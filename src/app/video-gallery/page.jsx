@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Play, ArrowLeft, ArrowRight } from "lucide-react";
@@ -50,6 +51,18 @@ const videos = [
 ];
 
 export default function VideoGallery() {
+  const scrollRef = useRef(null);
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const scrollAmount = 300; 
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <main className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[80px] overflow-hidden fixed inset-0">
       <div className="max-w-[1800px] mx-auto w-full h-full flex flex-col px-6 md:px-16 py-4 md:py-6 overflow-hidden">
@@ -64,7 +77,7 @@ export default function VideoGallery() {
         </header>
 
         <div className="flex-1 flex items-center min-h-0 overflow-hidden">
-          <div className="flex gap-6 md:gap-8 overflow-x-auto no-scrollbar w-full py-4 snap-x">
+          <div ref={scrollRef} className="flex gap-6 md:gap-8 overflow-x-auto no-scrollbar w-full py-4 snap-x scroll-smooth">
             {videos.map((video, idx) => (
               <motion.div
                 key={video.id}
@@ -122,10 +135,10 @@ export default function VideoGallery() {
           </div>
 
           <div className="flex items-center gap-6">
-            <button className="w-12 h-12 rounded-full border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all">
+            <button onClick={() => scroll("left")} className="w-12 h-12 rounded-full border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all">
               <ArrowLeft size={20} />
             </button>
-            <button className="w-12 h-12 rounded-full bg-[#130800]/50 border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all">
+            <button onClick={() => scroll("right")} className="w-12 h-12 rounded-full bg-[#130800]/50 border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all">
               <ArrowRight size={20} />
             </button>
           </div>
