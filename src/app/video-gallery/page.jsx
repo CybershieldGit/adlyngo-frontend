@@ -238,26 +238,26 @@ export default function VideoGallery() {
       {/* Massive Background Text (Watermark) - Precisely aligned with Figma */}
       <div className="absolute inset-0 flex items-start justify-center pointer-events-none select-none z-0 overflow-hidden pt-20">
         <motion.h2
-          key={currentCategory.id}
+          key={currentCategory?.id}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 0.04, scale: 1 }}
           transition={{ duration: 1 }}
           className="text-[25vw] font-black font-heading leading-none text-white whitespace-nowrap uppercase text-center"
         >
-          {currentCategory.title.first}{currentCategory.title.second}
+          {currentCategory?.title?.first}{currentCategory?.title?.second}
         </motion.h2>
       </div>
 
       <div className="max-w-[1800px] mx-auto w-full h-full flex flex-col px-6 md:px-16 py-4 md:py-6 overflow-hidden relative z-10">
         <header className="flex justify-between items-center mb-6 flex-shrink-0">
           <motion.h1 
-            key={currentCategory.id}
+            key={currentCategory?.id}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="text-4xl md:text-6xl font-bold font-heading leading-tight"
           >
-            <span className="text-white">{currentCategory.title.first}</span>
-            <span className="text-[#FF6A00]">{currentCategory.title.second}</span>
+            <span className="text-white">{currentCategory?.title?.first}</span>
+            <span className="text-[#FF6A00]">{currentCategory?.title?.second}</span>
           </motion.h1>
           <button className="hidden md:flex items-center gap-2.5 px-4 py-2 bg-[#181818]/40 border border-white rounded-lg text-white text-sm font-medium font-albert leading-none hover:bg-white hover:text-black transition-all">
             View All
@@ -285,27 +285,27 @@ export default function VideoGallery() {
           </div>
 
           <motion.div 
-            key={currentCategory.id}
+            key={currentCategory?.id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             ref={scrollRef} 
             className="flex gap-6 md:gap-8 overflow-x-auto no-scrollbar w-full py-4 snap-x scroll-smooth pl-10"
           >
-            {currentCategory.videos.map((video, idx) => (
+            {currentCategory?.videos?.map((video, idx) => (
               <motion.div
-                key={video.id}
+                key={video?.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
                 className={`group relative flex-shrink-0 cursor-pointer rounded-[20px] border border-[#FEFEFE] overflow-hidden snap-center
-                  ${currentCategory.layout === "landscape" ? "w-[450px] md:w-[600px] h-[350px] md:h-[400px]" : "w-[260px] h-[clamp(300px,50vh,400px)]"}
+                  ${currentCategory?.layout === "landscape" ? "w-[450px] md:w-[600px] h-[350px] md:h-[400px]" : "w-[260px] h-[clamp(300px,50vh,400px)]"}
                 `}
               >
                 <Image
-                  src={video.thumbnail}
-                  alt={video.title}
+                  src={video?.thumbnail}
+                  alt={video?.title}
                   fill
-                  sizes={currentCategory.layout === "landscape" ? "600px" : "260px"}
+                  sizes={currentCategory?.layout === "landscape" ? "600px" : "260px"}
                   className="object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
                 
@@ -318,12 +318,12 @@ export default function VideoGallery() {
                 </div>
 
                 <div className="absolute bottom-6 left-6 right-6">
-                  <p className="text-[#FF6A00] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">{video.category}</p>
-                  <h3 className="text-base md:text-lg font-bold text-white font-heading uppercase tracking-tight leading-none">{video.title}</h3>
+                  <p className="text-[#FF6A00] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">{video?.category}</p>
+                  <h3 className="text-base md:text-lg font-bold text-white font-heading uppercase tracking-tight leading-none">{video?.title}</h3>
                 </div>
 
                 <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-[10px] text-white font-bold tracking-widest">
-                  {video.duration}
+                  {video?.duration}
                 </div>
               </motion.div>
             ))}
