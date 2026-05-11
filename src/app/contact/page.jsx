@@ -1,161 +1,136 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Send, ArrowRight } from "lucide-react";
-import { useState } from "react";
-
-// Custom Brand Icons for consistency
-const InstagramIcon = ({ size = 24 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-  </svg>
-);
-
-const LinkedinIcon = ({ size = 24 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-  </svg>
-);
-
-const TwitterIcon = ({ size = 24 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-  </svg>
-);
+import { Star } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import Footer from "@/components/common/Footer";
+import { cn } from "@/lib/utils";
 
 export default function ContactPage() {
-  const [focused, setFocused] = useState("");
-
   return (
-    <div className="pt-32 bg-black min-h-screen">
-      <div className="container mx-auto px-6 mb-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-24">
-          
-          {/* Contact Info */}
-          <div className="lg:col-span-5">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1 }}
-            >
-              <span className="text-brand uppercase tracking-[0.4em] text-[10px] font-bold mb-8 block underline underline-offset-8">Inquiries</span>
-              <h1 className="text-6xl md:text-[9rem] font-heading text-white leading-[0.8] mb-12">
-                LET'S <br /> <span className="italic text-muted/20">TALK</span>.
-              </h1>
-              
-              <p className="text-muted/40 text-lg uppercase tracking-widest leading-loose max-w-sm mb-20">
-                Whether you have a fully formed vision or just the seed of an idea, we're ready to help you speak.
-              </p>
+    <main className="bg-[#0A0A0A] min-h-screen pt-32 overflow-x-hidden">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-16 mb-20">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start gap-10 mb-20">
+          <h1 className="text-6xl md:text-8xl font-black font-heading leading-none">
+            <span className="text-white uppercase">LETS GET IN </span>
+            <span className="text-[#FF6A00] uppercase">TOUCH</span>
+          </h1>
+          <p className="max-w-md text-white/40 text-sm md:text-base leading-relaxed text-right md:text-left self-end">
+            Adlyngo is a full-service digital growth agency built for businesses serious about scaling. We combine data-driven performance marketing with premium creative so every rupee works harder.
+          </p>
+        </div>
 
-              <div className="space-y-12">
+        {/* Main Contact Card */}
+        <div className="bg-[#121212] rounded-[40px] p-8 md:p-16 border border-white/5 mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
+            {/* Left Column: Info & Map */}
+            <div className="lg:col-span-5 flex flex-col gap-12">
+              <div className="space-y-10">
                 <div>
-                  <h4 className="text-white text-xs uppercase tracking-[0.4em] font-bold mb-4 opacity-40">Direct Contact</h4>
-                  <a href="mailto:hello@adlyngo.com" className="text-2xl md:text-4xl font-heading text-white hover:text-brand transition-colors">HELLO@ADLYNGO.COM</a>
+                  <p className="text-white/20 text-[10px] uppercase tracking-widest font-bold mb-3">Have Questions?</p>
+                  <p className="text-white text-lg font-bold">hello@adlyngo.com</p>
                 </div>
                 <div>
-                  <h4 className="text-white text-xs uppercase tracking-[0.4em] font-bold mb-4 opacity-40">Studio Location</h4>
-                  <p className="text-2xl md:text-4xl font-heading text-white uppercase">123 Creative Blvd <br /> Manhattan, NY 10013</p>
+                  <p className="text-white/20 text-[10px] uppercase tracking-widest font-bold mb-3">Say Hello!</p>
+                  <p className="text-white text-lg font-bold">+91 9595 333 111</p>
                 </div>
-                <div className="pt-12 border-t border-white/5 flex gap-8">
-                  <a href="#" className="text-muted hover:text-brand transition-colors"><InstagramIcon /></a>
-                  <a href="#" className="text-muted hover:text-brand transition-colors"><LinkedinIcon /></a>
-                  <a href="#" className="text-muted hover:text-brand transition-colors"><TwitterIcon /></a>
+                <div>
+                  <p className="text-white/20 text-[10px] uppercase tracking-widest font-bold mb-3">Located at</p>
+                  <p className="text-white text-sm font-medium leading-relaxed max-w-xs">
+                    T3, B1603, NXOne, Tech zone 4, Opposite Gaur city mall, Greater Noida, UP, 201306
+                  </p>
                 </div>
               </div>
-            </motion.div>
-          </div>
 
-          {/* Contact Form */}
-          <div className="lg:col-span-7">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
-              className="bg-surface/50 backdrop-blur-xl p-8 md:p-16 border border-white/5 relative overflow-hidden"
-            >
-              {/* Background Accent */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 blur-[100px] rounded-full" />
+              {/* Map Image */}
+              <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden border border-white/5 grayscale invert opacity-40">
+                <Image
+                  src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop"
+                  alt="Map"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
 
-              <form className="space-y-12 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                  <div className="relative group">
-                    <label className={cn(
-                      "absolute left-0 transition-all duration-300 pointer-events-none uppercase tracking-[0.2em] text-[10px] font-bold",
-                      focused === "name" ? "-top-6 text-brand" : "top-4 text-muted/40"
-                    )}>Your Name</label>
-                    <input
-                      type="text"
-                      onFocus={() => setFocused("name")}
-                      onBlur={(e) => !e.target.value && setFocused("")}
-                      className="w-full bg-transparent border-b border-white/10 py-4 text-white focus:border-brand transition-all outline-none text-xl"
-                    />
-                  </div>
-                  <div className="relative group">
-                    <label className={cn(
-                      "absolute left-0 transition-all duration-300 pointer-events-none uppercase tracking-[0.2em] text-[10px] font-bold",
-                      focused === "email" ? "-top-6 text-brand" : "top-4 text-muted/40"
-                    )}>Email Address</label>
-                    <input
-                      type="email"
-                      onFocus={() => setFocused("email")}
-                      onBlur={(e) => !e.target.value && setFocused("")}
-                      className="w-full bg-transparent border-b border-white/10 py-4 text-white focus:border-brand transition-all outline-none text-xl"
-                    />
-                  </div>
+            {/* Right Column: Form */}
+            <div className="lg:col-span-7">
+              <form className="space-y-12">
+                <div className="space-y-3 border-b border-white/10 pb-4 group focus-within:border-[#FF6A00] transition-colors">
+                  <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">I am</p>
+                  <input type="text" placeholder="name" className="w-full bg-transparent text-white text-xl outline-none placeholder:text-white/10" />
                 </div>
-
-                <div className="relative group">
-                  <label className="block uppercase tracking-[0.2em] text-[10px] font-bold text-muted/40 mb-4">What service do you need?</label>
-                  <select className="w-full bg-black/40 border border-white/10 p-5 text-white focus:border-brand transition-all outline-none appearance-none cursor-pointer uppercase tracking-widest text-xs">
-                    <option className="bg-dark">Brand Strategy & Identity</option>
-                    <option className="bg-dark">High-End Production</option>
-                    <option className="bg-dark">Motion Graphics & VFX</option>
-                    <option className="bg-dark">Social Media Retainers</option>
+                <div className="space-y-3 border-b border-white/10 pb-4 group focus-within:border-[#FF6A00] transition-colors">
+                  <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">Here is my email</p>
+                  <input type="email" placeholder="abc@abc.com" className="w-full bg-transparent text-white text-xl outline-none placeholder:text-white/10" />
+                </div>
+                <div className="space-y-3 border-b border-white/10 pb-4 group focus-within:border-[#FF6A00] transition-colors">
+                  <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">I need</p>
+                  <select className="w-full bg-transparent text-white text-xl outline-none appearance-none cursor-pointer uppercase font-bold text-white/20">
+                    <option className="bg-black">Select Service</option>
+                    <option className="bg-black">Website Development</option>
+                    <option className="bg-black">UGC Ads</option>
+                    <option className="bg-black">Social Media Management</option>
                   </select>
                 </div>
-
-                <div className="relative group">
-                  <label className={cn(
-                    "absolute left-0 transition-all duration-300 pointer-events-none uppercase tracking-[0.2em] text-[10px] font-bold",
-                    focused === "message" ? "-top-6 text-brand" : "top-4 text-muted/40"
-                  )}>Tell us about your goals</label>
-                  <textarea
-                    rows={4}
-                    onFocus={() => setFocused("message")}
-                    onBlur={(e) => !e.target.value && setFocused("")}
-                    className="w-full bg-transparent border-b border-white/10 py-4 text-white focus:border-brand transition-all outline-none text-xl resize-none"
-                  ></textarea>
+                <div className="space-y-3 border-b border-white/10 pb-4 group focus-within:border-[#FF6A00] transition-colors">
+                  <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">Message</p>
+                  <textarea placeholder="Select Service" rows={1} className="w-full bg-transparent text-white text-xl outline-none placeholder:text-white/10 resize-none" />
                 </div>
-                
-                <button className="group relative w-full py-8 bg-brand text-white font-bold uppercase tracking-[0.5em] text-xs flex items-center justify-center gap-6 overflow-hidden transition-all hover:tracking-[0.7em]">
-                  <span className="relative z-10 flex items-center gap-4">
-                    Send Inquiry <Send size={18} className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-500" />
-                  </span>
-                  <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-expo" />
-                </button>
-              </form>
-            </motion.div>
 
-            {/* Calendly Mini-Section */}
-            <div className="mt-12 p-8 border border-white/5 bg-white/[0.02] flex flex-col md:flex-row items-center justify-between gap-8">
-               <div>
-                 <h4 className="text-white text-xs uppercase tracking-widest font-bold mb-2">Prefer a direct call?</h4>
-                 <p className="text-muted/40 text-xs uppercase tracking-widest">Schedule a 15-minute discovery session with our lead strategist.</p>
-               </div>
-               <button className="flex items-center gap-2 text-brand font-bold uppercase tracking-widest text-[10px] hover:text-white transition-colors">
-                 Book Session <ArrowRight size={14} />
-               </button>
+                <div className="flex flex-col md:flex-row items-center gap-10 pt-4">
+                  <button className="px-12 py-5 bg-[#FF6A00] text-white font-bold uppercase tracking-widest text-xs rounded-xl hover:bg-white hover:text-[#FF6A00] transition-all">
+                    Send Message
+                  </button>
+                  <p className="text-white/20 text-[10px] leading-relaxed max-w-xs italic">
+                    We are committed to protecting your privacy. We will never collect information about you without your explicit consent.
+                  </p>
+                </div>
+              </form>
             </div>
           </div>
+        </div>
 
+        {/* Trusted By Section */}
+        <div className="bg-[#121212] rounded-[40px] p-10 md:p-16 border border-white/5 flex flex-col lg:flex-row items-center justify-between gap-12 mb-32">
+          <div className="flex flex-col gap-4">
+            <h3 className="text-4xl font-bold text-white font-heading uppercase leading-none">Trusted by Brands</h3>
+            <div className="flex items-center gap-6">
+              <span className="text-7xl font-black text-white">4.89</span>
+              <div className="flex gap-1 bg-white/5 p-2 rounded-full">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={18} className="fill-[#FF6A00] text-[#FF6A00]" />
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex-1 max-w-xl text-white/40 text-sm leading-relaxed text-center lg:text-left">
+            Adlyngo is a full-service digital growth agency built for businesses serious about scaling. We combine data-driven performance marketing with premium creative so every rupee works harder.
+          </div>
+
+          <div className="flex flex-col items-center lg:items-end">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full overflow-hidden border border-white/10 bg-white/5">
+                <Image src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=1974&auto=format&fit=crop" width={64} height={64} alt="CEO" />
+              </div>
+              <div className="text-left">
+                <p className="text-white font-bold text-lg">Ravi Verma</p>
+                <p className="text-white/40 text-xs uppercase tracking-widest">CEO, Perpilly Inc.</p>
+              </div>
+            </div>
+            {/* Slider Dots */}
+            <div className="flex gap-2 mt-6">
+              {[...Array(7)].map((_, i) => (
+                <div key={i} className={cn("w-1.5 h-1.5 rounded-full", i === 0 ? "bg-[#FF6A00]" : "bg-white/10")} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </main>
   );
-}
-
-function cn(...inputs) {
-  return inputs.filter(Boolean).join(" ");
 }

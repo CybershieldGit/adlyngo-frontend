@@ -170,12 +170,14 @@ export default function Navbar() {
                 
                 <nav className="flex flex-col gap-4 md:gap-6 relative z-10">
                   {[
-                    { name: "Portfolio", href: "/work" },
-                    { name: "About", href: "/about", active: true },
-                    { name: "Services", href: "/services" },
-                    // { name: "Projects", href: "/projects" },
-                    // { name: "Blogs", href: "/blogs" },
-                    { name: "Contact", href: "/contact" },
+                    { 
+                      name: "Portfolio", 
+                      href: "/work", 
+                      isActive: ["/work", "/video-gallery", "/creative-gallery", "/testimonials"].includes(pathname) || (pathname === "/" )
+                    },
+                    { name: "About", href: "/about", isActive: pathname === "/about" },
+                    { name: "Services", href: "/services", isActive: pathname === "/services" },
+                    { name: "Contact", href: "/contact", isActive: pathname === "/contact" },
                   ].map((link, i) => (
                     <div key={link.name} className="flex flex-col">
                       <Link
@@ -183,12 +185,12 @@ export default function Navbar() {
                         onClick={() => setIsOpen(false)}
                         className={cn(
                           "text-2xl md:text-4xl font-bold font-heading uppercase tracking-tight transition-colors",
-                          link.active ? "text-[#FF6A00]" : "text-white hover:text-[#FF6A00]"
+                          link.isActive ? "text-[#FF6A00]" : "text-white hover:text-[#FF6A00]"
                         )}
                       >
                         {link.name}
                       </Link>
-                      {i < 5 && <div className="h-[1px] w-full bg-white/5 mt-4" />}
+                      {i < 3 && <div className="h-[1px] w-full bg-white/5 mt-4" />}
                     </div>
                   ))}
                 </nav>
