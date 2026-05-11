@@ -24,7 +24,6 @@ const SocialIcon = ({ children, href = "#" }) => (
   </a>
 );
 
-// Custom SVG Icons to match the image exactly and avoid dependency issues
 const FacebookIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
@@ -65,11 +64,9 @@ export default function Navbar() {
         scrolled ? "bg-black/90 backdrop-blur-md" : "bg-[#0A0A0A]"
       )}
     >
-      {/* Subtle Background Pattern */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px]" />
 
       <nav className="max-w-[1800px] mx-auto flex items-center justify-between px-6 py-4 md:px-12 relative">
-        {/* Left: Logo Section */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center group">
             <Image 
@@ -81,10 +78,8 @@ export default function Navbar() {
             />
           </Link>
           
-          {/* Vertical Separator */}
           <div className="hidden lg:block w-[1px] h-10 bg-white/10 mx-2" />
 
-          {/* Center Links */}
           <div className="hidden lg:flex items-center gap-10">
             {navLinks.map((link) => (
               <div key={link.name} className="relative py-2">
@@ -99,7 +94,6 @@ export default function Navbar() {
                 >
                   {link.name}
                 </Link>
-                {/* Active Indicator Triangle */}
                 {((pathname === link.href) || (pathname === "/" && link.name === "Video Gallery")) && (
                   <motion.div 
                     layoutId="nav-triangle"
@@ -111,24 +105,20 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Right: Actions */}
         <div className="flex items-center gap-4 md:gap-8">
-          {/* Social Icons */}
           <div className="hidden lg:flex items-center gap-4">
             <SocialIcon><FacebookIcon /></SocialIcon>
             <SocialIcon><InstagramIcon /></SocialIcon>
             <SocialIcon><TwitterIcon /></SocialIcon>
           </div>
 
-          {/* Let's Connect Button */}
           <Link 
             href="/contact"
-            className="hidden md:block px-8 py-2 bg-[#1A120B] border border-white/20 rounded-md text-white text-[14px] font-medium font-albert leading-[24px] tracking-[0.21px] break-words hover:bg-[#2A1D12] transition-all duration-300"
+            className="hidden md:block px-8 py-2 bg-[#1A120B] border border-white/20 rounded-md text-white text-[14px] font-medium font-albert leading-[24px] tracking-[0.21px] hover:bg-[#2A1D12] transition-all duration-300"
           >
             Let's Connect
           </Link>
 
-          {/* Hamburger Menu */}
           <button
             className="w-[34px] h-[34px] flex flex-col gap-1.5 items-end justify-center group"
             onClick={() => setIsOpen(!isOpen)}
@@ -140,71 +130,86 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Bottom Orange Border */}
       <div className="w-full h-[1.5px] bg-[#FF4D00]" />
 
-      {/* Right Side Drawer Menu */}
       <AnimatePresence>
         {isOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 bg-[#0A0A0A] z-[200] flex flex-col p-10 md:p-20 overflow-hidden"
+          >
+            <button 
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[110]"
-            />
-            
-            {/* Drawer */}
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 h-full w-full max-w-[400px] !bg-black border-l border-white/10 z-[120] flex flex-col p-10 md:p-16"
-              style={{ backgroundColor: "#000000", opacity: 1 }}
+              className="absolute top-10 right-10 w-10 h-10 rounded-full bg-white flex items-center justify-center text-black hover:scale-110 transition-transform z-[210]"
             >
-              <button 
-                onClick={() => setIsOpen(false)} 
-                className="self-end text-white/60 hover:text-white transition-colors mb-20"
+              <X size={20} />
+            </button>
+
+            <div className="flex-1 flex flex-col lg:flex-row items-center justify-between gap-10 md:gap-20 max-w-[1800px] mx-auto w-full">
+              <div className="flex-1">
+                <motion.h2 
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2, duration: 0.8 }}
+                  className="text-5xl md:text-[8vw] font-black font-heading leading-[0.9] text-white uppercase"
+                >
+                  We don't run <br /> ads. We make <br /> them <span className="text-[#FF6A00]">Speak.</span>
+                </motion.h2>
+              </div>
+
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9, x: 50 }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="w-full max-w-md bg-[#1A1A1A] rounded-[40px] p-8 md:p-12 border border-white/5 relative"
               >
-                <X size={32} />
-              </button>
+                <div className="absolute inset-0 rounded-[40px] shadow-[0_0_50px_rgba(255,255,255,0.02)] pointer-events-none" />
+                
+                <nav className="flex flex-col gap-4 md:gap-6 relative z-10">
+                  {[
+                    { name: "Portfolio", href: "/work" },
+                    { name: "About", href: "/about", active: true },
+                    { name: "Services", href: "/services" },
+                    // { name: "Projects", href: "/projects" },
+                    // { name: "Blogs", href: "/blogs" },
+                    { name: "Contact", href: "/contact" },
+                  ].map((link, i) => (
+                    <div key={link.name} className="flex flex-col">
+                      <Link
+                        href={link.href}
+                        onClick={() => setIsOpen(false)}
+                        className={cn(
+                          "text-2xl md:text-4xl font-bold font-heading uppercase tracking-tight transition-colors",
+                          link.active ? "text-[#FF6A00]" : "text-white hover:text-[#FF6A00]"
+                        )}
+                      >
+                        {link.name}
+                      </Link>
+                      {i < 5 && <div className="h-[1px] w-full bg-white/5 mt-4" />}
+                    </div>
+                  ))}
+                </nav>
+              </motion.div>
+            </div>
 
-              <div className="flex flex-col gap-8">
-                {navLinks.map((link, i) => (
-                  <motion.div
-                    key={link.name}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={() => setIsOpen(false)}
-                      className="text-6xl font-bold text-white hover:text-[#FF4D00] transition-colors uppercase tracking-tight font-heading leading-[0.9]"
-                    >
-                      {link.name}
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-
-              <div className="mt-auto flex flex-col gap-10">
-                <div className="h-[1px] w-full bg-white/10" />
-                <div className="flex gap-6">
-                  <SocialIcon><FacebookIcon /></SocialIcon>
-                  <SocialIcon><InstagramIcon /></SocialIcon>
-                  <SocialIcon><TwitterIcon /></SocialIcon>
-                </div>
-                <div>
-                  <p className="text-white/40 text-[10px] uppercase tracking-[0.3em] font-bold mb-2">Get in touch</p>
-                  <p className="text-white text-sm font-albert">hello@adlyngo.com</p>
+            <div className="mt-auto max-w-[1800px] mx-auto w-full">
+              <div className="h-[1px] w-full bg-white/10 mb-8" />
+              <div className="flex flex-col md:flex-row justify-between items-center gap-6 pb-10 md:pb-0">
+                <Image src="/logo.svg" alt="Adlyngo" width={120} height={35} className="object-contain" />
+                
+                <div className="flex flex-col md:flex-row items-center gap-4 text-white/60 text-sm font-medium tracking-wide">
+                  <span>Let's Build something great together</span>
+                  <div className="hidden md:block w-[1px] h-4 bg-white/20" />
+                  <a href="mailto:hello@adlyngo.com" className="text-white underline underline-offset-4 hover:text-[#FF6A00] transition-colors">
+                    hello@adlyngo.com
+                  </a>
                 </div>
               </div>
-            </motion.div>
-          </>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </header>
