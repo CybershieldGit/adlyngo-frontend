@@ -183,7 +183,7 @@ export default function Navbar() {
                     <Link
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className="text-4xl font-bold text-white hover:text-[#FF4D00] transition-colors uppercase tracking-widest font-heading"
+                      className="text-6xl font-bold text-white hover:text-[#FF4D00] transition-colors uppercase tracking-tight font-heading leading-[0.9]"
                     >
                       {link.name}
                     </Link>

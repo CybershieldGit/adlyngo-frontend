@@ -84,48 +84,42 @@ export default function Hero() {
       <motion.section 
         animate={{ filter: isPopupOpen ? "blur(30px)" : "blur(0px)", scale: isPopupOpen ? 1.02 : 1 }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="relative min-h-screen flex flex-col justify-center px-6 md:px-16 pt-24 pb-12"
+        className="relative min-h-screen flex flex-col px-6 md:px-16 pt-32 pb-12"
       >
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="flex-1 flex flex-col justify-center"
+            className="flex-1 flex flex-col"
           >
-            {/* Background Massive Text */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none">
-              <h1 className="text-[25vw] font-bold text-white/[0.02] tracking-tighter uppercase leading-none">{current.bgText}</h1>
-            </div>
-
             {/* Top Header Row */}
-            <div className="flex justify-between items-end mb-10 relative z-10">
-              <h2 className="text-4xl md:text-6xl font-bold text-white uppercase tracking-tight">
-                {current.title} <span className="text-brand">{current.subtitle}</span>
+            <div className="flex justify-between items-end mb-12 relative z-10">
+              <h2 className="text-5xl md:text-[80px] font-bold text-white uppercase tracking-tight font-heading leading-none">
+                {current.title} <span className="text-[#FF6A00]">{current.subtitle}</span>
               </h2>
-              <button className="px-6 py-2 md:px-8 md:py-3 border border-white/20 text-white rounded-xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+              <button className="px-8 py-3 bg-white/5 border border-white rounded-lg text-white text-sm font-medium font-albert uppercase tracking-widest hover:bg-white hover:text-black transition-all">
                 View All
               </button>
             </div>
 
-            {/* Content Grid */}
-            <div className={cn("grid gap-4 md:gap-6 relative z-10 mb-16", current.gridClass)}>
+            {/* Content Grid (Horizontal List) */}
+            <div className="flex gap-4 md:gap-8 relative z-10 mb-16 overflow-x-auto no-scrollbar pb-4">
               {current.items.map((item) => (
                 <div 
                   key={item.id} 
                   className={cn(
-                    "relative overflow-hidden group transition-all duration-500 rounded-2xl md:rounded-[30px]",
-                    item.size,
-                    item.active ? "ring-2 md:ring-4 ring-brand shadow-[0_0_40px_rgba(255,77,0,0.3)]" : "opacity-80 hover:opacity-100"
+                    "relative flex-shrink-0 w-[260px] h-[462px] overflow-hidden rounded-[20px] border border-[#FEFEFE] group transition-all duration-500",
+                    item.active && "ring-2 ring-[#FF6A00] shadow-[0_0_30px_rgba(255,106,0,0.3)]"
                   )}
                 >
                   <Image 
                     src={item.image} 
                     alt="Work" 
                     fill 
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
+                    sizes="260px"
                     className="object-cover transition-transform duration-1000 group-hover:scale-105" 
                   />
                 </div>
@@ -135,39 +129,47 @@ export default function Hero() {
         </AnimatePresence>
 
         {/* Bottom Row: Brands & Navigation */}
-        <div className="mt-auto flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
-          <div className="flex items-center gap-10 overflow-hidden max-w-full">
-            <span className="text-lg md:text-2xl font-bold text-white uppercase tracking-tight whitespace-nowrap">
-              BRANDS <span className="text-brand">WE SERVE</span>
-            </span>
-            <div className="hidden md:flex items-center gap-16 opacity-30 grayscale brightness-200">
+        <div className="mt-auto flex flex-col md:flex-row items-center justify-between gap-12 relative z-10 border-t border-white/5 pt-12">
+          <div className="flex items-center gap-12 overflow-hidden max-w-full">
+            <h3 className="text-2xl md:text-4xl font-bold text-white uppercase tracking-tight font-heading whitespace-nowrap">
+              BRANDS <span className="text-[#FF6A00]">WE SERVE</span>
+            </h3>
+            <div className="hidden md:flex items-center gap-12 opacity-40 grayscale brightness-200">
               {brands.map((brand, i) => (
-                <span key={i} className="text-3xl font-heading uppercase tracking-tighter whitespace-nowrap">{brand}</span>
+                <span key={i} className="text-2xl font-heading uppercase tracking-tighter whitespace-nowrap">{brand}</span>
               ))}
             </div>
           </div>
 
-          <div className="flex gap-4">
-            <button onClick={prevSlide} className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-brand transition-all active:scale-90">
-              <ArrowLeft size={20} />
+          <div className="flex items-center gap-6">
+            <button onClick={prevSlide} className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all active:scale-90">
+              <ArrowLeft size={24} />
             </button>
-            <button onClick={nextSlide} className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-brand transition-all active:scale-90">
-              <ArrowRight size={20} />
+            <button onClick={nextSlide} className="w-14 h-14 rounded-full bg-[#FF6A00]/10 border border-white/20 flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all active:scale-90">
+              <ArrowRight size={24} />
             </button>
           </div>
         </div>
 
         {/* Left Dot Navigation */}
-        <div className="absolute left-6 md:left-10 top-1/2 -translate-y-1/2 flex flex-col gap-6 z-20">
+        <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 flex flex-col gap-8 z-20">
           {categories.map((_, i) => (
             <button 
               key={i} 
               onClick={() => setActiveSlide(i)}
-              className={cn(
-                "w-2.5 h-2.5 rounded-full border border-white/20 transition-all",
-                i === activeSlide ? "bg-brand border-brand scale-150 shadow-[0_0_10px_rgba(255,77,0,0.5)]" : "bg-transparent hover:bg-white/40"
-              )} 
-            />
+              className="relative flex items-center justify-center w-8 h-8 group"
+            >
+              {i === activeSlide ? (
+                <motion.div 
+                  layoutId="hero-dot-ring"
+                  className="absolute inset-0 border border-white/40 rounded-full flex items-center justify-center"
+                >
+                  <div className="w-2.5 h-2.5 bg-[#FF6A00] rounded-full shadow-[0_0_15px_rgba(255,106,0,0.8)]" />
+                </motion.div>
+              ) : (
+                <div className="w-2 h-2 bg-white/20 rounded-full group-hover:bg-white/50 transition-colors" />
+              )}
+            </button>
           ))}
         </div>
       </motion.section>
