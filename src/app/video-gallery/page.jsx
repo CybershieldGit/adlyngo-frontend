@@ -51,9 +51,17 @@ export default function VideoGallery() {
   const [showIntro, setShowIntro] = useState(false);
 
   useEffect(() => {
-    // Show intro on mount
-    setShowIntro(true);
+    // Show intro only if it hasn't been seen in this session
+    const hasSeenIntro = sessionStorage.getItem("adlyngo_intro_seen");
+    if (!hasSeenIntro) {
+      setShowIntro(true);
+    }
   }, []);
+
+  const handleCloseIntro = () => {
+    setShowIntro(false);
+    sessionStorage.setItem("adlyngo_intro_seen", "true");
+  };
 
   const currentCategory = categories[activeCategoryIndex];
 
@@ -127,7 +135,7 @@ export default function VideoGallery() {
 
                   {/* Button */}
                   <button 
-                    onClick={() => setShowIntro(false)}
+                    onClick={handleCloseIntro}
                     className="w-[170px] h-[48px] bg-[#FF6A00] rounded-lg outline outline-[1.5px] outline-white -outline-offset-[1.5px] flex items-center justify-center gap-[10px] hover:scale-105 transition-transform"
                   >
                     <span className="text-white text-base font-medium tracking-[0.24px] uppercase" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
