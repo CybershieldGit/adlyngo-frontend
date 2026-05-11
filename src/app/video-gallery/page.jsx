@@ -24,8 +24,8 @@ const categories = [
     videos: [
       { id: 5, title: "Premium Watch Edit", category: "Luxury", thumbnail: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=2099&auto=format&fit=crop", duration: "1:05" },
       { id: 6, title: "Sneaker Motion", category: "Sport", thumbnail: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop", duration: "0:50" },
-      { id: 7, title: "Tech Gadget Showcase", category: "Electronics", thumbnail: "https://images.unsplash.com/photo-1525547718571-a0144531857b?q=80&w=2064&auto=format&fit=crop", duration: "1:15" },
-      { id: 8, title: "Cosmetic Elegance", category: "Beauty", thumbnail: "https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?q=80&w=2080&auto=format&fit=crop", duration: "0:40" },
+      { id: 7, title: "Tech Gadget Showcase", category: "Electronics", thumbnail: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop", duration: "1:15" },
+      { id: 8, title: "Cosmetic Elegance", category: "Beauty", thumbnail: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=2087&auto=format&fit=crop", duration: "0:40" },
       { id: 14, title: "Coffee Brewing Art", category: "Food", thumbnail: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2070&auto=format&fit=crop", duration: "1:10" },
       { id: 15, title: "Smart Home Tech", category: "Tech", thumbnail: "https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=2070&auto=format&fit=crop", duration: "0:55" },
     ]
@@ -62,7 +62,20 @@ export default function VideoGallery() {
 
   return (
     <main className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[80px] overflow-hidden fixed inset-0">
-      <div className="max-w-[1800px] mx-auto w-full h-full flex flex-col px-6 md:px-16 py-4 md:py-6 overflow-hidden">
+      {/* Massive Background Text (Watermark) - Precisely aligned with Figma */}
+      <div className="absolute inset-0 flex items-start justify-center pointer-events-none select-none z-0 overflow-hidden pt-20">
+        <motion.h2
+          key={currentCategory.id}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 0.04, scale: 1 }}
+          transition={{ duration: 1 }}
+          className="text-[25vw] font-black font-heading leading-none text-white whitespace-nowrap uppercase text-center"
+        >
+          {currentCategory.title.first}{currentCategory.title.second}
+        </motion.h2>
+      </div>
+
+      <div className="max-w-[1800px] mx-auto w-full h-full flex flex-col px-6 md:px-16 py-4 md:py-6 overflow-hidden relative z-10">
         <header className="flex justify-between items-center mb-6 flex-shrink-0">
           <motion.h1 
             key={currentCategory.id}
