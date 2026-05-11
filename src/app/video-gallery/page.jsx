@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Play, ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -47,8 +47,34 @@ const categories = [
 export default function VideoGallery() {
   const scrollRef = useRef(null);
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+  const [isLocked, setIsLocked] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
+
+  useEffect(() => {
+    // Show intro on mount
+    setShowIntro(true);
+  }, []);
 
   const currentCategory = categories[activeCategoryIndex];
+
+  const handleWheel = (e) => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      if (isLocked) return;
+
+      if (e.deltaY > 20 && activeCategoryIndex < categories.length - 1) {
+        setActiveCategoryIndex(prev => prev + 1);
+        lockScrolling();
+      } else if (e.deltaY < -20 && activeCategoryIndex > 0) {
+        setActiveCategoryIndex(prev => prev - 1);
+        lockScrolling();
+      }
+    }
+  };
+
+  const lockScrolling = () => {
+    setIsLocked(true);
+    setTimeout(() => setIsLocked(false), 1000); // Lock for 1s to prevent rapid firing
+  };
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -61,7 +87,146 @@ export default function VideoGallery() {
   };
 
   return (
-    <main className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[80px] overflow-hidden fixed inset-0">
+    <main 
+      onWheel={handleWheel}
+      className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[80px] overflow-hidden fixed inset-0"
+    >
+      <AnimatePresence>
+        {showIntro && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-start justify-center p-6 md:p-10 pt-[260px]"
+          >
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-1xl" />
+            
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: -50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="relative w-full max-w-[1250px] bg-black/20 backdrop-blur-xl border border-white/10 rounded-[48px] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col mt-[80px]"
+            >
+              {/* Header inside modal - EXACT Figma Implementation */}
+              <div className="w-full px-12 py-6 flex justify-between items-center relative z-20">
+                <div className="flex items-center justify-between w-full">
+                  {/* Logo Area */}
+                  <div className="w-[207.67px] h-[54.73px] relative">
+                    <Image 
+                      src="/logo.svg" 
+                      alt="Adlyngo" 
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+
+                  {/* Tagline */}
+                  <div className="text-white text-[34px] font-normal uppercase tracking-tight" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                    The Native Tongue of Ads.
+                  </div>
+
+                  {/* Button */}
+                  <button 
+                    onClick={() => setShowIntro(false)}
+                    className="w-[170px] h-[48px] bg-[#FF6A00] rounded-lg outline outline-[1.5px] outline-white -outline-offset-[1.5px] flex items-center justify-center gap-[10px] hover:scale-105 transition-transform"
+                  >
+                    <span className="text-white text-base font-medium tracking-[0.24px] uppercase" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
+                      LET'S START
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="w-[calc(100%-96px)] mx-auto h-[1px] bg-white/10 relative z-20" />
+
+              <div className="flex-1 p-12 pt-6 relative z-20 overflow-hidden">
+                <div className="w-full flex justify-between items-center h-full">
+                  {/* Left Column: Branding & Who We Are */}
+                  <div className="flex flex-col justify-start items-start gap-10 max-w-[500px]">
+                    <div className="flex flex-col justify-start items-start gap-5">
+                      {/* Main Heading */}
+                      <h1 className="flex flex-col" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                        <span className="text-white text-[56px] leading-[1.1] uppercase">We Don’t Run Ads.</span>
+                        <span className="text-white text-[56px] leading-[1.1] uppercase">
+                          We Make Them <span className="text-[#FF6A00]">Speak.</span>
+                        </span>
+                      </h1>
+                      
+                      {/* Sub-heading */}
+                      <p className="w-[478px] text-white text-sm font-normal leading-relaxed opacity-80" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
+                        We turn ideas into performance-driven campaigns that actually connect with people not just impressions.
+                      </p>
+                    </div>
+
+                    {/* Who We Are Section */}
+                    <div className="flex flex-col justify-start items-start gap-5 w-full">
+                      <h3 className="text-white text-[34px] font-normal uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                        WHO WE ARE?
+                      </h3>
+                      <div className="flex flex-col justify-start items-start gap-3">
+                        <p className="w-[484px] text-white text-sm font-normal leading-relaxed opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
+                          Adlyngo is a full-service digital growth agency built for businesses serious about scaling. We combine data-driven performance marketing with premium creative so every rupee works harder.
+                        </p>
+                        <p className="w-[484px] text-white text-sm font-normal leading-relaxed opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
+                          We don't chase generic briefs. We specialise in Real Estate, Interior Design, E-Commerce, and Beauty — niches we've mastered across strategy, creative and execution.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Statistics Grid */}
+                  <div className="flex justify-start items-center gap-[30px]">
+                    {/* Stat Column 1 */}
+                    <div className="w-[268px] bg-white/10 rounded-[30px] p-8 py-8 flex flex-col justify-center items-start">
+                      <div className="flex flex-col justify-start items-start gap-[18px] w-full">
+                        {[
+                          { value: "10,000 +", label: "Qualified Leads Generated" },
+                          { value: "₹50L+", label: "Ad Spend Managed" },
+                          { value: "3-5X", label: "Average Client ROI" },
+                          { value: "50 +", label: "Funnels Built & Optimised" }
+                        ].map((stat, i) => (
+                          <div key={i} className="flex flex-col justify-start items-start gap-2 w-full">
+                            <div className="text-white text-[34px] font-normal uppercase leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                              {stat.value}
+                            </div>
+                            <div className="text-white text-sm font-normal opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
+                              {stat.label}
+                            </div>
+                            {i < 3 && <div className="w-full h-[1px] bg-white/10 mt-3" />}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Stat Column 2 */}
+                    <div className="w-[268px] bg-white/10 rounded-[30px] p-8 py-8 flex flex-col justify-center items-start">
+                      <div className="flex flex-col justify-start items-start gap-[18px] w-full">
+                        {[
+                          { value: "10,000 +", label: "Qualified Leads Generated" },
+                          { value: "₹50L+", label: "Ad Spend Managed" },
+                          { value: "3-5X", label: "Average Client ROI" },
+                          { value: "50 +", label: "Funnels Built & Optimised" }
+                        ].map((stat, i) => (
+                          <div key={i} className="flex flex-col justify-start items-start gap-2 w-full">
+                            <div className="text-white text-[34px] font-normal uppercase leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                              {stat.value}
+                            </div>
+                            <div className="text-white text-sm font-normal opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
+                              {stat.label}
+                            </div>
+                            {i < 3 && <div className="w-full h-[1px] bg-white/10 mt-3" />}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Massive Background Text (Watermark) - Precisely aligned with Figma */}
       <div className="absolute inset-0 flex items-start justify-center pointer-events-none select-none z-0 overflow-hidden pt-20">
         <motion.h2
