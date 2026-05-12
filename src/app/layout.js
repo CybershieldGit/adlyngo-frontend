@@ -28,7 +28,7 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }) { 
   return (
     <html lang="en" className={`${bebasNeue.variable} ${inter.variable} ${albertSans.variable}`}>
       <body className="antialiased selection:bg-brand selection:text-white">
