@@ -73,21 +73,17 @@ export default function AboutPage() {
           
           <div className="grid grid-cols-2 gap-4">
             <motion.div style={{ y: y1 }} className="aspect-[3/4] bg-surface relative overflow-hidden group">
-               <Image 
-                 src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop" 
-                 fill 
-                 sizes="(max-width: 768px) 100vw, 50vw"
+               <img 
+                 src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=1200" 
                  alt="Culture" 
-                 className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" 
+                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" 
                />
             </motion.div>
             <motion.div style={{ y: y2 }} className="aspect-[3/4] bg-surface relative overflow-hidden group translate-y-12">
-               <Image 
-                 src="https://images.unsplash.com/photo-1522071823916-291771192934?q=80&w=2070&auto=format&fit=crop" 
-                 fill 
-                 sizes="(max-width: 768px) 100vw, 50vw"
+               <img 
+                 src="https://images.unsplash.com/photo-1522071823916-291771192934?auto=format&fit=crop&q=80&w=1200" 
                  alt="Studio" 
-                 className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" 
+                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" 
                />
             </motion.div>
           </div>
@@ -132,12 +128,10 @@ export default function AboutPage() {
                 className="group cursor-none"
               >
                 <div className="relative aspect-[3/4] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 mb-6">
-                  <Image 
+                  <img 
                     src={member.image} 
-                    fill 
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                     alt={member.name} 
-                    className="object-cover transition-transform duration-1000 group-hover:scale-110" 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
                   />
                   <div className="absolute inset-0 bg-brand/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>

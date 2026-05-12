@@ -1,57 +1,114 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Image from "next/image";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/common/Footer";
-
-const categories = [
-  {
-    id: "brand-creatives-1",
-    title: "BRAND",
-    subtitle: "CREATIVES",
-    items: [
-      { id: 1, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff", size: "col-span-1 row-span-1" },
-      { id: 2, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30", size: "col-span-1 row-span-1" },
-      { id: 3, image: "https://images.unsplash.com/photo-1511556532299-8f662fc26c06", size: "col-span-2 row-span-2" },
-      { id: 4, image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5", size: "col-span-1 row-span-1" },
-      { id: 5, image: "https://images.unsplash.com/photo-1596462502278-27bfdc4033c8", size: "col-span-1 row-span-1" },
-      { id: 6, image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796", size: "col-span-1 row-span-2" },
-      { id: 7, image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d", size: "col-span-1 row-span-1" },
-      { id: 8, image: "https://images.unsplash.com/photo-1515377666659-7178f4860d5b", size: "col-span-1 row-span-1" },
-      { id: 9, image: "https://images.unsplash.com/photo-1556228720-195a672e8a03", size: "col-span-2 row-span-2" },
-      { id: 10, image: "https://images.unsplash.com/photo-1512203558265-fd550388b266", size: "col-span-1 row-span-1" },
-      { id: 11, image: "https://images.unsplash.com/photo-1594035910387-fea47794261f", size: "col-span-1 row-span-1" },
-      { id: 12, image: "https://images.unsplash.com/photo-1612817288484-6f916006741a", size: "col-span-1 row-span-1" },
-      { id: 13, image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796", size: "col-span-1 row-span-1" },
-    ]
-  },
-  {
-    id: "brand-creatives-2",
-    title: "BRAND",
-    subtitle: "CREATIVES",
-    items: [
-      { id: 14, image: "https://images.unsplash.com/photo-1517142089942-ba376ce32a2e", size: "col-span-2 row-span-2" },
-      { id: 15, image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9", size: "col-span-1 row-span-1" },
-      { id: 16, image: "https://images.unsplash.com/photo-1596462502278-27bfdc4033c8", size: "col-span-1 row-span-1" },
-      { id: 17, image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571", size: "col-span-1 row-span-2" },
-      { id: 18, image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19", size: "col-span-1 row-span-1" },
-      { id: 19, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff", size: "col-span-1 row-span-1" },
-      { id: 20, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30", size: "col-span-2 row-span-2" },
-      { id: 21, image: "https://images.unsplash.com/photo-1515377666659-7178f4860d5b", size: "col-span-1 row-span-1" },
-      { id: 22, image: "https://images.unsplash.com/photo-1512203558265-fd550388b266", size: "col-span-1 row-span-1" },
-    ]
-  }
-];
+import { Loader2, X, ZoomIn } from "lucide-react";
+import Image from "next/image";
 
 export default function CreativeGallery() {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        const response = await fetch("https://adlyngo-next-seven.vercel.app/api/gallery?page=1&limit=100");
+        const json = await response.json();
+        
+        if (json.success && json.data.items) {
+          // Group items by category
+          const grouped = json.data.items.reduce((acc, item) => {
+            const categoryName = item.category?.name || "OTHER";
+            if (!acc[categoryName]) {
+              acc[categoryName] = [];
+            }
+            acc[categoryName].push({
+              id: item._id,
+              title: item.title,
+              image: item.imageUrl,
+            });
+            return acc;
+          }, {});
+
+          // Grid size pattern to repeat
+          const sizePattern = [
+            "col-span-1 row-span-1",
+            "col-span-1 row-span-1",
+            "col-span-2 row-span-2",
+            "col-span-1 row-span-1",
+            "col-span-1 row-span-1",
+            "col-span-1 row-span-2",
+            "col-span-1 row-span-1",
+            "col-span-1 row-span-1",
+            "col-span-2 row-span-1",
+            "col-span-1 row-span-1",
+            "col-span-1 row-span-1",
+          ];
+
+          // Convert grouped object to categories array
+          const formattedCategories = Object.keys(grouped).map((name, index) => {
+            const words = name.trim().split(/\s+/);
+            let first = "";
+            let second = "";
+
+            if (words.length >= 2) {
+              first = words[0];
+              second = words.slice(1).join(" ");
+            } else {
+              first = words[0];
+              second = "";
+            }
+
+            return {
+              id: `cat-${index}`,
+              title: first + (second ? " " : ""),
+              subtitle: second,
+              items: grouped[name].map((item, i) => ({
+                ...item,
+                size: sizePattern[i % sizePattern.length]
+              }))
+            };
+          });
+
+          setCategories(formattedCategories);
+        }
+      } catch (error) {
+        console.error("Failed to fetch gallery:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGallery();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-[#0A0A0A] h-screen w-full flex items-center justify-center">
+        <Loader2 className="text-[#FF6A00] animate-spin" size={48} />
+      </div>
+    );
+  }
+
   return (
-    <main className="bg-[#0A0A0A] min-h-screen pt-32 overflow-x-hidden">
-      <div className="max-w-[1800px] mx-auto px-6 md:px-16 mb-20">
+    <main className="bg-[#0A0A0A] min-h-screen pt-32 overflow-x-hidden relative">
+      {/* Background Watermark */}
+      <div className="fixed inset-0 flex items-start justify-center pointer-events-none select-none z-0 overflow-hidden pt-40 opacity-[0.04]">
+        <h2 className="text-[25vw] font-black font-heading leading-none text-white whitespace-nowrap uppercase text-center tracking-tighter">
+          CREATIVES
+        </h2>
+      </div>
+
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px] z-0" />
+
+      <div className="max-w-[1800px] mx-auto px-6 md:px-16 mb-20 relative z-10">
         {categories.map((category, idx) => (
           <section key={category.id} className={cn("mb-32", idx !== 0 && "pt-20 border-t border-white/5")}>
             <div className="flex justify-between items-end mb-12">
-              <h2 className="text-4xl md:text-6xl font-bold text-white uppercase tracking-tight font-heading">
+              <h2 className="text-4xl md:text-7xl font-bold text-white uppercase tracking-tight font-heading">
                 {category.title} <span className="text-[#FF6A00]">{category.subtitle}</span>
               </h2>
               <button className="px-8 py-3 border border-white/10 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
@@ -67,25 +124,57 @@ export default function CreativeGallery() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05 }}
+                  onClick={() => setSelectedImage(item.image)}
                   className={cn(
-                    "relative rounded-xl overflow-hidden group border border-white/5",
+                    "relative rounded-xl overflow-hidden group border border-white/5 bg-[#121212] cursor-pointer",
                     item.size
                   )}
                 >
-                  <Image 
+                  <img 
                     src={item.image} 
-                    alt="Creative" 
-                    fill 
-                    sizes="(max-width: 768px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-1000 group-hover:scale-110" 
+                    alt={item.title} 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                    loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-500" />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-500 flex items-center justify-center">
+                    <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={24} />
+                  </div>
                 </motion.div>
               ))}
             </div>
           </section>
         ))}
       </div>
+
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[2000] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4 md:p-10 cursor-zoom-out"
+          >
+            <button className="absolute top-8 right-8 text-white hover:text-[#FF6A00] transition-colors">
+              <X size={48} />
+            </button>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-full max-h-full aspect-auto rounded-2xl overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img 
+                src={selectedImage} 
+                alt="Selected" 
+                className="max-w-full max-h-[90vh] object-contain"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <Footer />
     </main>
   );

@@ -6,10 +6,11 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { useLenis } from "lenis/react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { name: "Video Gallery", href: "/video-gallery" },
+  { name: "Video Gallery", href: "/" },
   { name: "Creative Gallery", href: "/creative-gallery" },
   { name: "Case Studies", href: "/work" },
   { name: "Testimonials", href: "/testimonials" },
@@ -48,6 +49,17 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const lenis = useLenis();
+
+  useEffect(() => {
+    if (lenis) {
+      if (isOpen) {
+        lenis.stop();
+      } else {
+        lenis.start();
+      }
+    }
+  }, [isOpen, lenis]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,10 +69,23 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   return (
+    <>
     <header
       className={cn(
-        "fixed top-0 left-0 w-full z-[100] transition-all duration-500",
+        "fixed top-0 left-0 w-full z-[999] transition-all duration-500",
         scrolled ? "bg-black/90 backdrop-blur-md" : "bg-[#0A0A0A]"
       )}
     >
@@ -69,12 +94,10 @@ export default function Navbar() {
       <nav className="max-w-[1800px] mx-auto flex items-center justify-between px-6 py-4 md:px-12 relative">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center group">
-            <Image 
+            <img 
               src="/logo.svg" 
               alt="Adlyngo" 
-              width={140} 
-              height={40} 
-              className="object-contain"
+              className="h-8 md:h-10 w-auto object-contain"
             />
           </Link>
           
@@ -132,6 +155,8 @@ export default function Navbar() {
 
       <div className="w-full h-[1.5px] bg-[#FF4D00]" />
 
+    </header>
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -139,7 +164,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed inset-0 bg-[#0A0A0A] z-[200] flex flex-col p-10 md:p-20 overflow-hidden"
+            className="fixed inset-0 bg-[#0A0A0A] z-[1000] flex flex-col p-6 md:p-10 lg:px-20 lg:pt-20 lg:pb-12 overflow-y-auto"
           >
             <button 
               onClick={() => setIsOpen(false)}
@@ -150,11 +175,11 @@ export default function Navbar() {
 
             <div className="flex-1 flex flex-col lg:flex-row items-center justify-between gap-10 md:gap-20 max-w-[1800px] mx-auto w-full">
               <div className="flex-1">
-                <motion.h2 
+                  <motion.h2 
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2, duration: 0.8 }}
-                  className="text-5xl md:text-[8vw] font-black font-heading leading-[0.9] text-white uppercase"
+                  className="text-4xl md:text-5xl lg:text-[8vw] font-black font-heading leading-[0.9] text-white uppercase"
                 >
                   We don't run <br /> ads. We make <br /> them <span className="text-[#FF6A00]">Speak.</span>
                 </motion.h2>
@@ -172,8 +197,8 @@ export default function Navbar() {
                   {[
                     { 
                       name: "Portfolio", 
-                      href: "/work", 
-                      isActive: ["/work", "/video-gallery", "/creative-gallery", "/testimonials"].includes(pathname) || (pathname === "/" )
+                      href: "/video-gallery", 
+                      isActive: [ "/video-gallery", "/work", "/", "/creative-gallery", "/testimonials"].includes(pathname)
                     },
                     { name: "About", href: "/about", isActive: pathname === "/about" },
                     { name: "Services", href: "/services", isActive: pathname === "/services" },
@@ -184,11 +209,20 @@ export default function Navbar() {
                         href={link.href}
                         onClick={() => setIsOpen(false)}
                         className={cn(
-                          "text-2xl md:text-4xl font-bold font-heading uppercase tracking-tight transition-colors",
+                          "group flex items-center w-full text-2xl md:text-4xl font-bold font-heading uppercase tracking-tight transition-all duration-500 ease-expo",
                           link.isActive ? "text-[#FF6A00]" : "text-white hover:text-[#FF6A00]"
                         )}
                       >
-                        {link.name}
+                        <div className={cn(
+                          "transition-all duration-500 ease-expo", 
+                          link.isActive ? "flex-1" : "w-0 group-hover:flex-1"
+                        )} />
+                        <motion.span 
+                          className="relative"
+                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                        >
+                          {link.name}
+                        </motion.span>
                       </Link>
                       {i < 3 && <div className="h-[1px] w-full bg-white/5 mt-4" />}
                     </div>
@@ -197,10 +231,11 @@ export default function Navbar() {
               </motion.div>
             </div>
 
-            <div className="mt-auto max-w-[1800px] mx-auto w-full">
+            {/* Anchored Bottom Footer */}
+            <div className="mt-auto max-w-[1800px] mx-auto w-full pt-12">
               <div className="h-[1px] w-full bg-white/10 mb-8" />
-              <div className="flex flex-col md:flex-row justify-between items-center gap-6 pb-10 md:pb-0">
-                <Image src="/logo.svg" alt="Adlyngo" width={120} height={35} className="object-contain" />
+              <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+                <img src="/logo.svg" alt="Adlyngo" className="h-8 w-auto object-contain" />
                 
                 <div className="flex flex-col md:flex-row items-center gap-4 text-white/60 text-sm font-medium tracking-wide">
                   <span>Let's Build something great together</span>
@@ -214,6 +249,6 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }
