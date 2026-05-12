@@ -15,20 +15,17 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Show intro only if it hasn't been seen in this session
     const hasSeenIntro = sessionStorage.getItem("adlyngo_intro_seen");
     if (!hasSeenIntro) {
       setShowIntro(true);
     }
 
-    // Fetch dynamic data from API
     const fetchReels = async () => {
       try {
         const response = await fetch("https://adlyngo-next-seven.vercel.app/api/reels?page=1&limit=50");
         const json = await response.json();
         
         if (json.success && json.data.reels) {
-          // Group reels by category
           const grouped = json.data.reels.reduce((acc, reel) => {
             const categoryName = reel.category?.name || "OTHER";
             if (!acc[categoryName]) {
@@ -40,27 +37,33 @@ export default function Home() {
               category: categoryName,
               thumbnail: reel.thumbnail?.url || "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2070&auto=format&fit=crop",
               videoUrl: reel.reelUrl,
-              duration: "0:30", // Fallback duration
+              duration: "0:30",
             });
             return acc;
           }, {});
 
-          // Convert grouped object to categories array
           const formattedCategories = Object.keys(grouped).map((name, index) => {
-            const words = name.split(" ");
-            let first = words[0];
-            let second = words.slice(1).join(" ");
+            const words = name.trim().split(/\s+/);
             
-            // If only one word, split it artificially for design or just keep it
-            if (!second && name.length > 5) {
-              const mid = Math.ceil(name.length / 2);
-              first = name.substring(0, mid);
-              second = name.substring(mid);
+            let first = "";
+            let second = "";
+
+            if (words.length >= 2) {
+              // If 2 or more words, first word is white, others are orange
+              first = words[0];
+              second = words.slice(1).join(" ");
+            } else {
+              // If only 1 word, keep it whole in white
+              first = words[0];
+              second = "";
             }
 
             return {
               id: index,
-              title: { first: first + " ", second: second || "" },
+              title: { 
+                first: first + (second ? " " : ""), 
+                second: second 
+              },
               videos: grouped[name],
               layout: index === 2 ? "landscape" : "portrait" 
             };
@@ -181,26 +184,7 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-
               <div className="w-[calc(100%-96px)] mx-auto h-[1px] bg-white/10 relative z-20" />
-
-              <div className="flex-1 p-12 pt-6 relative z-20 overflow-hidden">
-                <div className="w-full flex justify-between items-center h-full">
-                  <div className="flex flex-col justify-start items-start gap-10 max-w-[500px]">
-                    <div className="flex flex-col justify-start items-start gap-5">
-                      <h1 className="flex flex-col" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                        <span className="text-white text-[56px] leading-[1.1] uppercase">We Don’t Run Ads.</span>
-                        <span className="text-white text-[56px] leading-[1.1] uppercase">
-                          We Make Them <span className="text-[#FF6A00]">Speak.</span>
-                        </span>
-                      </h1>
-                      <p className="w-[478px] text-white text-sm font-normal leading-relaxed opacity-80" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
-                        We turn ideas into performance-driven campaigns that actually connect with people not just impressions.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </motion.div>
           </motion.div>
         )}
@@ -284,7 +268,6 @@ export default function Home() {
                       ${currentCategory?.layout === "landscape" ? "w-[450px] md:w-[700px] h-[320px] md:h-[380px]" : "w-[260px] h-[430px]"}
                     `}
                   >
-                    {/* Background Video for Homepage Card */}
                     {video.videoUrl ? (
                       <video 
                         src={video.videoUrl}
@@ -304,7 +287,6 @@ export default function Home() {
                         className="object-cover transition-transform duration-1000 group-hover:scale-110"
                       />
                     )}
-
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-16 h-16 rounded-full bg-brand/90 flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 shadow-2xl">
