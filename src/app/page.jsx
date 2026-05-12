@@ -63,17 +63,18 @@ export default function Home() {
     sessionStorage.setItem("adlyngo_intro_seen", "true");
   };
 
-  const currentCategory = categories[activeCategoryIndex];
+  const currentCategory = categories[activeCategoryIndex] || categories[0];
 
   const handleWheel = (e) => {
+    // Only handle vertical wheel for category switching if we're not horizontally scrolling
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
       if (isLocked) return;
 
-      if (e.deltaY > 20 && activeCategoryIndex < categories.length - 1) {
-        setActiveCategoryIndex(prev => prev + 1);
+      if (e.deltaY > 50 && activeCategoryIndex < categories.length - 1) {
+        setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
         lockScrolling();
-      } else if (e.deltaY < -20 && activeCategoryIndex > 0) {
-        setActiveCategoryIndex(prev => prev - 1);
+      } else if (e.deltaY < -50 && activeCategoryIndex > 0) {
+        setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
         lockScrolling();
       }
     }
@@ -81,7 +82,7 @@ export default function Home() {
 
   const lockScrolling = () => {
     setIsLocked(true);
-    setTimeout(() => setIsLocked(false), 1000); // Lock for 1s to prevent rapid firing
+    setTimeout(() => setIsLocked(false), 800); // Slightly shorter lock
   };
 
   const scroll = (direction) => {
@@ -237,34 +238,43 @@ export default function Home() {
 
       {/* Massive Background Text (Watermark) - Precisely aligned with Figma */}
       <div className="absolute inset-0 flex items-start justify-center pointer-events-none select-none z-0 overflow-hidden pt-20">
-        <motion.h2
-          key={currentCategory?.id}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 0.04, scale: 1 }}
-          transition={{ duration: 1 }}
-          className="text-[25vw] font-black font-heading leading-none text-white whitespace-nowrap uppercase text-center"
-        >
-          {currentCategory?.title?.first}{currentCategory?.title?.second}
-        </motion.h2>
+        <AnimatePresence mode="wait">
+          <motion.h2
+            key={currentCategory?.id}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 0.04, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-[25vw] font-black font-heading leading-none text-white whitespace-nowrap uppercase text-center"
+          >
+            {currentCategory?.title?.first}{currentCategory?.title?.second}
+          </motion.h2>
+        </AnimatePresence>
       </div>
 
-      <div className="max-w-[1800px] mx-auto w-full h-full flex flex-col px-6 md:px-16 py-4 md:py-6 overflow-hidden relative z-10">
-        <header className="flex justify-between items-center mb-6 flex-shrink-0">
-          <motion.h1 
-            key={currentCategory?.id}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="text-4xl md:text-6xl font-bold font-heading leading-tight"
-          >
-            <span className="text-white">{currentCategory?.title?.first}</span>
-            <span className="text-[#FF6A00]">{currentCategory?.title?.second}</span>
-          </motion.h1>
-          <button className="hidden md:flex items-center gap-2.5 px-4 py-2 bg-[#181818]/40 border border-white rounded-lg text-white text-sm font-medium font-albert leading-none hover:bg-white hover:text-black transition-all">
+      <div className="max-w-[1800px] mx-auto w-full h-full flex flex-col px-6 md:px-16 pt-2 pb-6 overflow-hidden relative z-10">
+        <header className="flex justify-between items-end flex-shrink-0">
+          <div className="h-[72px] overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.h1 
+                key={activeCategoryIndex}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="text-4xl md:text-5xl lg:text-[72px] font-bold font-heading leading-[0.8]"
+              >
+                <span className="text-white">{currentCategory?.title?.first}</span>
+                <span className="text-[#FF6A00]">{currentCategory?.title?.second}</span>
+              </motion.h1>
+            </AnimatePresence>
+          </div>
+          <button className="hidden md:flex items-center gap-2.5 px-6 py-2.5 bg-[#181818]/40 border border-white rounded-lg text-white text-sm font-medium font-albert leading-none hover:bg-white hover:text-black transition-all">
             View All
           </button>
         </header>
 
-        <div className="flex-1 flex items-center min-h-0 overflow-hidden relative">
+        <div className="flex-1 flex items-center min-h-0 relative py-2">
           {/* Vertical Category Navigation Dots */}
           <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-4">
             {categories.map((cat, idx) => (
@@ -284,77 +294,84 @@ export default function Home() {
             ))}
           </div>
 
-          <motion.div 
-            key={currentCategory?.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            ref={scrollRef} 
-            className="flex gap-6 md:gap-8 overflow-x-auto no-scrollbar w-full py-4 snap-x scroll-smooth pl-10"
-          >
-            {currentCategory?.videos?.map((video, idx) => (
-              <motion.div
-                key={video?.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                className={`group relative flex-shrink-0 cursor-pointer rounded-[20px] border border-[#FEFEFE] overflow-hidden snap-center
-                  ${currentCategory?.layout === "landscape" ? "w-[450px] md:w-[600px] h-[350px] md:h-[400px]" : "w-[260px] h-[clamp(300px,50vh,400px)]"}
-                `}
+          <div className="w-full h-full relative">
+            <AnimatePresence mode="wait">
+              <motion.div 
+                key={activeCategoryIndex}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.5 }}
+                ref={scrollRef} 
+                className="flex gap-4 md:gap-5 overflow-x-auto no-scrollbar w-full snap-x scroll-smooth pl-10 h-full items-center"
               >
-                <img
-                  src={video?.thumbnail}
-                  alt={video?.title}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                  loading="lazy"
-                />
-                
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+                {currentCategory?.videos?.map((video, idx) => (
+                  <motion.div
+                    key={`${activeCategoryIndex}-${video?.id}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.05 }}
+                    className={`group relative flex-shrink-0 cursor-pointer rounded-[40px] border border-white/20 overflow-hidden snap-center
+                      ${currentCategory?.layout === "landscape" ? "w-[450px] md:w-[700px] h-[320px] md:h-[380px]" : "w-[260px] h-[430px]"}
+                    `}
+                  >
+                    <Image
+                      src={video?.thumbnail}
+                      alt={video?.title}
+                      fill
+                      sizes={currentCategory?.layout === "landscape" ? "700px" : "260px"}
+                      className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                    />
+                    
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
 
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-brand/90 flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 shadow-2xl">
-                    <Play className="text-white fill-white ml-1" size={24} />
-                  </div>
-                </div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-full bg-brand/90 flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 shadow-2xl">
+                        <Play className="text-white fill-white ml-1" size={24} />
+                      </div>
+                    </div>
 
-                <div className="absolute bottom-6 left-6 right-6">
-                  <p className="text-[#FF6A00] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">{video?.category}</p>
-                  <h3 className="text-base md:text-lg font-bold text-white font-heading uppercase tracking-tight leading-none">{video?.title}</h3>
-                </div>
+                    <div className="absolute bottom-6 left-6 right-6">
+                      <p className="text-[#FF6A00] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">{video?.category}</p>
+                      <h3 className="text-base md:text-lg font-bold text-white font-heading uppercase tracking-tight leading-none">{video?.title}</h3>
+                    </div>
 
-                <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-[10px] text-white font-bold tracking-widest">
-                  {video?.duration}
-                </div>
+                    <div className="absolute top-6 right-6 bg-black/60 backdrop-blur-md px-2 py-1.5 rounded text-[10px] text-white font-bold tracking-widest">
+                      {video?.duration}
+                    </div>
+                  </motion.div>
+                ))}
               </motion.div>
-            ))}
-          </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
 
-        <footer className="mt-4 flex flex-col md:flex-row items-center justify-between gap-8 border-t border-white/5 pt-6 flex-shrink-0">
+        <footer className="flex flex-col md:flex-row items-center justify-between gap-6 flex-shrink-0">
           <div className="flex items-center gap-10">
-            <h3 className="text-2xl md:text-3xl font-bold font-heading">
-              <span className="text-white">BRANDS </span>
-              <span className="text-[#FF6A00]">WE SERVE</span>
+            <h3 className="text-2xl md:text-[34px] font-bold font-heading whitespace-nowrap">
+              <span className="text-white uppercase">BRANDS </span>
+              <span className="text-[#FF6A00] uppercase">WE SERVE</span>
             </h3>
-            <div className="hidden lg:flex items-center gap-10 opacity-40 grayscale brightness-200">
-              <span className="text-xl font-heading text-white uppercase tracking-tighter">airbnb</span>
-              <span className="text-xl font-heading text-white uppercase tracking-tighter">Expedia</span>
-              <span className="text-xl font-heading text-white uppercase tracking-tighter">Skyscanner</span>
-              <span className="text-xl font-heading text-white uppercase tracking-tighter">Expedia</span>
+            <div className="hidden lg:flex items-center gap-10 opacity-60">
+              <span className="text-2xl font-heading text-white uppercase tracking-tighter">airbnb</span>
+              <span className="text-2xl font-heading text-white uppercase tracking-tighter">Expedia</span>
+              <span className="text-2xl font-heading text-white uppercase tracking-tighter">Skyscanner</span>
+              <span className="text-2xl font-heading text-white uppercase tracking-tighter">Expedia</span>
             </div>
           </div>
 
           <div className="flex items-center gap-6">
             <button 
               onClick={() => scroll("left")}
-              className="w-12 h-12 rounded-full border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all"
+              className="w-14 h-14 rounded-full border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all"
             >
-              <ArrowLeft size={20} />
+              <ArrowLeft size={24} />
             </button>
             <button 
               onClick={() => scroll("right")}
-              className="w-12 h-12 rounded-full bg-[#130800]/50 border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all"
+              className="w-14 h-14 rounded-full bg-[#130800]/50 border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all"
             >
-              <ArrowRight size={20} />
+              <ArrowRight size={24} />
             </button>
           </div>
         </footer>

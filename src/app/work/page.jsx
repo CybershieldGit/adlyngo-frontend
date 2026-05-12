@@ -128,7 +128,6 @@ export default function WorkPage() {
           </AnimatePresence>
         </div>
       </div>
-      <Footer />
     </main>
   );
 }
