@@ -20,7 +20,7 @@ const albertSans = Albert_Sans({
   weight: ["400", "500", "700"],
 });
 
-export const metadata = { 
+export const metadata = {
   title: "ADLYNGO | We Don't Run Ads. We Make Them Speak.",
   description: "A premium creative agency specializing in cinematic storytelling and high-performance advertising.",
 };
