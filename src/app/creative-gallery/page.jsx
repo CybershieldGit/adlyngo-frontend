@@ -56,12 +56,22 @@ const categories = [
 
 export default function CreativeGallery() {
   return (
-    <main className="bg-[#0A0A0A] min-h-screen pt-32 overflow-x-hidden">
-      <div className="max-w-[1800px] mx-auto px-6 md:px-16 mb-20">
+    <main className="bg-[#0A0A0A] min-h-screen pt-32 overflow-x-hidden relative">
+      {/* Background Watermark - Fixed and Cinematic */}
+      <div className="fixed inset-0 flex items-start justify-center pointer-events-none select-none z-0 overflow-hidden pt-40 opacity-[0.04]">
+        <h2 className="text-[25vw] font-black font-heading leading-none text-white whitespace-nowrap uppercase text-center tracking-tighter">
+          CREATIVES
+        </h2>
+      </div>
+
+      {/* Grid Pattern Background Overlay */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px] z-0" />
+
+      <div className="max-w-[1800px] mx-auto px-6 md:px-16 mb-20 relative z-10">
         {categories.map((category, idx) => (
           <section key={category.id} className={cn("mb-32", idx !== 0 && "pt-20 border-t border-white/5")}>
             <div className="flex justify-between items-end mb-12">
-              <h2 className="text-4xl md:text-6xl font-bold text-white uppercase tracking-tight font-heading">
+              <h2 className="text-4xl md:text-7xl font-bold text-white uppercase tracking-tight font-heading">
                 {category.title} <span className="text-[#FF6A00]">{category.subtitle}</span>
               </h2>
               <button className="px-8 py-3 border border-white/10 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
@@ -78,7 +88,7 @@ export default function CreativeGallery() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05 }}
                   className={cn(
-                    "relative rounded-xl overflow-hidden group border border-white/5",
+                    "relative rounded-xl overflow-hidden group border border-white/5 bg-[#121212]",
                     item.size
                   )}
                 >
@@ -95,6 +105,7 @@ export default function CreativeGallery() {
           </section>
         ))}
       </div>
+      <Footer />
     </main>
   );
 }

@@ -23,6 +23,9 @@ const albertSans = Albert_Sans({
 export const metadata = {
   title: "ADLYNGO | We Don't Run Ads. We Make Them Speak.",
   description: "A premium creative agency specializing in cinematic storytelling and high-performance advertising.",
+  icons: {
+    icon: "/favicon.svg"
+  },
 };
 
 export default function RootLayout({ children }) {

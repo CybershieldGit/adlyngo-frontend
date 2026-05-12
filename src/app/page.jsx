@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Play, ArrowLeft, ArrowRight } from "lucide-react";
+import { Play, ArrowLeft, ArrowRight, X } from "lucide-react";
 
 const categories = [
   {
@@ -49,6 +49,7 @@ export default function Home() {
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
   const [showIntro, setShowIntro] = useState(false);
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
 
   useEffect(() => {
     // Show intro only if it hasn't been seen in this session
@@ -66,6 +67,9 @@ export default function Home() {
   const currentCategory = categories[activeCategoryIndex] || categories[0];
 
   const handleWheel = (e) => {
+    // Disable category switching when modal is open
+    if (selectedVideoIndex !== null) return;
+
     // Only handle vertical wheel for category switching if we're not horizontally scrolling
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
       if (isLocked) return;
@@ -92,6 +96,24 @@ export default function Home() {
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
       });
+    }
+  };
+
+  const handleVideoClick = (idx) => {
+    setSelectedVideoIndex(idx);
+  };
+
+  const closeVideoModal = () => {
+    setSelectedVideoIndex(null);
+  };
+
+  const navigateVideo = (direction) => {
+    if (selectedVideoIndex === null) return;
+    const totalVideos = currentCategory.videos.length;
+    if (direction === "next") {
+      setSelectedVideoIndex((prev) => (prev + 1) % totalVideos);
+    } else {
+      setSelectedVideoIndex((prev) => (prev - 1 + totalVideos) % totalVideos);
     }
   };
 
@@ -308,6 +330,7 @@ export default function Home() {
                 {currentCategory?.videos?.map((video, idx) => (
                   <motion.div
                     key={`${activeCategoryIndex}-${video?.id}`}
+                    onClick={() => handleVideoClick(idx)}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05 }}
@@ -376,6 +399,111 @@ export default function Home() {
           </div>
         </footer>
       </div>
+
+      {/* Video Modal - Cinematic Player */}
+      <AnimatePresence>
+        {selectedVideoIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 md:p-10"
+          >
+            {/* Close Button */}
+            <button 
+              onClick={closeVideoModal}
+              className="absolute top-24 right-8 md:top-19md:right-12 z-[2100] w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all shadow-xl border border-white/10 backdrop-blur-md"
+            >
+              <X size={28} />
+            </button>
+
+            {/* Navigation Arrows */}
+            <button 
+              onClick={() => navigateVideo("prev")}
+              className="absolute left-10 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"
+            >
+              <ArrowLeft size={32} />
+            </button>
+            <button 
+              onClick={() => navigateVideo("next")}
+              className="absolute right-10 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"
+            >
+              <ArrowRight size={32} />
+            </button>
+
+            {/* Theatre Mode Container */}
+            <div className="relative w-full max-w-[1400px] h-[70vh] flex items-center justify-center gap-10">
+              {/* Left Video (Previous) */}
+              <motion.div
+                key={`prev-${selectedVideoIndex}`}
+                initial={{ opacity: 0, x: -100, scale: 0.8 }}
+                animate={{ opacity: 0.3, x: 0, scale: 0.8 }}
+                className="hidden xl:block w-[300px] h-[500px] rounded-[32px] overflow-hidden grayscale pointer-events-none"
+              >
+                <Image 
+                  src={currentCategory.videos[(selectedVideoIndex - 1 + currentCategory.videos.length) % currentCategory.videos.length].thumbnail}
+                  alt="Previous"
+                  fill
+                  className="object-cover"
+                />
+              </motion.div>
+
+              {/* Main Video (Current) */}
+              <motion.div
+                key={`main-${selectedVideoIndex}`}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="relative flex-1 max-w-[900px] h-full rounded-[48px] overflow-hidden border border-white/20 shadow-[0_0_100px_rgba(255,106,0,0.2)] group"
+              >
+                <Image 
+                  src={currentCategory.videos[selectedVideoIndex].thumbnail}
+                  alt="Main Video"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                   <div className="w-24 h-24 rounded-full bg-[#FF6A00] flex items-center justify-center shadow-2xl hover:scale-110 transition-transform cursor-pointer">
+                      <Play className="text-white fill-white ml-1" size={36} />
+                   </div>
+                </div>
+
+                <div className="absolute bottom-12 left-12 right-12 z-20">
+                  <motion.p 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-[#FF6A00] text-sm uppercase tracking-[0.3em] font-bold mb-3"
+                  >
+                    {currentCategory.videos[selectedVideoIndex].category}
+                  </motion.p>
+                  <motion.h2 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="text-4xl md:text-6xl font-bold text-white font-heading uppercase leading-none"
+                  >
+                    {currentCategory.videos[selectedVideoIndex].title}
+                  </motion.h2>
+                </div>
+              </motion.div>
+
+              {/* Right Video (Next) */}
+              <motion.div
+                key={`next-${selectedVideoIndex}`}
+                initial={{ opacity: 0, x: 100, scale: 0.8 }}
+                animate={{ opacity: 0.3, x: 0, scale: 0.8 }}
+                className="hidden xl:block w-[300px] h-[500px] rounded-[32px] overflow-hidden grayscale pointer-events-none"
+              >
+                <Image 
+                  src={currentCategory.videos[(selectedVideoIndex + 1) % currentCategory.videos.length].thumbnail}
+                  alt="Next"
+                  fill
+                  className="object-cover"
+                />
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
