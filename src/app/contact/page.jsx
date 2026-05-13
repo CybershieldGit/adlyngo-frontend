@@ -62,12 +62,12 @@ export default function ContactPage() {
 
       <div className="w-full mx-auto px-6 md:px-16 lg:px-[70px] relative z-10">
         {/* Header Section - Ultra Compact */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-4 mb-8 relative z-10">
-          <h1 className="text-4xl md:text-6xl font-black font-heading leading-[0.9]">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-4 mb-8 relative z-10">
+          <h1 className="text-4xl md:text-6xl font-black font-heading leading-[0.9] text-center md:text-left">
             <span className="text-white uppercase">LETS GET IN </span>
             <span className="text-[#FF6A00] uppercase">TOUCH</span>
           </h1>
-          <p className="max-w-md text-white/40 text-[9px] md:text-[10px] leading-relaxed text-right md:text-left uppercase tracking-widest font-bold">
+          <p className="max-w-md text-white/40 text-[9px] md:text-[10px] leading-relaxed text-center md:text-left uppercase tracking-widest font-bold">
             Adlyngo is a full-service digital growth agency built for businesses serious about scaling. We combine data-driven performance marketing with premium creative.
           </p>
         </div>
@@ -100,18 +100,22 @@ export default function ContactPage() {
                 <div className="flex flex-col gap-1">
                   <div className="text-[#8C8C8C] text-[13px] font-normal">Located at</div>
                   <div className="text-white text-[15px] font-bold max-w-sm leading-tight">
-                    T3, B1603, NXOne, Tech zone 4, Opposite Gaur city mall, UP, 201306
+                    T3, B-1603, NX-One, Tech, Amrapali Dream Valley, Zone IV, Amrapali Dream Valley, Greater Noida, Uttar Pradesh 201318
                   </div>
                 </div>
               </div>
 
-              {/* Map Image - Even Smaller */}
-              <div className="relative w-full aspect-[21/9] rounded-2xl overflow-hidden border border-white/5 grayscale invert opacity-20">
-                <img
-                  src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=1200"
-                  alt="Map"
-                  className="w-full h-full object-cover"
-                />
+              {/* Real Google Map Embed - Default Style */}
+              <div className="relative w-full aspect-[21/9] rounded-2xl overflow-hidden border border-white/5 opacity-80 hover:opacity-100 transition-opacity duration-500">
+                <iframe
+                  src="https://maps.google.com/maps?q=NX-One,%20Tech,%20Amrapali%20Dream%20Valley,%20B-109,%20Greater%20Noida,%20Uttar%20Pradesh%20201318&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
               </div>
             </div>
 
@@ -125,6 +129,10 @@ export default function ContactPage() {
                 <div className="space-y-1.5 border-b border-white/10 pb-2.5 group focus-within:border-[#FF6A00] transition-colors">
                   <p className="text-white/40 text-[12px] uppercase tracking-widest font-bold">Here is my email</p>
                   <input type="email" placeholder="abc@abc.com" className="w-full bg-transparent text-white text-base outline-none placeholder:text-white/10 font-albert" />
+                </div>
+                <div className="space-y-1.5 border-b border-white/10 pb-2.5 group focus-within:border-[#FF6A00] transition-colors">
+                  <p className="text-white/40 text-[12px] uppercase tracking-widest font-bold">My mobile number</p>
+                  <input type="tel" placeholder="+91 00000 00000" className="w-full bg-transparent text-white text-base outline-none placeholder:text-white/10 font-albert" />
                 </div>
                 <div className="space-y-1.5 border-b border-white/10 pb-2.5 group focus-within:border-[#FF6A00] transition-colors">
                   <p className="text-white/40 text-[12px] uppercase tracking-widest font-bold">I need</p>

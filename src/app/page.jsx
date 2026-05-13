@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Play, ArrowLeft, ArrowRight, X, Loader2 } from "lucide-react";
+import { Play, ArrowLeft, ArrowRight, X, Loader2, ArrowUpRight } from "lucide-react";
 
 export default function Home() {
   const scrollRef = useRef(null);
@@ -24,7 +24,7 @@ export default function Home() {
       try {
         const response = await fetch("https://adlyngo-next-seven.vercel.app/api/reels?page=1&limit=50");
         const json = await response.json();
-        
+
         if (json.success && json.data.reels) {
           const grouped = json.data.reels.reduce((acc, reel) => {
             const categoryName = reel.category?.name || "OTHER";
@@ -44,7 +44,7 @@ export default function Home() {
 
           const formattedCategories = Object.keys(grouped).map((name, index) => {
             const words = name.trim().split(/\s+/);
-            
+
             let first = "";
             let second = "";
 
@@ -60,12 +60,12 @@ export default function Home() {
 
             return {
               id: index,
-              title: { 
-                first: first + (second ? " " : ""), 
-                second: second 
+              title: {
+                first: first + (second ? " " : ""),
+                second: second
               },
               videos: grouped[name],
-              layout: index === 2 ? "landscape" : "portrait" 
+              layout: index === 2 ? "landscape" : "portrait"
             };
           });
 
@@ -94,10 +94,11 @@ export default function Home() {
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
       if (isLocked) return;
 
-      if (e.deltaY > 50 && activeCategoryIndex < categories.length - 1) {
+      // Lowered threshold from 50 to 20 for better responsiveness
+      if (e.deltaY > 20 && activeCategoryIndex < categories.length - 1) {
         setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
         lockScrolling();
-      } else if (e.deltaY < -50 && activeCategoryIndex > 0) {
+      } else if (e.deltaY < -20 && activeCategoryIndex > 0) {
         setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
         lockScrolling();
       }
@@ -107,16 +108,6 @@ export default function Home() {
   const lockScrolling = () => {
     setIsLocked(true);
     setTimeout(() => setIsLocked(false), 800);
-  };
-
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const scrollAmount = currentCategory?.layout === "landscape" ? 500 : 300;
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
   };
 
   const handleVideoClick = (idx) => {
@@ -146,11 +137,11 @@ export default function Home() {
   }
 
   return (
-    <motion.main 
+    <motion.main
       onWheel={handleWheel}
       onPanEnd={(e, info) => {
         if (showIntro || selectedVideoIndex !== null || isLocked) return;
-        const threshold = 50;
+        const threshold = 30;
         if (info.offset.y < -threshold && activeCategoryIndex < categories.length - 1) {
           setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
           lockScrolling();
@@ -159,7 +150,7 @@ export default function Home() {
           lockScrolling();
         }
       }}
-      className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[80px] overflow-hidden fixed inset-0 touch-pan-x md:touch-auto"
+      className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[80px] overflow-hidden fixed inset-0 touch-auto"
     >
       <AnimatePresence>
         {showIntro && (
@@ -170,7 +161,7 @@ export default function Home() {
             className="fixed inset-0 z-[100] flex items-end justify-center"
           >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-1xl" />
-            
+
             <motion.div
               initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
@@ -183,9 +174,9 @@ export default function Home() {
                 <div className="flex items-center justify-between w-full gap-4">
                   {/* Logo Area */}
                   <div className="w-[120px] h-[32px] md:w-[207.67px] md:h-[54.73px] relative flex-shrink-0">
-                    <Image 
-                      src="/logo.svg" 
-                      alt="Adlyngo" 
+                    <Image
+                      src="/logo.svg"
+                      alt="Adlyngo"
                       fill
                       className="object-contain"
                     />
@@ -197,7 +188,7 @@ export default function Home() {
                   </div>
 
                   {/* Button */}
-                  <button 
+                  <button
                     onClick={handleCloseIntro}
                     className="px-4 py-2 md:w-[170px] md:h-[48px] bg-[#FF6A00] rounded-lg outline outline-[1.5px] outline-white -outline-offset-[1.5px] flex items-center justify-center gap-[10px] hover:scale-105 transition-transform flex-shrink-0"
                   >
@@ -222,7 +213,7 @@ export default function Home() {
                           We Make Them <span className="text-[#FF6A00]">Speak.</span>
                         </span>
                       </h1>
-                      
+
                       {/* Sub-heading */}
                       <p className="w-full md:w-[478px] text-white text-xs md:text-sm font-normal leading-relaxed opacity-80" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
                         We turn ideas into performance-driven campaigns that actually connect with people not just impressions.
@@ -313,17 +304,17 @@ export default function Home() {
         </AnimatePresence>
       </div>
 
-      <div className="w-full mx-auto h-full flex flex-col px-6 md:px-16 pt-2 pb-6 overflow-hidden relative z-10">
-        <header className="flex justify-between items-end flex-shrink-0">
-          <div className="h-[72px] overflow-hidden">
+      <div className="w-full mx-auto h-full flex flex-col px-6 md:px-16 pt-15 md:pt-2 pb-6 overflow-hidden relative z-10">
+        <header className="flex flex-col md:flex-row justify-between items-center md:items-end flex-shrink-0 gap-4">
+          <div className="h-[20px] md:h-[72px] overflow-hidden">
             <AnimatePresence mode="wait">
-              <motion.h1 
+              <motion.h1
                 key={activeCategoryIndex}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="text-4xl md:text-5xl lg:text-[72px] font-bold font-heading leading-[0.8] tracking-wide"
+                className="text-2xl md:text-5xl lg:text-[72px] font-bold font-heading leading-[0.8] tracking-wide text-center md:text-left"
               >
                 <span className="text-white">{currentCategory?.title?.first}</span>
                 <span className="text-[#FF6A00]">{currentCategory?.title?.second}</span>
@@ -356,14 +347,14 @@ export default function Home() {
 
           <div className="w-full h-full relative">
             <AnimatePresence mode="wait">
-              <motion.div 
+              <motion.div
                 key={activeCategoryIndex}
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -50 }}
                 transition={{ duration: 0.5 }}
-                ref={scrollRef} 
-                className="flex gap-4 md:gap-5 overflow-x-auto no-scrollbar w-full snap-x snap-mandatory scroll-smooth pl-10 h-full items-center"
+                ref={scrollRef}
+                className="flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar w-full snap-x snap-mandatory scroll-smooth pl-10 md:pl-20 lg:pl-40 h-full items-center touch-pan-x"
               >
                 {currentCategory?.videos?.map((video, idx) => (
                   <motion.div
@@ -372,12 +363,14 @@ export default function Home() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05 }}
-                    className={`group relative flex-shrink-0 cursor-pointer rounded-[40px] border border-white/20 overflow-hidden snap-center bg-black
-                      ${currentCategory?.layout === "landscape" ? "w-[450px] md:w-[700px] h-[320px] md:h-[380px]" : "w-[260px] h-[430px]"}
+                    className={`group relative flex-shrink-0 cursor-pointer rounded-[32px] md:rounded-[40px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
+                      ${currentCategory?.layout === "landscape" 
+                        ? "w-[300px] md:w-[600px] lg:w-[800px] xl:w-[950px] h-[200px] md:h-[350px] lg:h-[450px] xl:h-[550px]" 
+                        : "w-[260px] md:w-[320px] lg:w-[380px] xl:w-[420px] h-[420px] md:h-[520px] lg:h-[620px] xl:h-[700px]"}
                     `}
                   >
                     {video.videoUrl ? (
-                      <video 
+                      <video
                         src={video.videoUrl}
                         poster={video.thumbnail}
                         muted
@@ -401,6 +394,12 @@ export default function Home() {
                         <Play className="text-white fill-white ml-1" size={24} />
                       </div>
                     </div>
+                    
+                    {/* Top Right Arrow on Hover */}
+                    <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
+                      <ArrowUpRight size={24} />
+                    </div>
+
                     <div className="absolute bottom-6 left-6 right-6">
                       <p className="text-[#FF6A00] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">{video?.category}</p>
                       <h3 className="text-base md:text-lg font-bold text-white font-heading uppercase tracking-tight leading-none">{video?.title}</h3>
@@ -412,21 +411,37 @@ export default function Home() {
           </div>
         </div>
 
-        <footer className="flex flex-row items-center justify-between gap-4 md:gap-6 flex-shrink-0">
-          <div className="flex items-center gap-4 md:gap-10">
+        <footer className="flex flex-row items-center justify-between gap-4 md:gap-10 flex-shrink-0 overflow-hidden">
+          <div className="flex items-center gap-4 md:gap-10 flex-shrink-0">
             <h3 className="text-xl md:text-[34px] font-bold font-heading whitespace-nowrap">
               <span className="text-white uppercase">BRANDS </span>
               <span className="text-[#FF6A00] uppercase">WE SERVE</span>
             </h3>
-            <div className="hidden lg:flex items-center gap-10 opacity-60">
-              {["airbnb", "Expedia", "Skyscanner", "Expedia"].map((brand, i) => (
-                <span key={i} className="text-2xl font-heading text-white uppercase tracking-tighter">{brand}</span>
-              ))}
-            </div>
           </div>
-          <div className="flex items-center gap-3 md:gap-6">
-            <button onClick={() => scroll("left")} className="w-10 h-10 md:w-14 md:h-14 rounded-full border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowLeft size={18} className="md:size-[24px]" /></button>
-            <button onClick={() => scroll("right")} className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-[#130800]/50 border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowRight size={18} className="md:size-[24px]" /></button>
+          
+          <div className="flex-1 overflow-hidden relative">
+            <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#0A0A0A] to-transparent z-10" />
+            <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[#0A0A0A] to-transparent z-10" />
+            
+            <motion.div 
+              className="flex items-center gap-12 whitespace-nowrap"
+              animate={{ x: [0, -1000] }}
+              transition={{ 
+                duration: 20, 
+                repeat: Infinity, 
+                ease: "linear" 
+              }}
+            >
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="flex items-center gap-12">
+                  {["airbnb", "Expedia", "Skyscanner", "Booking", "Marriott", "Netflix"].map((brand, idx) => (
+                    <span key={idx} className="text-xl md:text-2xl font-heading text-white uppercase tracking-tighter opacity-40 hover:opacity-100 transition-opacity cursor-default">
+                      {brand}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </motion.div>
           </div>
         </footer>
       </div>
@@ -450,11 +465,11 @@ export default function Home() {
                 <video src={currentCategory.videos[(selectedVideoIndex - 1 + currentCategory.videos.length) % currentCategory.videos.length].videoUrl} muted className="w-full h-full object-cover" />
               </motion.div>
               <motion.div key={`main-${selectedVideoIndex}`} className="relative flex-1 max-w-[900px] h-full rounded-[48px] overflow-hidden border border-white/20 shadow-[0_0_100px_rgba(255,106,0,0.2)]">
-                <video 
-                  src={currentCategory.videos[selectedVideoIndex].videoUrl} 
-                  className="w-full h-full object-cover" 
-                  controls 
-                  autoPlay 
+                <video
+                  src={currentCategory.videos[selectedVideoIndex].videoUrl}
+                  className="w-full h-full object-cover"
+                  controls
+                  autoPlay
                 />
                 <div className="absolute bottom-12 left-12 right-12 z-20 pointer-events-none">
                   <p className="text-[#FF6A00] text-sm uppercase tracking-[0.3em] font-bold mb-3">{currentCategory.videos[selectedVideoIndex].category}</p>

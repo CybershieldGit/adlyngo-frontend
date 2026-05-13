@@ -66,7 +66,6 @@ export default function Footer() {
               <ul className="space-y-3 text-white/40 text-[13px] font-normal">
                 <li><NextLink href="/case-studies" className="hover:text-white transition-colors">Portfolio</NextLink></li>
                 <li><NextLink href="/services" className="hover:text-white transition-colors">Services</NextLink></li>
-                <li><NextLink href="/careers" className="hover:text-white transition-colors">Career</NextLink></li>
                 <li><NextLink href="/contact" className="hover:text-white transition-colors">Contact</NextLink></li>
               </ul>
             </div>
@@ -85,38 +84,39 @@ export default function Footer() {
         <div className="w-full h-[1px] bg-white/10 mb-8" />
 
         {/* Newsletter Row */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-12">
           <p className="text-white text-xl font-normal whitespace-nowrap uppercase tracking-tight">Sign up for the newsletter</p>
-          <div className="flex-1 max-w-lg relative">
-            <input 
-              type="email" 
-              placeholder="email" 
-              className="w-full bg-transparent border-b border-white/20 py-1.5 text-white text-xl outline-none focus:border-white transition-colors placeholder:text-white/20 font-albert" 
-            />
+          <div className="flex flex-row items-center gap-4 w-full lg:flex-1 lg:max-w-lg">
+            <div className="flex-1 relative">
+              <input
+                type="email"
+                placeholder="email"
+                className="w-full bg-transparent border-b border-white/20 py-1.5 text-white text-xl outline-none focus:border-white transition-colors placeholder:text-white/20 font-albert"
+              />
+            </div>
+            <button className="px-6 md:px-8 py-3 bg-[#1A1A1A] text-white rounded-xl text-sm md:text-base font-normal hover:bg-white hover:text-black transition-all uppercase tracking-widest font-bold whitespace-nowrap">
+              Submit
+            </button>
           </div>
-          <button className="px-8 py-3 bg-[#1A1A1A] text-white rounded-xl text-base font-normal hover:bg-white hover:text-black transition-all uppercase tracking-widest font-bold">
-            Submit
-          </button>
         </div>
 
         {/* Bottom Row: Exact Image Match */}
-        <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 pt-8 border-t border-white/5">
-          <p className="text-white/40 text-[12px] font-normal">
-            © 2026 All rights reserved to Adlyngo. A unit of Cybershield Tecnologies Private Limited.
-          </p>
-          
-          <div className="hidden md:block text-white/20 opacity-30">|</div>
-          
-          <NextLink href="#" className="text-white/40 text-[12px] hover:text-white transition-colors">Privacy Policy</NextLink>
-          
-          <div className="hidden md:block text-white/20 opacity-30">|</div>
-          
-          <NextLink href="#" className="text-white/40 text-[12px] hover:text-white transition-colors">Terms & Conditions</NextLink>
-          
-          <div className="hidden md:block text-white/20 opacity-30">|</div>
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+            <p className="text-white/40 text-[10px] md:text-[12px] font-normal text-center md:text-left">
+              © 2026 All rights reserved to Adlyngo. <br className="md:hidden" /> A unit of Cybershield Tecnologies Private Limited.
+            </p>
 
-          <div className="flex items-center ml-auto">
-             <img src="/cybershield.svg" alt="Cybershield" className="h-5 w-auto [filter:brightness(0)_invert(1)]" />
+            <div className="flex items-center gap-6">
+              <NextLink href="#" className="text-white/40 text-[10px] md:text-[12px] hover:text-white transition-colors">Privacy Policy</NextLink>
+              <div className="w-[1px] h-3 bg-white/10" />
+              <NextLink href="#" className="text-white/40 text-[10px] md:text-[12px] hover:text-white transition-colors">Terms & Conditions</NextLink>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <span className="text-white/20 text-[10px] uppercase tracking-widest font-bold">Powered by</span>
+            <img src="/cybershield.svg" alt="Cybershield" className="h-4 md:h-5 w-auto [filter:brightness(0)_invert(1)] opacity-40 hover:opacity-100 transition-opacity" />
           </div>
         </div>
       </div>
