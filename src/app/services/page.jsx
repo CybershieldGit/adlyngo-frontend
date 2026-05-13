@@ -118,7 +118,7 @@ export default function ServicesPage() {
             <span className="text-[#FF6A00] uppercase">SERVICES</span>
           </h1>
           <p className="max-w-xl text-white/60 text-sm md:text-base leading-relaxed">
-            Adlyngo is a full-service digital growth agency built for businesses serious about scaling. We combine data-driven performance marketing with premium creative so every rupee work...
+            Adlyngo is a creative growth agency helping modern brands scale through strategy, content, and performance marketing. We combine creative storytelling with data-driven execution to turn attention into real business growth
           </p>
         </div>
 
@@ -133,11 +133,20 @@ export default function ServicesPage() {
           <div className="absolute inset-0 bg-black/20" />
         </div>
 
-        {/* Specialization Quote */}
-        <div className="mb-24 relative z-10">
-          <h2 className="w-full flex flex-col justify-center text-white text-2xl md:text-[48px] font-normal break-words font-albert leading-tight">
-            We don't chase generic briefs. We specialise in Real Estate, Interior Design
-          </h2>
+        {/* Value Proposition Section */}
+        <div className="text-center mb-24 relative z-10 max-w-5xl mx-auto px-4">
+          <div className="mb-10">
+            <h2 className="text-white text-3xl md:text-[48px] font-normal font-albert uppercase leading-[1.1] tracking-tight">
+              Creative. Strategy.Execution.
+            </h2>
+            <br />
+            <h2 className="text-[#FF6A00] text-3xl md:text-[48px] font-normal font-albert uppercase leading-[1.1] tracking-tight">
+              Built To Deliver Results.
+            </h2>
+          </div>
+          <p className="text-white text-sm md:text-[16px] md:leading-[24px] font-normal font-albert max-w-3xl mx-auto opacity-80">
+            Adlyngo helps modern brands grow through a structured creative process focused on strategy, execution, and measurable results. From understanding your business goals to launching high-performing campaigns, every step is built to create impactful digital experiences that drive real growth.
+          </p>
         </div>
 
         {/* Core Process Grid */}
