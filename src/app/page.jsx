@@ -150,7 +150,7 @@ export default function Home() {
           lockScrolling();
         }
       }}
-      className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[80px] overflow-hidden fixed inset-0 touch-auto"
+      className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[60px] md:pt-[80px] overflow-hidden fixed inset-0 touch-auto"
     >
       <AnimatePresence>
         {showIntro && (
@@ -304,9 +304,9 @@ export default function Home() {
         </AnimatePresence>
       </div>
 
-      <div className="w-full mx-auto h-full flex flex-col px-6 md:px-16 pt-15 md:pt-2 pb-6 overflow-hidden relative z-10">
+      <div className="w-full mx-auto h-full flex flex-col px-6 md:px-16 pt-6 md:pt-2 pb-6 overflow-hidden relative z-10">
         <header className="flex flex-col md:flex-row justify-between items-center md:items-end flex-shrink-0 gap-4">
-          <div className="h-[20px] md:h-[72px] overflow-hidden">
+          <div className="h-[32px] md:h-[72px] overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.h1
                 key={activeCategoryIndex}
@@ -363,10 +363,10 @@ export default function Home() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05 }}
-                    className={`group relative flex-shrink-0 cursor-pointer rounded-[32px] md:rounded-[40px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
+                    className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[40px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
                       ${currentCategory?.layout === "landscape" 
-                        ? "w-[300px] md:w-[600px] lg:w-[800px] xl:w-[950px] h-[200px] md:h-[350px] lg:h-[450px] xl:h-[550px]" 
-                        : "w-[260px] md:w-[320px] lg:w-[380px] xl:w-[420px] h-[420px] md:h-[520px] lg:h-[620px] xl:h-[700px]"}
+                        ? "w-[85vw] md:w-[70vw] lg:w-[60vw] max-w-[950px] aspect-[16/9] md:aspect-[21/9] h-auto max-h-[40vh] md:max-h-[50vh]" 
+                        : "w-[65vw] md:w-[35vw] lg:w-[22vw] max-w-[420px] aspect-[9/16] h-auto max-h-[60vh] md:max-h-[68vh]"}
                     `}
                   >
                     {video.videoUrl ? (
