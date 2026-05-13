@@ -20,7 +20,7 @@ const InstagramIcon = () => (
 
 const TwitterIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zm-1.294 19.497h2.039L6.482 3.239H4.293l13.314 17.411z" />
   </svg>
 );
 
@@ -64,7 +64,7 @@ export default function Footer() {
             <div className="space-y-4">
               <p className="text-white font-bold text-xs uppercase tracking-wider">Company</p>
               <ul className="space-y-3 text-white/40 text-[13px] font-normal">
-                <li><NextLink href="/work" className="hover:text-white transition-colors">Portfolio</NextLink></li>
+                <li><NextLink href="/case-studies" className="hover:text-white transition-colors">Portfolio</NextLink></li>
                 <li><NextLink href="/services" className="hover:text-white transition-colors">Services</NextLink></li>
                 <li><NextLink href="/careers" className="hover:text-white transition-colors">Career</NextLink></li>
                 <li><NextLink href="/contact" className="hover:text-white transition-colors">Contact</NextLink></li>
@@ -75,7 +75,7 @@ export default function Footer() {
               <ul className="space-y-3 text-white/40 text-[13px] font-normal">
                 <li><NextLink href="/" className="hover:text-white transition-colors">Video Gallery</NextLink></li>
                 <li><NextLink href="/creative-gallery" className="hover:text-white transition-colors">Creative Gallery</NextLink></li>
-                <li><NextLink href="/work" className="hover:text-white transition-colors">Case Studies</NextLink></li>
+                <li><NextLink href="/case-studies" className="hover:text-white transition-colors">Case Studies</NextLink></li>
                 <li><NextLink href="/testimonials" className="hover:text-white transition-colors">Testimonials</NextLink></li>
               </ul>
             </div>
