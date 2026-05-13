@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/common/Footer";
@@ -69,7 +70,8 @@ const SocialIcon = ({ socials }) => {
             href={url} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all cursor-pointer"
+            onClick={(e) => e.stopPropagation()}
+            className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all cursor-pointer relative z-20"
           >
             {icons[platform]}
           </a>
@@ -79,63 +81,68 @@ const SocialIcon = ({ socials }) => {
   );
 };
 
-const CaseStudyCard = ({ study }) => (
-  <motion.div 
-    initial={{ opacity: 0, y: 40 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.8 }}
-    className="w-full bg-[#0D0D0D] rounded-[40px] p-8 md:p-12 mb-12 border border-white/5 overflow-hidden group"
-  >
-    <div className="flex justify-between items-center mb-8">
-      <img src={study.logo} alt="logo" className="h-6 md:h-8 opacity-80" />
-      <SocialIcon socials={study.socials} />
-    </div>
+const CaseStudyCard = ({ study }) => {
+  const router = useRouter();
 
-    <div className="relative aspect-[16/9] md:aspect-[21/9] w-full mb-10 overflow-hidden rounded-[30px]">
-      <Image
-        src={study.image}
-        alt={study.title}
-        fill
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-    </div>
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8 }}
+      onClick={() => router.push(`/case-studies/${study.id}`)}
+      className="w-full bg-[#0D0D0D] rounded-[40px] p-8 md:p-12 mb-12 border border-white/5 overflow-hidden group cursor-pointer relative"
+    >
+      <div className="flex justify-between items-center mb-8 relative z-10">
+        <img src={study.logo} alt="logo" className="h-6 md:h-8 opacity-80" />
+        <SocialIcon socials={study.socials} />
+      </div>
 
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-      <div>
-        <h3 className="text-3xl md:text-5xl font-heading text-white mb-6 uppercase tracking-tight">
-          {study.title}
-        </h3>
+      <div className="relative aspect-[16/9] md:aspect-[21/9] w-full mb-10 overflow-hidden rounded-[30px]">
+        <Image
+          src={study.image}
+          alt={study.title}
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+        />
       </div>
-      <div>
-        <p className="text-white/60 text-base md:text-lg leading-relaxed font-albert">
-          {study.description}
-        </p>
-      </div>
-    </div>
 
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-10 border-t border-white/10">
-      <div>
-        <p className="text-white/30 text-[10px] uppercase tracking-widest mb-2 font-bold">Services</p>
-        <p className="text-white text-sm md:text-base font-medium">{study.metadata.services}</p>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div>
+          <h3 className="text-3xl md:text-5xl font-heading text-white mb-6 uppercase tracking-tight">
+            {study.title}
+          </h3>
+        </div>
+        <div>
+          <p className="text-white/60 text-base md:text-lg leading-relaxed font-albert">
+            {study.description}
+          </p>
+        </div>
       </div>
-      <div>
-        <p className="text-white/30 text-[10px] uppercase tracking-widest mb-2 font-bold">Website</p>
-        <p className="text-white text-sm md:text-base font-medium">{study.metadata.website}</p>
-      </div>
-      <div>
-        <p className="text-white/30 text-[10px] uppercase tracking-widest mb-2 font-bold">Published</p>
-        <p className="text-white text-sm md:text-base font-medium">{study.metadata.published}</p>
-      </div>
-      <div>
-        <p className="text-white/30 text-[10px] uppercase tracking-widest mb-2 font-bold">Industry</p>
-        <p className="text-white text-sm md:text-base font-medium">{study.metadata.industry}</p>
-      </div>
-    </div>
-  </motion.div>
-);
 
-export default function WorkPage() {
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-10 border-t border-white/10">
+        <div>
+          <p className="text-white/30 text-[10px] uppercase tracking-widest mb-2 font-bold">Services</p>
+          <p className="text-white text-sm md:text-base font-medium">{study.metadata.services}</p>
+        </div>
+        <div>
+          <p className="text-white/30 text-[10px] uppercase tracking-widest mb-2 font-bold">Website</p>
+          <p className="text-white text-sm md:text-base font-medium">{study.metadata.website}</p>
+        </div>
+        <div>
+          <p className="text-white/30 text-[10px] uppercase tracking-widest mb-2 font-bold">Published</p>
+          <p className="text-white text-sm md:text-base font-medium">{study.metadata.published}</p>
+        </div>
+        <div>
+          <p className="text-white/30 text-[10px] uppercase tracking-widest mb-2 font-bold">Industry</p>
+          <p className="text-white text-sm md:text-base font-medium">{study.metadata.industry}</p>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default function CaseStudiesPage() {
   const [activeCategory, setActiveCategory] = useState("ALL");
 
   const filteredStudies = activeCategory === "ALL" 
