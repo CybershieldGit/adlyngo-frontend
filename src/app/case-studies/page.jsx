@@ -91,14 +91,14 @@ const CaseStudyCard = ({ study }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
       onClick={() => router.push(`/case-studies/${study.id}`)}
-      className="w-full bg-[#0D0D0D] rounded-[30px] md:rounded-[40px] p-6 md:p-12 mb-8 md:mb-12 border border-white/5 overflow-hidden group cursor-pointer relative"
+      className="w-full bg-[#0D0D0D] rounded-[24px] md:rounded-[40px] p-6 md:p-12 mb-8 md:mb-12 border border-white/5 overflow-hidden group cursor-pointer relative"
     >
-      <div className="flex justify-between items-center mb-8 relative z-10">
-        <img src={study.logo} alt="logo" className="h-6 md:h-8 opacity-80" />
+      <div className="flex justify-between items-center mb-6 md:mb-8 relative z-10">
+        <img src={study.logo} alt="logo" className="h-5 md:h-8 opacity-80" />
         <SocialIcon socials={study.socials} />
       </div>
 
-      <div className="relative aspect-[16/9] md:aspect-[21/9] w-full mb-10 overflow-hidden rounded-[30px]">
+      <div className="relative aspect-[16/9] md:aspect-[21/9] w-full mb-8 md:mb-10 overflow-hidden rounded-[20px] md:rounded-[30px]">
         <Image
           src={study.image}
           alt={study.title}
@@ -151,14 +151,14 @@ export default function CaseStudiesPage() {
 
   return (
     <>
-      <main className="bg-[#050505] min-h-screen pt-32 px-4 md:px-8 flex flex-col">
+      <main className="bg-[#050505] min-h-screen pt-[160px] md:pt-32 px-4 md:px-8 flex flex-col">
       {/* Header Section */}
       <div className="w-full mb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-end mb-16">
           <motion.h1
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-5xl md:text-8xl lg:text-[100px] font-black font-heading text-white leading-[0.9] uppercase text-center md:text-left"
+            className="text-4xl md:text-8xl lg:text-[100px] font-black font-heading text-white leading-[0.9] uppercase text-center md:text-left"
           >
             OUR <span className="text-[#FF4D00]">CASE STUDIES.</span>
           </motion.h1>
@@ -172,17 +172,17 @@ export default function CaseStudiesPage() {
         </div>
 
         {/* Island Navbar (Filters) */}
-        <div className="flex justify-center mb-16 md:mb-24">
-          <div className="flex items-center p-1.5 md:p-2 bg-black border border-white/10 rounded-full gap-1 md:gap-2 overflow-x-auto no-scrollbar max-w-full px-4 md:px-2">
+        <div className="flex justify-center mb-12 md:mb-24 px-4">
+          <div className="inline-flex items-center p-1.5 bg-black border border-white/10 rounded-full gap-1 md:gap-2 overflow-x-auto no-scrollbar max-w-full">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 className={cn(
-                  "relative px-6 md:px-8 py-2 md:py-2.5 rounded-full text-[9px] md:text-[10px] font-bold tracking-[0.2em] transition-all duration-500 uppercase flex-shrink-0",
+                  "relative px-5 md:px-8 py-2 md:py-2.5 rounded-full text-[9px] md:text-[10px] font-bold tracking-[0.15em] md:tracking-[0.2em] transition-all duration-500 uppercase whitespace-nowrap",
                   activeCategory === cat
                     ? "text-white"
-                    : "text-white/40 border border-white/5 hover:border-white/20 hover:text-white"
+                    : "text-white/40 border border-white/0 hover:border-white/20 hover:text-white"
                 )}
               >
                 {activeCategory === cat && (
