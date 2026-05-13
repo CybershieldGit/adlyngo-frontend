@@ -65,10 +65,10 @@ const SocialIcon = ({ socials }) => {
     <div className="flex gap-3">
       {Object.entries(socials).map(([platform, url]) => (
         url && icons[platform] && (
-          <a 
-            key={platform} 
-            href={url} 
-            target="_blank" 
+          <a
+            key={platform}
+            href={url}
+            target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
             className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all cursor-pointer relative z-20"
@@ -85,13 +85,13 @@ const CaseStudyCard = ({ study }) => {
   const router = useRouter();
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
       onClick={() => router.push(`/case-studies/${study.id}`)}
-      className="w-full bg-[#0D0D0D] rounded-[40px] p-8 md:p-12 mb-12 border border-white/5 overflow-hidden group cursor-pointer relative"
+      className="w-full bg-[#0D0D0D] rounded-[30px] md:rounded-[40px] p-6 md:p-12 mb-8 md:mb-12 border border-white/5 overflow-hidden group cursor-pointer relative"
     >
       <div className="flex justify-between items-center mb-8 relative z-10">
         <img src={study.logo} alt="logo" className="h-6 md:h-8 opacity-80" />
@@ -109,7 +109,7 @@ const CaseStudyCard = ({ study }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         <div>
-          <h3 className="text-3xl md:text-5xl font-heading text-white mb-6 uppercase tracking-tight">
+          <h3 className="text-2xl md:text-5xl font-heading text-white mb-4 md:mb-6 uppercase tracking-tight">
             {study.title}
           </h3>
         </div>
@@ -145,23 +145,24 @@ const CaseStudyCard = ({ study }) => {
 export default function CaseStudiesPage() {
   const [activeCategory, setActiveCategory] = useState("ALL");
 
-  const filteredStudies = activeCategory === "ALL" 
-    ? caseStudies 
+  const filteredStudies = activeCategory === "ALL"
+    ? caseStudies
     : caseStudies.filter(s => s.category === activeCategory);
 
   return (
-    <main className="bg-[#050505] min-h-screen pt-32 pb-20 px-4 md:px-16 lg:px-[70px]">
+    <>
+      <main className="bg-[#050505] min-h-screen pt-32 px-4 md:px-8 flex flex-col">
       {/* Header Section */}
       <div className="w-full mb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-end mb-16">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-6xl md:text-8xl lg:text-[100px] font-black font-heading text-white leading-[0.8] uppercase"
+            className="text-5xl md:text-8xl lg:text-[100px] font-black font-heading text-white leading-[0.9] uppercase text-center md:text-left"
           >
             OUR <span className="text-[#FF4D00]">CASE STUDIES.</span>
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             className="text-white/60 text-sm md:text-base max-w-md font-albert leading-relaxed"
@@ -171,16 +172,16 @@ export default function CaseStudiesPage() {
         </div>
 
         {/* Island Navbar (Filters) */}
-        <div className="flex justify-center mb-24">
-          <div className="inline-flex items-center p-2 bg-black border border-white/10 rounded-full gap-2">
+        <div className="flex justify-center mb-16 md:mb-24">
+          <div className="flex items-center p-1.5 md:p-2 bg-black border border-white/10 rounded-full gap-1 md:gap-2 overflow-x-auto no-scrollbar max-w-full px-4 md:px-2">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 className={cn(
-                  "relative px-8 py-2.5 rounded-full text-[10px] font-bold tracking-[0.2em] transition-all duration-500 uppercase",
-                  activeCategory === cat 
-                    ? "text-white" 
+                  "relative px-6 md:px-8 py-2 md:py-2.5 rounded-full text-[9px] md:text-[10px] font-bold tracking-[0.2em] transition-all duration-500 uppercase flex-shrink-0",
+                  activeCategory === cat
+                    ? "text-white"
                     : "text-white/40 border border-white/5 hover:border-white/20 hover:text-white"
                 )}
               >
@@ -191,7 +192,7 @@ export default function CaseStudiesPage() {
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-                <span className="relative z-10">{cat}</span>
+                <span className="relative z-10 whitespace-nowrap">{cat}</span>
               </button>
             ))}
           </div>
@@ -205,11 +206,11 @@ export default function CaseStudiesPage() {
         </div>
 
         {/* Testimonial Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="mt-32 bg-[#0D0D0D] rounded-[50px] p-10 md:p-20 border border-white/5 relative overflow-hidden"
+          className="mt-20 md:mt-32 bg-[#0D0D0D] rounded-[30px] md:rounded-[50px] p-8 md:p-20 border border-white/5 relative overflow-hidden"
         >
           {/* Large background text */}
           <div className="absolute -bottom-10 -right-10 text-[15vw] font-black text-white/[0.02] uppercase pointer-events-none select-none">
@@ -218,7 +219,7 @@ export default function CaseStudiesPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10">
             <div>
-              <h2 className="text-5xl md:text-7xl font-heading text-white mb-8 leading-tight">
+              <h2 className="text-4xl md:text-7xl font-heading text-white mb-6 md:mb-8 leading-tight">
                 Trusted by <br /> Brands
               </h2>
               <div className="flex items-center gap-6">
@@ -230,9 +231,9 @@ export default function CaseStudiesPage() {
                     ))}
                   </div>
                   <div className="flex gap-1 mt-4">
-                     {[1, 2, 3, 4, 5, 6].map((i) => (
-                       <div key={i} className={cn("w-1.5 h-1.5 rounded-full", i === 1 ? "bg-[#FF4D00]" : "bg-white/20")} />
-                     ))}
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                      <div key={i} className={cn("w-1.5 h-1.5 rounded-full", i === 1 ? "bg-[#FF4D00]" : "bg-white/20")} />
+                    ))}
                   </div>
                 </div>
               </div>
@@ -242,14 +243,14 @@ export default function CaseStudiesPage() {
               <p className="text-white/60 text-lg md:text-xl leading-relaxed font-albert mb-12">
                 Adlyngo is a full-service digital growth agency built for businesses serious about scaling. We combine data driven performance marketing with premium creative so every rupee work...
               </p>
-              
+
               <div className="flex items-center gap-5 mt-auto">
                 <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#FF4D00]/30">
-                  <Image 
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop" 
-                    alt="Ravi Verma" 
-                    width={64} 
-                    height={64} 
+                  <Image
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop"
+                    alt="Ravi Verma"
+                    width={64}
+                    height={64}
                     className="object-cover"
                   />
                 </div>
@@ -262,7 +263,8 @@ export default function CaseStudiesPage() {
           </div>
         </motion.div>
       </div>
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }

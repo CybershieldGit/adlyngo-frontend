@@ -26,7 +26,7 @@ const TwitterIcon = () => (
 
 export default function Footer() {
   return (
-    <footer className="pt-16 pb-8 bg-black px-6 md:px-16 lg:px-[70px] relative z-10 overflow-hidden">
+    <footer className="pt-16 pb-8 bg-black px-6 md:px-10 lg:px-12 relative z-10 overflow-hidden">
       <div className="w-full mx-auto">
         {/* Top Row: Logo & Socials */}
         <div className="flex flex-row justify-between items-center mb-8">

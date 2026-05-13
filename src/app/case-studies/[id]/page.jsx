@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { X } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/common/Footer";
 
@@ -109,17 +109,21 @@ export default function CaseStudyDetailPage() {
   const study = caseStudies.find(s => s.id === parseInt(params.id)) || caseStudies[0];
 
   return (
-    <main className="bg-[#050505] min-h-screen pt-10 pb-20 px-4 md:px-16 lg:px-[70px]">
-      <div className="max-w-[1440px] mx-auto">
-        {/* Back/Close Button */}
-        <div className="flex justify-end mb-6">
-          <Link href="/case-studies" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all">
-            <X size={20} />
+    <>
+      <main className="bg-[#050505] min-h-screen pt-32 pb-20 flex flex-col">
+      <div className="w-full px-4 md:px-8">
+        {/* Back Button */}
+        <div className="flex justify-start mb-6">
+          <Link href="/case-studies" className="flex items-center gap-2 text-white/60 hover:text-white transition-all group">
+            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-[#FF4D00] group-hover:text-white transition-all">
+              <ArrowLeft size={20} />
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-widest hidden md:block">Back to Case Studies</span>
           </Link>
         </div>
 
         {/* Main Content Area */}
-        <div className="bg-[#0D0D0D] rounded-[40px] p-8 md:p-12 border border-white/5 overflow-hidden">
+        <div className="bg-[#0D0D0D] rounded-[30px] md:rounded-[40px] p-6 md:p-12 border border-white/5 overflow-hidden">
           {/* Top Bar */}
           <div className="flex justify-between items-center mb-10">
             <img src={study.logo} alt="logo" className="h-6 md:h-8 opacity-80" />
@@ -127,7 +131,7 @@ export default function CaseStudyDetailPage() {
           </div>
 
           {/* Hero Image */}
-          <div className="relative aspect-[21/9] w-full mb-12 overflow-hidden rounded-[30px]">
+          <div className="relative aspect-[16/9] md:aspect-[21/9] w-full mb-8 md:mb-12 overflow-hidden rounded-[20px] md:rounded-[30px]">
             <Image
               src={study.image}
               alt={study.title}
@@ -137,8 +141,8 @@ export default function CaseStudyDetailPage() {
           </div>
 
           {/* Description */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
-            <h1 className="text-4xl md:text-5xl font-heading text-white uppercase leading-tight">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 mb-12 md:mb-16">
+            <h1 className="text-3xl md:text-5xl font-heading text-white uppercase leading-tight">
               {study.title}
             </h1>
             <p className="text-white/60 text-lg leading-relaxed font-albert">
@@ -167,8 +171,8 @@ export default function CaseStudyDetailPage() {
           </div>
 
           {/* Video Gallery */}
-          <div className="mb-20">
-            <h2 className="text-4xl md:text-5xl font-heading text-white mb-10 uppercase italic">Video Gallery</h2>
+          <div className="mb-16 md:mb-20">
+            <h2 className="text-3xl md:text-5xl font-heading text-white mb-8 md:mb-10 uppercase italic">Video Gallery</h2>
             <div className="flex gap-4 overflow-x-auto no-scrollbar pb-4">
               {study.videos.map((vid, i) => (
                 <div key={i} className="relative w-[280px] h-[450px] flex-shrink-0 rounded-[30px] overflow-hidden border border-white/5">
@@ -180,8 +184,8 @@ export default function CaseStudyDetailPage() {
           </div>
 
           {/* Creatives Gallery */}
-          <div className="mb-10">
-            <h2 className="text-4xl md:text-5xl font-heading text-white mb-10 uppercase italic">Creatives Gallery</h2>
+          <div className="mb-6 md:mb-10">
+            <h2 className="text-3xl md:text-5xl font-heading text-white mb-8 md:mb-10 uppercase italic">Creatives Gallery</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {study.creatives.map((img, i) => (
                 <div 
@@ -198,7 +202,8 @@ export default function CaseStudyDetailPage() {
           </div>
         </div>
       </div>
-      <Footer />
     </main>
+    <Footer />
+  </>
   );
 }
