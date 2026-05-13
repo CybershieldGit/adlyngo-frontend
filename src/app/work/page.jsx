@@ -143,21 +143,21 @@ export default function WorkPage() {
     : caseStudies.filter(s => s.category === activeCategory);
 
   return (
-    <main className="bg-[#050505] min-h-screen pt-32 pb-20 px-4 md:px-16 lg:px-[70px]">
+    <main className="bg-[#050505] min-h-screen pt-[160px] md:pt-32 pb-20 px-4 md:px-16 lg:px-[70px]">
       {/* Header Section */}
       <div className="w-full mb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-end mb-16">
           <motion.h1 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-6xl md:text-8xl lg:text-[100px] font-black font-heading text-white leading-[0.8] uppercase"
+            className="text-4xl md:text-8xl lg:text-[100px] font-black font-heading text-white leading-[0.9] uppercase text-center md:text-left"
           >
             OUR <span className="text-[#FF4D00]">CASE STUDIES.</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-white/60 text-sm md:text-base max-w-md font-albert leading-relaxed"
+            className="text-white/60 text-sm md:text-base max-w-md font-albert leading-relaxed text-center md:text-left mx-auto md:mx-0"
           >
             Every project at Adlyngo is built with one goal: turning creative thinking into measurable business growth through strategy, execution, and performance-focused design.
           </motion.p>

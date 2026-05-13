@@ -43,7 +43,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <main className="bg-[#0A0A0A] min-h-screen pt-32 overflow-x-hidden relative flex flex-col">
+      <main className="bg-[#0A0A0A] min-h-screen pt-[160px] md:pt-32 overflow-x-hidden relative flex flex-col">
       {/* Grid Pattern Background */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px] z-0" />
 

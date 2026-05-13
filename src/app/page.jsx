@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Play, ArrowLeft, ArrowRight, X, Loader2, ArrowUpRight } from "lucide-react";
+import { Play, ArrowLeft, ArrowRight, X, Loader2, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Home() {
   const scrollRef = useRef(null);
@@ -128,6 +128,16 @@ export default function Home() {
     }
   };
 
+  const scrollSlider = (direction) => {
+    if (scrollRef.current) {
+      const scrollAmount = 400;
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth"
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="bg-[#0A0A0A] h-screen w-full flex items-center justify-center">
@@ -150,7 +160,7 @@ export default function Home() {
           lockScrolling();
         }
       }}
-      className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[60px] md:pt-[80px] overflow-hidden fixed inset-0 touch-auto"
+      className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[140px] md:pt-[80px] overflow-hidden fixed inset-0 touch-auto"
     >
       <AnimatePresence>
         {showIntro && (
@@ -304,9 +314,9 @@ export default function Home() {
         </AnimatePresence>
       </div>
 
-      <div className="w-full mx-auto h-full flex flex-col px-6 md:px-16 pt-6 md:pt-2 pb-6 overflow-hidden relative z-10">
+      <div className="w-full mx-auto h-full flex flex-col px-6 md:px-16 md:pt-2 pb-6 overflow-hidden relative z-10">
         <header className="flex flex-col md:flex-row justify-between items-center md:items-end flex-shrink-0 gap-4">
-          <div className="h-[32px] md:h-[72px] overflow-hidden">
+          <div className="w-full md:w-auto h-[40px] md:h-[80px] overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.h1
                 key={activeCategoryIndex}
@@ -345,7 +355,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="w-full h-full relative">
+          <div className="w-full h-full relative group/slider">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeCategoryIndex}
@@ -364,8 +374,8 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05 }}
                     className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[40px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
-                      ${currentCategory?.layout === "landscape" 
-                        ? "w-[85vw] md:w-[70vw] lg:w-[60vw] max-w-[950px] aspect-[16/9] md:aspect-[21/9] h-auto max-h-[40vh] md:max-h-[50vh]" 
+                      ${currentCategory?.layout === "landscape"
+                        ? "w-[85vw] md:w-[70vw] lg:w-[60vw] max-w-[950px] aspect-[16/9] md:aspect-[21/9] h-auto max-h-[40vh] md:max-h-[50vh]"
                         : "w-[65vw] md:w-[35vw] lg:w-[22vw] max-w-[420px] aspect-[9/16] h-auto max-h-[60vh] md:max-h-[68vh]"}
                     `}
                   >
@@ -394,7 +404,7 @@ export default function Home() {
                         <Play className="text-white fill-white ml-1" size={24} />
                       </div>
                     </div>
-                    
+
                     {/* Top Right Arrow on Hover */}
                     <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
                       <ArrowUpRight size={24} />
@@ -418,18 +428,18 @@ export default function Home() {
               <span className="text-[#FF6A00] uppercase">WE SERVE</span>
             </h3>
           </div>
-          
+
           <div className="flex-1 overflow-hidden relative">
             <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#0A0A0A] to-transparent z-10" />
             <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[#0A0A0A] to-transparent z-10" />
-            
-            <motion.div 
+
+            <motion.div
               className="flex items-center gap-12 whitespace-nowrap"
               animate={{ x: [0, -1000] }}
-              transition={{ 
-                duration: 20, 
-                repeat: Infinity, 
-                ease: "linear" 
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                ease: "linear"
               }}
             >
               {[...Array(3)].map((_, i) => (
@@ -442,6 +452,22 @@ export default function Home() {
                 </div>
               ))}
             </motion.div>
+          </div>
+
+          {/* Navigation Arrows - Desktop/Tablet Only */}
+          <div className="hidden md:flex items-center gap-3 flex-shrink-0 ml-4">
+            <button
+              onClick={() => scrollSlider("left")}
+              className="w-12 h-12 rounded-full bg-black border border-white/20 flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all duration-300"
+            >
+              <ChevronLeft size={24} strokeWidth={1.5} />
+            </button>
+            <button
+              onClick={() => scrollSlider("right")}
+              className="w-12 h-12 rounded-full bg-black border border-white/20 flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all duration-300"
+            >
+              <ChevronRight size={24} strokeWidth={1.5} />
+            </button>
           </div>
         </footer>
       </div>
@@ -457,8 +483,8 @@ export default function Home() {
             <button onClick={closeVideoModal} className="absolute top-24 right-8 md:top-32 md:right-12 z-[2100] w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all shadow-xl border border-white/10 backdrop-blur-md">
               <X size={28} />
             </button>
-            <button onClick={() => navigateVideo("prev")} className="absolute left-10 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowLeft size={32} /></button>
-            <button onClick={() => navigateVideo("next")} className="absolute right-10 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowRight size={32} /></button>
+            <button onClick={() => navigateVideo("prev")} className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 z-50 w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 hidden md:flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowLeft size={32} /></button>
+            <button onClick={() => navigateVideo("next")} className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 z-50 w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 hidden md:flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowRight size={32} /></button>
 
             <div className="relative w-full max-w-[1400px] h-[70vh] flex items-center justify-center gap-10">
               <motion.div key={`prev-${selectedVideoIndex}`} className="hidden xl:block w-[300px] h-[500px] rounded-[32px] overflow-hidden grayscale opacity-30">

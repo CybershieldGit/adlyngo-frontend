@@ -163,7 +163,7 @@ export default function Navbar() {
             {[
               { name: "Video Gallery", href: "/" },
               { name: "Creative Gallery", href: "/creative-gallery" },
-              { name: "Case Studies", href: "/work" },
+              { name: "Case Studies", href: "/case-studies" },
               { name: "Testimonials", href: "/testimonials" },
             ].map((item) => {
               const isActive = pathname === item.href;
