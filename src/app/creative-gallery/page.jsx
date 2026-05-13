@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import Footer from "@/components/common/Footer";
 import { Loader2, X, ZoomIn } from "lucide-react";
 import Image from "next/image";
 
@@ -94,17 +93,17 @@ export default function CreativeGallery() {
   }
 
   return (
-    <main className="bg-[#0A0A0A] min-h-screen pt-32 overflow-x-hidden relative">
+    <main className="bg-[#0A0A0A] min-h-screen pt-32 pb-20 px-6 md:px-16 lg:px-[70px]">
       {/* Background Watermark */}
       <div className="fixed inset-0 flex items-start justify-center pointer-events-none select-none z-0 overflow-hidden pt-40 opacity-[0.04]">
-        <h2 className="text-[25vw] font-black font-heading leading-none text-white whitespace-nowrap uppercase text-center tracking-tighter">
+        <h2 className="text-[25vw] font-black font-heading leading-none text-white whitespace-nowrap uppercase text-center tracking-normal">
           CREATIVES
         </h2>
       </div>
 
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px] z-0" />
 
-      <div className="max-w-[1800px] mx-auto px-6 md:px-16 mb-20 relative z-10">
+      <div className="w-full mx-auto relative z-10">
         {categories.map((category, idx) => (
           <section key={category.id} className={cn("mb-32", idx !== 0 && "pt-20 border-t border-white/5")}>
             <div className="flex justify-between items-end mb-12">
@@ -174,8 +173,6 @@ export default function CreativeGallery() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <Footer />
     </main>
   );
 }

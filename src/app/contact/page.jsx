@@ -42,7 +42,7 @@ export default function ContactPage() {
   }, []);
 
   return (
-    <main className="bg-[#0A0A0A] min-h-screen pt-32 pb-8 overflow-x-hidden relative flex flex-col justify-center">
+    <main className="bg-[#0A0A0A] min-h-screen pt-32 overflow-x-hidden relative flex flex-col justify-center">
       {/* Grid Pattern Background */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px] z-0" />
 
@@ -60,10 +60,10 @@ export default function ContactPage() {
         </h2>
       </div>
 
-      <div className="max-w-[1800px] mx-auto px-[70px] relative z-10 w-full">
+      <div className="w-full mx-auto px-6 md:px-16 lg:px-[70px] relative z-10">
         {/* Header Section - Ultra Compact */}
         <div className="flex flex-col md:flex-row justify-between items-end gap-4 mb-8 relative z-10">
-          <h1 className="text-5xl md:text-6xl font-black font-heading leading-[0.9]">
+          <h1 className="text-4xl md:text-6xl font-black font-heading leading-[0.9]">
             <span className="text-white uppercase">LETS GET IN </span>
             <span className="text-[#FF6A00] uppercase">TOUCH</span>
           </h1>
@@ -83,7 +83,7 @@ export default function ContactPage() {
                   <div className="text-[#8C8C8C] text-[13px] font-normal">Have Questions?</div>
                   <div className="text-white text-base font-bold">hello@adlyngo.com</div>
                 </div>
-                
+
                 {/* Divider */}
                 <div className="w-full max-w-[280px] h-[0px] border-t border-[#888888] opacity-20"></div>
 
@@ -167,7 +167,7 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex-1 max-w-xl min-h-[140px] flex flex-col justify-center">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -180,7 +180,7 @@ export default function ContactPage() {
                   <p className="text-white/60 text-sm leading-relaxed mb-4 font-albert italic">
                     "{testimonials[currentTestimonial].quote}"
                   </p>
-                  
+
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/20 bg-white/5">
                       <img src={testimonials[currentTestimonial].image} className="w-full h-full object-cover" alt={testimonials[currentTestimonial].name} />

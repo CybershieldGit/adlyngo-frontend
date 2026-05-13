@@ -110,7 +110,7 @@ export default function ServicesPage() {
         </h2>
       </div>
 
-      <div className="max-w-[1800px] mx-auto px-[70px] relative z-10">
+      <div className="w-full mx-auto px-6 md:px-16 lg:px-[70px] relative z-10">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start gap-10 mb-12 relative z-10">
           <h1 className="text-6xl md:text-8xl font-black font-heading leading-none">
@@ -135,7 +135,7 @@ export default function ServicesPage() {
 
         {/* Specialization Quote */}
         <div className="mb-24 relative z-10">
-          <h2 className="w-full flex flex-col justify-center text-white text-[48px] font-normal break-words font-albert">
+          <h2 className="w-full flex flex-col justify-center text-white text-2xl md:text-[48px] font-normal break-words font-albert leading-tight">
             We don't chase generic briefs. We specialise in Real Estate, Interior Design
           </h2>
         </div>
@@ -149,15 +149,15 @@ export default function ServicesPage() {
             { icon: Rocket, label: "Launch" },
           ].map((item, i) => (
             <div key={i} className="flex flex-col items-center justify-center py-10 md:py-16 border-r border-white/10 last:border-r-0 hover:bg-white/5 transition-colors group">
-              <item.icon size={48} className="text-white mb-6 group-hover:scale-110 transition-transform" strokeWidth={1} />
-              <span className="text-white/60 text-xs uppercase tracking-[0.2em] font-bold">{item.label}</span>
+              <item.icon size={32} className="md:size-[48px] text-white mb-6 group-hover:scale-110 transition-transform" strokeWidth={1} />
+              <span className="text-white/60 text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold">{item.label}</span>
             </div>
           ))}
         </div>
 
         {/* Six Ways Section */}
         <div className="text-center mb-16 relative z-10">
-          <h2 className="text-white text-[56px] md:text-[72px] font-normal break-words font-heading">
+          <h2 className="text-white text-4xl md:text-[72px] font-normal break-words font-heading leading-none">
             SIX WAYS WE GROW YOUR BUSINESS
           </h2>
         </div>
@@ -189,7 +189,7 @@ export default function ServicesPage() {
                    </p>
                 </div>
 
-                <p className="text-white/70 text-[15px] font-normal leading-relaxed mb-8 font-albert max-w-[280px]">
+                <p className="text-white/70 text-[15px] font-normal leading-relaxed mb-8 font-albert md:max-w-[280px]">
                   {way.desc}
                 </p>
 

@@ -91,7 +91,7 @@ export default function Navbar() {
     >
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px]" />
 
-      <nav className="max-w-[1800px] mx-auto flex items-center justify-between px-6 py-4 md:px-12 relative">
+      <nav className="w-full mx-auto flex items-center justify-between px-6 md:px-16 lg:px-[70px] py-4 relative">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center group">
             <img 
@@ -173,7 +173,7 @@ export default function Navbar() {
               <X size={20} />
             </button>
 
-            <div className="flex-1 flex flex-col lg:flex-row items-center justify-between gap-10 md:gap-20 max-w-[1800px] mx-auto w-full">
+            <div className="flex-1 flex flex-col lg:flex-row items-center justify-between gap-10 md:gap-20 w-full mx-auto">
               <div className="flex-1">
                   <motion.h2 
                   initial={{ opacity: 0, x: -50 }}
@@ -232,7 +232,7 @@ export default function Navbar() {
             </div>
 
             {/* Anchored Bottom Footer */}
-            <div className="mt-auto max-w-[1800px] mx-auto w-full pt-12">
+            <div className="mt-auto w-full mx-auto pt-12">
               <div className="h-[1px] w-full bg-white/10 mb-8" />
               <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                 <img src="/logo.svg" alt="Adlyngo" className="h-8 w-auto object-contain" />

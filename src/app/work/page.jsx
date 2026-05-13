@@ -56,8 +56,8 @@ export default function WorkPage() {
     : projects.filter(p => p.category === activeCategory);
 
   return (
-    <main className="bg-[#0A0A0A] min-h-screen pt-32 overflow-x-hidden">
-      <div className="max-w-[1800px] mx-auto px-6 md:px-16 mb-20">
+    <main className="bg-[#0A0A0A] min-h-screen pt-32 px-6 md:px-16 lg:px-[70px] overflow-x-hidden">
+      <div className="w-full mx-auto mb-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

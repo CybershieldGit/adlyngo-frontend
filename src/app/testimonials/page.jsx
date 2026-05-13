@@ -37,8 +37,8 @@ const testimonials = [
 
 export default function TestimonialsPage() {
   return (
-    <main className="bg-[#0A0A0A] min-h-screen pt-32 pb-20 px-6 md:px-16">
-      <div className="max-w-[1400px] mx-auto">
+    <main className="bg-[#0A0A0A] min-h-screen pt-32 pb-20 px-6 md:px-16 lg:px-[70px]">
+      <div className="w-full mx-auto">
         <header className="mb-24 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
