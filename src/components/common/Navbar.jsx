@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, ArrowUpRight } from "lucide-react";
 import { useLenis } from "lenis/react";
 import { cn } from "@/lib/utils";
 
@@ -17,8 +17,8 @@ const navLinks = [
 ];
 
 const SocialIcon = ({ children, href = "#" }) => (
-  <a 
-    href={href} 
+  <a
+    href={href}
     className="w-9 h-9 rounded-full border border-white/40 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300"
   >
     {children}
@@ -83,79 +83,108 @@ export default function Navbar() {
 
   return (
     <>
-    <header
-      className={cn(
-        "fixed top-0 left-0 w-full z-[999] transition-all duration-500",
-        scrolled ? "bg-black/90 backdrop-blur-md" : "bg-[#0A0A0A]"
-      )}
-    >
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px]" />
+      <header
+        className={cn(
+          "fixed top-0 left-0 w-full z-[999] transition-all duration-500",
+          scrolled ? "bg-black/90 backdrop-blur-md" : "bg-[#0A0A0A]"
+        )}
+      >
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px]" />
 
-      <nav className="w-full mx-auto flex items-center justify-between px-6 md:px-16 lg:px-[70px] py-4 relative">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center group">
-            <img 
-              src="/logo.svg" 
-              alt="Adlyngo" 
-              className="h-8 md:h-10 w-auto object-contain"
-            />
-          </Link>
-          
-          <div className="hidden lg:block w-[1px] h-10 bg-white/10 mx-2" />
+        <nav className="w-full mx-auto flex items-center justify-between px-6 md:px-16 lg:px-[70px] py-4 relative">
+          <div className="flex items-center gap-6">
+            <Link href="/" className="flex items-center group">
+              <img
+                src="/logo.svg"
+                alt="Adlyngo"
+                className="h-8 md:h-10 w-auto object-contain"
+              />
+            </Link>
 
-          <div className="hidden lg:flex items-center gap-10">
-            {navLinks.map((link) => (
-              <div key={link.name} className="relative py-2">
+            <div className="hidden lg:block w-[1px] h-10 bg-white/10 mx-2" />
+
+            <div className="hidden lg:flex items-center gap-10">
+              {navLinks.map((link) => (
+                <div key={link.name} className="relative py-2">
+                  <Link
+                    href={link.href}
+                    className={cn(
+                      "font-albert transition-all duration-300 whitespace-nowrap",
+                      ((pathname === link.href) || (pathname === "/" && link.name === "Video Gallery"))
+                        ? "text-[16px] font-medium text-white"
+                        : "text-[14px] font-normal text-white/50 hover:text-white"
+                    )}
+                  >
+                    {link.name}
+                  </Link>
+                  {((pathname === link.href) || (pathname === "/" && link.name === "Video Gallery")) && (
+                    <motion.div
+                      layoutId="nav-triangle"
+                      className="absolute -bottom-[18px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-[#FF4D00] z-20"
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 md:gap-8">
+            <div className="hidden lg:flex items-center gap-4">
+              <SocialIcon><FacebookIcon /></SocialIcon>
+              <SocialIcon><InstagramIcon /></SocialIcon>
+              <SocialIcon><TwitterIcon /></SocialIcon>
+            </div>
+
+            <Link
+              href="/contact"
+              className="hidden md:block px-8 py-2 bg-[#1A120B] border border-white/20 rounded-md text-white text-[14px] font-medium font-albert leading-[24px] tracking-[0.21px] hover:bg-[#2A1D12] transition-all duration-300"
+            >
+              Let's Connect
+            </Link>
+
+            <button
+              className="w-[34px] h-[34px] flex flex-col gap-1.5 items-end justify-center group"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <div className="w-6 h-[2px] bg-white transition-all group-hover:w-8" />
+              <div className="w-8 h-[2px] bg-white transition-all group-hover:w-6" />
+              <div className="w-5 h-[2px] bg-white transition-all group-hover:w-8" />
+            </button>
+          </div>
+        </nav>
+
+        <div className="w-full h-[1.5px] bg-[#FF4D00]" />
+      </header>
+
+      {/* Mobile Island Navigation - PORTFOLIO ROUTES (Below Header) */}
+      <div className="lg:hidden fixed top-[82px] left-0 w-full px-6 z-[998] pointer-events-none">
+        <div className="max-w-max mx-auto bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-1 overflow-x-auto no-scrollbar pointer-events-auto shadow-2xl">
+          <div className="flex items-center">
+            {[
+              { name: "Video Gallery", href: "/" },
+              { name: "Creative Gallery", href: "/creative-gallery" },
+              { name: "Case Studies", href: "/work" },
+              { name: "Testimonials", href: "/testimonials" },
+            ].map((item) => {
+              const isActive = pathname === item.href;
+              return (
                 <Link
-                  href={link.href}
+                  key={item.name}
+                  href={item.href}
                   className={cn(
-                    "font-albert transition-all duration-300 whitespace-nowrap",
-                    ((pathname === link.href) || (pathname === "/" && link.name === "Video Gallery"))
-                      ? "text-[16px] font-medium text-white" 
-                      : "text-[14px] font-normal text-white/50 hover:text-white"
+                    "px-4 py-2 rounded-xl text-[10px] uppercase tracking-widest font-bold transition-all whitespace-nowrap",
+                    isActive
+                      ? "bg-[#FF6A00] text-white shadow-[0_0_20px_rgba(255,106,0,0.3)]"
+                      : "text-white/40 hover:text-white"
                   )}
                 >
-                  {link.name}
+                  {item.name}
                 </Link>
-                {((pathname === link.href) || (pathname === "/" && link.name === "Video Gallery")) && (
-                  <motion.div 
-                    layoutId="nav-triangle"
-                    className="absolute -bottom-[18px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-[#FF4D00] z-20" 
-                  />
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
-
-        <div className="flex items-center gap-4 md:gap-8">
-          <div className="hidden lg:flex items-center gap-4">
-            <SocialIcon><FacebookIcon /></SocialIcon>
-            <SocialIcon><InstagramIcon /></SocialIcon>
-            <SocialIcon><TwitterIcon /></SocialIcon>
-          </div>
-
-          <Link 
-            href="/contact"
-            className="hidden md:block px-8 py-2 bg-[#1A120B] border border-white/20 rounded-md text-white text-[14px] font-medium font-albert leading-[24px] tracking-[0.21px] hover:bg-[#2A1D12] transition-all duration-300"
-          >
-            Let's Connect
-          </Link>
-
-          <button
-            className="w-[34px] h-[34px] flex flex-col gap-1.5 items-end justify-center group"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <div className="w-6 h-[2px] bg-white transition-all group-hover:w-8" />
-            <div className="w-8 h-[2px] bg-white transition-all group-hover:w-6" />
-            <div className="w-5 h-[2px] bg-white transition-all group-hover:w-8" />
-          </button>
-        </div>
-      </nav>
-
-      <div className="w-full h-[1.5px] bg-[#FF4D00]" />
-
-    </header>
+      </div>
 
       <AnimatePresence>
         {isOpen && (
@@ -166,7 +195,7 @@ export default function Navbar() {
             transition={{ duration: 0.4 }}
             className="fixed inset-0 bg-[#0A0A0A] z-[1000] flex flex-col p-6 md:p-10 lg:px-20 lg:pt-20 lg:pb-12 overflow-y-auto"
           >
-            <button 
+            <button
               onClick={() => setIsOpen(false)}
               className="absolute top-10 right-10 w-10 h-10 rounded-full bg-white flex items-center justify-center text-black hover:scale-110 transition-transform z-[210]"
             >
@@ -175,7 +204,7 @@ export default function Navbar() {
 
             <div className="flex-1 flex flex-col lg:flex-row items-center justify-between gap-10 md:gap-20 w-full mx-auto">
               <div className="flex-1">
-                  <motion.h2 
+                <motion.h2
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2, duration: 0.8 }}
@@ -185,70 +214,57 @@ export default function Navbar() {
                 </motion.h2>
               </div>
 
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9, x: 50 }}
                 animate={{ opacity: 1, scale: 1, x: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
                 className="w-full max-w-md bg-[#1A1A1A] rounded-[40px] p-8 md:p-12 border border-white/5 relative"
               >
                 <div className="absolute inset-0 rounded-[40px] shadow-[0_0_50px_rgba(255,255,255,0.02)] pointer-events-none" />
-                
+
                 <nav className="flex flex-col gap-4 md:gap-6 relative z-10">
-                    {[
-                      { 
-                        name: "Portfolio", 
-                        href: "/", 
-                        isActive: ["/case-studies", "/", "/creative-gallery", "/testimonials"].includes(pathname),
-                        subLinks: [
-                          { name: "Creative Gallery", href: "/creative-gallery" },
-                          { name: "Case Studies", href: "/case-studies" },
-                          { name: "Testimonials", href: "/testimonials" },
-                        ]
-                      },
-                      { name: "About", href: "/about", isActive: pathname === "/about" },
-                      { name: "Services", href: "/services", isActive: pathname === "/services" },
-                      { name: "Contact", href: "/contact", isActive: pathname === "/contact" },
-                    ].map((link, i) => (
-                      <div key={link.name} className="flex flex-col">
-                        <Link
-                          href={link.href}
-                          onClick={() => setIsOpen(false)}
-                          className={cn(
-                            "group flex items-center w-full text-3xl md:text-4xl font-bold font-heading uppercase tracking-tight transition-all duration-500 ease-expo",
-                            link.isActive ? "text-[#FF6A00]" : "text-white hover:text-[#FF6A00]"
-                          )}
-                        >
-                          <div className={cn(
-                            "transition-all duration-500 ease-expo", 
-                            link.isActive ? "flex-1" : "w-0 group-hover:flex-1"
-                          )} />
-                          <span className="relative">
-                            {link.name}
-                          </span>
-                        </Link>
-                        
-                        {/* Mobile Only Sub-links for Portfolio */}
-                        {link.name === "Portfolio" && link.subLinks && (
-                          <div className="flex flex-col gap-3 mt-4 ml-4 md:hidden">
-                            {link.subLinks.map((sub) => (
-                              <Link
-                                key={sub.name}
-                                href={sub.href}
-                                onClick={() => setIsOpen(false)}
-                                className={cn(
-                                  "text-lg font-heading uppercase tracking-widest transition-colors",
-                                  pathname === sub.href ? "text-[#FF6A00]" : "text-white/50 hover:text-white"
-                                )}
-                              >
-                                — {sub.name}
-                              </Link>
-                            ))}
-                          </div>
+                  {[
+                    {
+                      name: "Portfolio",
+                      href: "/",
+                      isActive: ["/case-studies", "/", "/creative-gallery", "/testimonials"].includes(pathname),
+                      subLinks: [
+                        { name: "Creative Gallery", href: "/creative-gallery" },
+                        { name: "Case Studies", href: "/case-studies" },
+                        { name: "Testimonials", href: "/testimonials" },
+                      ]
+                    },
+                    { name: "About", href: "/about", isActive: pathname === "/about" },
+                    { name: "Services", href: "/services", isActive: pathname === "/services" },
+                    { name: "Contact", href: "/contact", isActive: pathname === "/contact" },
+                  ].map((link, i) => (
+                    <div key={link.name} className="flex flex-col">
+                      <Link
+                        href={link.href}
+                        onClick={() => setIsOpen(false)}
+                        className={cn(
+                          "group flex items-center w-full text-3xl md:text-4xl lg:text-[40px] font-bold font-heading uppercase tracking-tight transition-all duration-500 ease-expo",
+                          link.isActive ? "text-[#FF6A00]" : "text-white hover:text-[#FF6A00]"
                         )}
-                        
-                        {i < 3 && <div className="h-[1px] w-full bg-white/5 mt-4" />}
-                      </div>
-                    ))}
+                      >
+                        <div className={cn(
+                          "transition-all duration-500 ease-expo flex items-center overflow-hidden",
+                          link.isActive ? "flex-1" : "w-0 group-hover:flex-1"
+                        )}>
+                          <svg
+                            width="60" height="12" viewBox="0 0 60 12" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            className="flex-shrink-0 mr-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          >
+                            <path d="M0 6H58M58 6L53 1M58 6L53 11" stroke="#FF6A00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                        <span className="relative">
+                          {link.name}
+                        </span>
+                      </Link>
+                      {i < 3 && <div className="h-[1px] w-full bg-white/5 mt-4" />}
+                    </div>
+                  ))}
                 </nav>
               </motion.div>
             </div>
@@ -258,7 +274,7 @@ export default function Navbar() {
               <div className="h-[1px] w-full bg-white/10 mb-8" />
               <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                 <img src="/logo.svg" alt="Adlyngo" className="h-8 w-auto object-contain" />
-                
+
                 <div className="flex flex-col md:flex-row items-center gap-4 text-white/60 text-sm font-medium tracking-wide">
                   <span>Let's Build something great together</span>
                   <div className="hidden md:block w-[1px] h-4 bg-white/20" />
