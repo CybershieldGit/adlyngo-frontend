@@ -89,7 +89,7 @@ export default function Home() {
   const currentCategory = categories[activeCategoryIndex] || categories[0];
 
   const handleWheel = (e) => {
-    if (selectedVideoIndex !== null || categories.length === 0) return;
+    if (selectedVideoIndex !== null || categories.length === 0 || showIntro) return;
 
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
       if (isLocked) return;
@@ -165,7 +165,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 100 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[1250px] max-h-[90vh] bg-black/20 backdrop-blur-xl border border-white/10 rounded-t-[32px] md:rounded-t-[48px] rounded-b-none overflow-hidden shadow-[0_-20px_100px_rgba(0,0,0,0.8)] flex flex-col"
+              className="relative w-full max-w-[1250px] max-h-[82vh] md:max-h-[90vh] bg-black/20 backdrop-blur-xl border border-white/10 rounded-t-[32px] md:rounded-t-[48px] rounded-b-none overflow-hidden shadow-[0_-20px_100px_rgba(0,0,0,0.8)] flex flex-col"
             >
               {/* Header inside modal - EXACT Figma Implementation */}
               <div className="w-full px-6 py-4 md:px-12 md:py-6 flex justify-between items-center relative z-20">
@@ -199,7 +199,7 @@ export default function Home() {
 
               <div className="w-[calc(100%-48px)] md:w-[calc(100%-96px)] mx-auto h-[1px] bg-white/10 relative z-20" />
 
-              <div className="flex-1 p-6 md:p-12 md:pt-6 relative z-20 overflow-y-auto custom-scrollbar">
+              <div className="flex-1 p-6 md:p-12 md:pt-6 relative z-20 overflow-y-auto overflow-x-hidden touch-pan-y custom-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
                 <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center gap-12 lg:gap-0">
                   {/* Left Column: Branding & Who We Are */}
                   <div className="flex flex-col justify-start items-start gap-8 md:gap-10 max-w-full lg:max-w-[500px]">
