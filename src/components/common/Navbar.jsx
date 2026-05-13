@@ -194,39 +194,61 @@ export default function Navbar() {
                 <div className="absolute inset-0 rounded-[40px] shadow-[0_0_50px_rgba(255,255,255,0.02)] pointer-events-none" />
                 
                 <nav className="flex flex-col gap-4 md:gap-6 relative z-10">
-                  {[
-                    { 
-                      name: "Portfolio", 
-                      href: "/video-gallery", 
-                      isActive: [ "/video-gallery", "/work", "/", "/creative-gallery", "/testimonials"].includes(pathname)
-                    },
-                    { name: "About", href: "/about", isActive: pathname === "/about" },
-                    { name: "Services", href: "/services", isActive: pathname === "/services" },
-                    { name: "Contact", href: "/contact", isActive: pathname === "/contact" },
-                  ].map((link, i) => (
-                    <div key={link.name} className="flex flex-col">
-                      <Link
-                        href={link.href}
-                        onClick={() => setIsOpen(false)}
-                        className={cn(
-                          "group flex items-center w-full text-2xl md:text-4xl font-bold font-heading uppercase tracking-tight transition-all duration-500 ease-expo",
-                          link.isActive ? "text-[#FF6A00]" : "text-white hover:text-[#FF6A00]"
-                        )}
-                      >
-                        <div className={cn(
-                          "transition-all duration-500 ease-expo", 
-                          link.isActive ? "flex-1" : "w-0 group-hover:flex-1"
-                        )} />
-                        <motion.span 
-                          className="relative"
-                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    {[
+                      { 
+                        name: "Portfolio", 
+                        href: "/", 
+                        isActive: ["/work", "/", "/creative-gallery", "/testimonials"].includes(pathname),
+                        subLinks: [
+                          { name: "Creative Gallery", href: "/creative-gallery" },
+                          { name: "Case Studies", href: "/work" },
+                          { name: "Testimonials", href: "/testimonials" },
+                        ]
+                      },
+                      { name: "About", href: "/about", isActive: pathname === "/about" },
+                      { name: "Services", href: "/services", isActive: pathname === "/services" },
+                      { name: "Contact", href: "/contact", isActive: pathname === "/contact" },
+                    ].map((link, i) => (
+                      <div key={link.name} className="flex flex-col">
+                        <Link
+                          href={link.href}
+                          onClick={() => setIsOpen(false)}
+                          className={cn(
+                            "group flex items-center w-full text-3xl md:text-4xl font-bold font-heading uppercase tracking-tight transition-all duration-500 ease-expo",
+                            link.isActive ? "text-[#FF6A00]" : "text-white hover:text-[#FF6A00]"
+                          )}
                         >
-                          {link.name}
-                        </motion.span>
-                      </Link>
-                      {i < 3 && <div className="h-[1px] w-full bg-white/5 mt-4" />}
-                    </div>
-                  ))}
+                          <div className={cn(
+                            "transition-all duration-500 ease-expo", 
+                            link.isActive ? "flex-1" : "w-0 group-hover:flex-1"
+                          )} />
+                          <span className="relative">
+                            {link.name}
+                          </span>
+                        </Link>
+                        
+                        {/* Mobile Only Sub-links for Portfolio */}
+                        {link.name === "Portfolio" && link.subLinks && (
+                          <div className="flex flex-col gap-3 mt-4 ml-4 md:hidden">
+                            {link.subLinks.map((sub) => (
+                              <Link
+                                key={sub.name}
+                                href={sub.href}
+                                onClick={() => setIsOpen(false)}
+                                className={cn(
+                                  "text-lg font-heading uppercase tracking-widest transition-colors",
+                                  pathname === sub.href ? "text-[#FF6A00]" : "text-white/50 hover:text-white"
+                                )}
+                              >
+                                — {sub.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {i < 3 && <div className="h-[1px] w-full bg-white/5 mt-4" />}
+                      </div>
+                    ))}
                 </nav>
               </motion.div>
             </div>
