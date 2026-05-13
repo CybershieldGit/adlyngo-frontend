@@ -146,9 +146,20 @@ export default function Home() {
   }
 
   return (
-    <main 
+    <motion.main 
       onWheel={handleWheel}
-      className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[80px] overflow-hidden fixed inset-0"
+      onPanEnd={(e, info) => {
+        if (showIntro || selectedVideoIndex !== null || isLocked) return;
+        const threshold = 50;
+        if (info.offset.y < -threshold && activeCategoryIndex < categories.length - 1) {
+          setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
+          lockScrolling();
+        } else if (info.offset.y > threshold && activeCategoryIndex > 0) {
+          setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
+          lockScrolling();
+        }
+      }}
+      className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[80px] overflow-hidden fixed inset-0 touch-pan-x md:touch-auto"
     >
       <AnimatePresence>
         {showIntro && (
@@ -352,7 +363,7 @@ export default function Home() {
                 exit={{ opacity: 0, x: -50 }}
                 transition={{ duration: 0.5 }}
                 ref={scrollRef} 
-                className="flex gap-4 md:gap-5 overflow-x-auto no-scrollbar w-full snap-x scroll-smooth pl-10 h-full items-center"
+                className="flex gap-4 md:gap-5 overflow-x-auto no-scrollbar w-full snap-x snap-mandatory scroll-smooth pl-10 h-full items-center"
               >
                 {currentCategory?.videos?.map((video, idx) => (
                   <motion.div
@@ -457,6 +468,6 @@ export default function Home() {
           </motion.div>
         )}
       </AnimatePresence>
-    </main>
+    </motion.main>
   );
 }
