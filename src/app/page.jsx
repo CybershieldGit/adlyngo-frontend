@@ -171,7 +171,7 @@ export default function Home() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[1100] flex items-end justify-center"
           >
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-1xl" />
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-3xl md:backdrop-blur-xl" />
 
             <motion.div
               initial={{ opacity: 0, y: 100 }}

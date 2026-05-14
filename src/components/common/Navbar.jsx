@@ -106,7 +106,8 @@ export default function Navbar() {
       <header
         className={cn(
           "fixed top-0 left-0 w-full z-[999] transition-all duration-500",
-          scrolled ? "bg-black/90 backdrop-blur-md" : "bg-[#0A0A0A]"
+          scrolled ? "bg-black/90 backdrop-blur-md" : "bg-[#0A0A0A]",
+          isIntroShowing && "blur-lg md:blur-none pointer-events-none opacity-50"
         )}
       >
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px]" />
