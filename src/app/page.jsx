@@ -332,9 +332,9 @@ export default function Home() {
               </motion.h1>
             </AnimatePresence>
           </div>
-          <button className="hidden md:flex items-center gap-2.5 px-6 py-2.5 bg-[#181818]/40 border border-white rounded-lg text-white text-sm font-medium font-albert leading-none hover:bg-white hover:text-black transition-all">
+          {/* <button className="hidden md:flex items-center gap-2.5 px-6 py-2.5 bg-[#181818]/40 border border-white rounded-lg text-white text-sm font-medium font-albert leading-none hover:bg-white hover:text-black transition-all">
             View All
-          </button>
+          </button> */}
         </header>
 
         <div className="flex-1 flex items-center min-h-0 relative py-2">
