@@ -81,6 +81,26 @@ export default function Navbar() {
     };
   }, [isOpen]);
 
+  const [isIntroShowing, setIsIntroShowing] = useState(false);
+
+  useEffect(() => {
+    if (pathname === "/") {
+      const hasSeenIntro = sessionStorage.getItem("adlyngo_intro_seen");
+      if (!hasSeenIntro) {
+        setIsIntroShowing(true);
+      }
+    } else {
+      setIsIntroShowing(false);
+    }
+
+    const handleIntroClosed = () => {
+      setIsIntroShowing(false);
+    };
+
+    window.addEventListener("introClosed", handleIntroClosed);
+    return () => window.removeEventListener("introClosed", handleIntroClosed);
+  }, [pathname]);
+
   return (
     <>
       <header
@@ -157,34 +177,43 @@ export default function Navbar() {
       </header>
 
       {/* Mobile Island Navigation - PORTFOLIO ROUTES (Below Header) */}
-      <div className="lg:hidden fixed top-[82px] left-0 w-full px-6 z-[998] pointer-events-none">
-        <div className="max-w-max mx-auto bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-1 overflow-x-auto no-scrollbar pointer-events-auto shadow-2xl">
-          <div className="flex items-center">
-            {[
-              { name: "Video Gallery", href: "/" },
-              { name: "Creative Gallery", href: "/creative-gallery" },
-              { name: "Case Studies", href: "/case-studies" },
-              { name: "Testimonials", href: "/testimonials" },
-            ].map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    "px-4 py-2 rounded-xl text-[10px] uppercase tracking-widest font-bold transition-all whitespace-nowrap",
-                    isActive
-                      ? "bg-[#FF6A00] text-white shadow-[0_0_20px_rgba(255,106,0,0.3)]"
-                      : "text-white/40 hover:text-white"
-                  )}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      <AnimatePresence>
+        {!isIntroShowing && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="lg:hidden fixed top-[82px] left-0 w-full px-6 z-[998] pointer-events-none"
+          >
+            <div className="max-w-max mx-auto bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-1 overflow-x-auto no-scrollbar pointer-events-auto shadow-2xl">
+              <div className="flex items-center">
+                {[
+                  { name: "Video Gallery", href: "/" },
+                  { name: "Creative Gallery", href: "/creative-gallery" },
+                  { name: "Case Studies", href: "/case-studies" },
+                  { name: "Testimonials", href: "/testimonials" },
+                ].map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={cn(
+                        "px-4 py-2 rounded-xl text-[10px] uppercase tracking-widest font-bold transition-all whitespace-nowrap",
+                        isActive
+                          ? "bg-[#FF6A00] text-white shadow-[0_0_20px_rgba(255,106,0,0.3)]"
+                          : "text-white/40 hover:text-white"
+                      )}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {isOpen && (
