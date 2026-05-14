@@ -58,7 +58,7 @@ const growthWays = [
 ];
 
 const testimonials = [
-  {
+  { 
     id: 1,
     name: "Ravi Verma",
     role: "CEO, Perpilly Inc.",
