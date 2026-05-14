@@ -84,6 +84,7 @@ export default function Home() {
   const handleCloseIntro = () => {
     setShowIntro(false);
     sessionStorage.setItem("adlyngo_intro_seen", "true");
+    window.dispatchEvent(new Event("introClosed"));
   };
 
   const currentCategory = categories[activeCategoryIndex] || categories[0];
@@ -168,7 +169,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-end justify-center"
+            className="fixed inset-0 z-[1100] flex items-end justify-center"
           >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-1xl" />
 
