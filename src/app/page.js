@@ -95,7 +95,7 @@ export default function Home() {
   };
 
   return (
-    <main 
+    <main
       onWheel={handleWheel}
       className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[80px] overflow-hidden fixed inset-0"
     >
@@ -108,7 +108,7 @@ export default function Home() {
             className="fixed inset-0 z-[100] flex items-start justify-center p-6 md:p-10 pt-[260px]"
           >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-1xl" />
-            
+
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: -50 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -120,9 +120,9 @@ export default function Home() {
                 <div className="flex items-center justify-between w-full">
                   {/* Logo Area */}
                   <div className="w-[207.67px] h-[54.73px] relative">
-                    <Image 
-                      src="/logo.svg" 
-                      alt="Adlyngo" 
+                    <Image
+                      src="/logo.svg"
+                      alt="Adlyngo"
                       fill
                       className="object-contain"
                     />
@@ -134,7 +134,7 @@ export default function Home() {
                   </div>
 
                   {/* Button */}
-                  <button 
+                  <button
                     onClick={handleCloseIntro}
                     className="w-[170px] h-[48px] bg-[#FF6A00] rounded-lg outline outline-[1.5px] outline-white -outline-offset-[1.5px] flex items-center justify-center gap-[10px] hover:scale-105 transition-transform"
                   >
@@ -159,7 +159,7 @@ export default function Home() {
                           We Make Them <span className="text-[#FF6A00]">Speak.</span>
                         </span>
                       </h1>
-                      
+
                       {/* Sub-heading */}
                       <p className="w-[478px] text-white text-sm font-normal leading-relaxed opacity-80" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
                         We turn ideas into performance-driven campaigns that actually connect with people not just impressions.
@@ -250,7 +250,7 @@ export default function Home() {
 
       <div className="max-w-[1800px] mx-auto w-full h-full flex flex-col px-6 md:px-16 py-4 md:py-6 overflow-hidden relative z-10">
         <header className="flex justify-between items-center mb-6 flex-shrink-0">
-          <motion.h1 
+          <motion.h1
             key={currentCategory?.id}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -259,9 +259,9 @@ export default function Home() {
             <span className="text-white">{currentCategory?.title?.first}</span>
             <span className="text-[#FF6A00]">{currentCategory?.title?.second}</span>
           </motion.h1>
-          <button className="hidden md:flex items-center gap-2.5 px-4 py-2 bg-[#181818]/40 border border-white rounded-lg text-white text-sm font-medium font-albert leading-none hover:bg-white hover:text-black transition-all">
+          {/* <button className="hidden md:flex items-center gap-2.5 px-4 py-2 bg-[#181818]/40 border border-white rounded-lg text-white text-sm font-medium font-albert leading-none hover:bg-white hover:text-black transition-all">
             View All
-          </button>
+          </button> */}
         </header>
 
         <div className="flex-1 flex items-center min-h-0 overflow-hidden relative">
@@ -284,11 +284,11 @@ export default function Home() {
             ))}
           </div>
 
-          <motion.div 
+          <motion.div
             key={currentCategory?.id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            ref={scrollRef} 
+            ref={scrollRef}
             className="flex gap-6 md:gap-8 overflow-x-auto no-scrollbar w-full py-4 snap-x scroll-smooth pl-10"
           >
             {currentCategory?.videos?.map((video, idx) => (
@@ -307,7 +307,7 @@ export default function Home() {
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   loading="lazy"
                 />
-                
+
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
 
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -344,13 +344,13 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-6">
-            <button 
+            <button
               onClick={() => scroll("left")}
               className="w-12 h-12 rounded-full border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all"
             >
               <ArrowLeft size={20} />
             </button>
-            <button 
+            <button
               onClick={() => scroll("right")}
               className="w-12 h-12 rounded-full bg-[#130800]/50 border border-white flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all"
             >

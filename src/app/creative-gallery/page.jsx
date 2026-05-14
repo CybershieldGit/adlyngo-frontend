@@ -16,7 +16,7 @@ export default function CreativeGallery() {
       try {
         const response = await fetch("https://adlyngo-next-seven.vercel.app/api/gallery?page=1&limit=100");
         const json = await response.json();
-        
+
         if (json.success && json.data.items) {
           // Group items by category
           const grouped = json.data.items.reduce((acc, item) => {
@@ -110,9 +110,9 @@ export default function CreativeGallery() {
               <h2 className="text-4xl md:text-7xl font-bold text-white uppercase tracking-tight font-heading">
                 {category.title} <span className="text-[#FF6A00]">{category.subtitle}</span>
               </h2>
-              <button className="px-8 py-3 border border-white/10 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+              {/* <button className="px-8 py-3 border border-white/10 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
                 View All
-              </button>
+              </button> */}
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 auto-rows-[150px] md:auto-rows-[180px]">
@@ -129,10 +129,10 @@ export default function CreativeGallery() {
                     item.size
                   )}
                 >
-                  <img 
-                    src={item.image} 
-                    alt={item.title} 
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-500 flex items-center justify-center">
@@ -164,9 +164,9 @@ export default function CreativeGallery() {
               className="relative max-w-full max-h-full aspect-auto rounded-2xl overflow-hidden shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <img 
-                src={selectedImage} 
-                alt="Selected" 
+              <img
+                src={selectedImage}
+                alt="Selected"
                 className="max-w-full max-h-[90vh] object-contain"
               />
             </motion.div>

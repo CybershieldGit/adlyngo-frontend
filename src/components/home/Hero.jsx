@@ -79,9 +79,9 @@ export default function Hero() {
 
   return (
     <div className="relative min-h-screen bg-black overflow-hidden font-sans">
-      
+
       {/* BASE HERO SECTION (CAROUSEL) */}
-      <motion.section 
+      <motion.section
         animate={{ filter: isPopupOpen ? "blur(30px)" : "blur(0px)", scale: isPopupOpen ? 1.02 : 1 }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className="relative min-h-screen flex flex-col px-6 md:px-16 pt-32 pb-12"
@@ -100,27 +100,27 @@ export default function Hero() {
               <h2 className="text-5xl md:text-[80px] font-bold text-white uppercase tracking-tight font-heading leading-none">
                 {current.title} <span className="text-[#FF6A00]">{current.subtitle}</span>
               </h2>
-              <button className="px-8 py-3 bg-white/5 border border-white rounded-lg text-white text-sm font-medium font-albert uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+              {/* <button className="px-8 py-3 bg-white/5 border border-white rounded-lg text-white text-sm font-medium font-albert uppercase tracking-widest hover:bg-white hover:text-black transition-all">
                 View All
-              </button>
+              </button> */}
             </div>
 
             {/* Content Grid (Horizontal List) */}
             <div className="flex gap-4 md:gap-8 relative z-10 mb-16 overflow-x-auto no-scrollbar pb-4">
               {current.items.map((item) => (
-                <div 
-                  key={item.id} 
+                <div
+                  key={item.id}
                   className={cn(
                     "relative flex-shrink-0 w-[260px] h-[462px] overflow-hidden rounded-[20px] border border-[#FEFEFE] group transition-all duration-500",
                     item.active && "ring-2 ring-[#FF6A00] shadow-[0_0_30px_rgba(255,106,0,0.3)]"
                   )}
                 >
-                  <Image 
-                    src={item.image} 
-                    alt="Work" 
-                    fill 
+                  <Image
+                    src={item.image}
+                    alt="Work"
+                    fill
                     sizes="260px"
-                    className="object-cover transition-transform duration-1000 group-hover:scale-105" 
+                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
                 </div>
               ))}
@@ -154,13 +154,13 @@ export default function Hero() {
         {/* Left Dot Navigation */}
         <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 flex flex-col gap-8 z-20">
           {categories.map((_, i) => (
-            <button 
-              key={i} 
+            <button
+              key={i}
               onClick={() => setActiveSlide(i)}
               className="relative flex items-center justify-center w-8 h-8 group"
             >
               {i === activeSlide ? (
-                <motion.div 
+                <motion.div
                   layoutId="hero-dot-ring"
                   className="absolute inset-0 border border-white/40 rounded-full flex items-center justify-center"
                 >
@@ -178,7 +178,7 @@ export default function Hero() {
       <AnimatePresence>
         {isPopupOpen && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -195,20 +195,20 @@ export default function Hero() {
             >
               <div className="flex-shrink-0 flex flex-col lg:flex-row items-center justify-between px-6 py-6 md:px-14 md:py-8 border-b border-white/5 relative z-20 bg-black/20">
                 <div className="flex items-center">
-                  <Image 
-                    src="/logo.svg" 
-                    alt="Adlyngo" 
-                    width={140} 
-                    height={40} 
+                  <Image
+                    src="/logo.svg"
+                    alt="Adlyngo"
+                    width={140}
+                    height={40}
                     className="object-contain"
                   />
                 </div>
-                
+
                 <div className="text-white font-medium text-xs md:text-lg tracking-[0.2em] md:tracking-[0.4em] opacity-90 uppercase mt-4 lg:mt-0 text-center">
                   THE NATIVE TONGUE OF ADS.
                 </div>
-                
-                <button 
+
+                <button
                   onClick={() => setIsPopupOpen(false)}
                   className="mt-6 lg:mt-0 px-8 py-3 md:px-10 md:py-4 bg-[#FF4D00] text-white font-bold rounded-xl uppercase tracking-widest text-[10px] md:text-sm hover:brightness-110 transition-all shadow-[0_10px_30px_rgba(255,77,0,0.4)]"
                 >
@@ -216,7 +216,7 @@ export default function Hero() {
                 </button>
               </div>
 
-              <div 
+              <div
                 className="px-6 py-10 md:px-20 md:py-16 overflow-y-auto relative z-10 custom-scrollbar flex-1 scroll-smooth"
                 data-lenis-prevent
               >
@@ -253,7 +253,7 @@ export default function Hero() {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={() => setIsPopupOpen(false)}
                 className="absolute top-6 right-6 md:top-8 md:right-8 text-white/10 hover:text-white transition-colors z-30"
               >
