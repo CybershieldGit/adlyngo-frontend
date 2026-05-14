@@ -229,7 +229,7 @@ export default function CaseStudiesPage() {
         </section>
 
         {/* Section 2: Case Studies Content Section - Overlaps Nav */}
-        <section className="bg-[#212121] pt-24 md:pt-32 px-4 md:px-8 relative z-10">
+        <section className="bg-[#212121] pt-24 md:pt-32 px-4 md:px-8 relative z-10 overflow-hidden">
           {/* Diagonal Line Watermark Pattern */}
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px]" />
 
@@ -244,7 +244,7 @@ export default function CaseStudiesPage() {
             {/* Testimonial Section with Background Text */}
             <div className="relative mt-20 md:mt-40 pb-20">
               {/* Large background text behind everything */}
-              <div className="absolute bottom-[-5%] left-1/2 -translate-x-1/2 text-[25vw] font-black text-white/[0.04] uppercase pointer-events-none select-none tracking-widest leading-none whitespace-nowrap z-0">
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 text-[25vw] font-black text-white/[0.04] uppercase pointer-events-none select-none tracking-widest leading-none whitespace-nowrap z-0">
                 WEBSITE
               </div>
 
