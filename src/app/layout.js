@@ -17,7 +17,7 @@ const inter = Inter({
 const albertSans = Albert_Sans({
   variable: "--font-albert",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["300", "400", "500", "700", "800", "900"],
 });
 
 export const metadata = {
