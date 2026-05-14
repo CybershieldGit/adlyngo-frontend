@@ -315,8 +315,8 @@ export default function Home() {
       </div>
 
       <div className="w-full mx-auto h-full flex flex-col px-6 md:px-16 md:pt-2 pb-6 overflow-hidden relative z-10">
-        <header className="flex flex-col md:flex-row justify-between items-center md:items-end flex-shrink-0 gap-4">
-          <div className="w-full md:w-auto h-[40px] md:h-[80px] overflow-hidden">
+        <header className="flex flex-col md:flex-row justify-between items-center md:items-center flex-shrink-0 gap-4">
+          <div className="w-full md:w-auto h-[40px] md:h-[80px] overflow-hidden flex items-center">
             <AnimatePresence mode="wait">
               <motion.h1
                 key={activeCategoryIndex}
