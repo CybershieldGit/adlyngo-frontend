@@ -161,7 +161,7 @@ export default function Home() {
           lockScrolling();
         }
       }}
-      className="bg-[#0A0A0A] fixed inset-0 flex flex-col pt-[140px] md:pt-[80px] overflow-hidden touch-auto"
+      className="bg-[#0A0A0A] fixed inset-0 flex flex-col pt-[150px] md:pt-[80px] overflow-hidden touch-auto"
     >
       <AnimatePresence>
         {showIntro && (
@@ -317,7 +317,7 @@ export default function Home() {
 
       <div className="w-full mx-auto flex-1 flex flex-col px-6 md:px-16 md:pt-2 pb-16 md:pb-6 overflow-hidden relative z-10">
         <header className="flex flex-col md:flex-row justify-between items-center md:items-center flex-shrink-0 gap-4">
-          <div className="w-full md:w-auto h-[40px] md:h-[80px] overflow-hidden flex items-center">
+          <div className="w-full md:w-auto h-[50px] md:h-[80px] overflow-hidden flex items-center">
             <AnimatePresence mode="wait">
               <motion.h1
                 key={activeCategoryIndex}
@@ -325,7 +325,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="text-2xl md:text-5xl lg:text-[72px] font-bold font-heading leading-[0.8] tracking-wide text-center md:text-left"
+                className="text-[34px] md:text-5xl lg:text-[72px] font-bold font-heading leading-none md:leading-[0.8] tracking-wide text-center md:text-left"
               >
                 <span className="text-white">{currentCategory?.title?.first}</span>
                 <span className="text-[#FF6A00]">{currentCategory?.title?.second}</span>
@@ -376,8 +376,8 @@ export default function Home() {
                     transition={{ delay: idx * 0.05 }}
                     className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[24px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
                       ${currentCategory?.layout === "landscape"
-                        ? "w-[85vw] md:w-[70vw] lg:w-[60vw] max-w-[950px] aspect-[16/9] lg:aspect-[21/9] h-auto max-h-[40vh] md:max-h-[50vh]"
-                        : "w-[65vw] md:w-[35vw] lg:w-[22vw] max-w-[420px] aspect-[9/16] h-auto max-h-[60vh] md:max-h-[68vh]"}
+                        ? "w-[75vw] md:w-[60vw] lg:w-[50vw] max-w-[950px] aspect-[16/9] lg:aspect-[21/9] h-auto max-h-[38vh] md:max-h-[42vh]"
+                        : "h-[45vh] md:h-[60vh] aspect-[9/16] w-auto"}
                     `}
                   >
                     {video.videoUrl ? (
@@ -424,7 +424,7 @@ export default function Home() {
 
         <footer className="flex flex-row items-center justify-between gap-4 md:gap-10 flex-shrink-0 overflow-hidden">
           <div className="flex items-center gap-4 md:gap-10 flex-shrink-0">
-            <h3 className="text-[14px] md:text-[34px] font-bold font-heading whitespace-nowrap">
+            <h3 className="text-[25px] md:text-[34px] font-bold font-heading whitespace-nowrap">
               <span className="text-white uppercase">BRANDS </span>
               <span className="text-[#FF6A00] uppercase">WE SERVE</span>
             </h3>
@@ -446,7 +446,7 @@ export default function Home() {
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="flex items-center gap-12">
                   {["airbnb", "Expedia", "Skyscanner", "Booking", "Marriott", "Netflix"].map((brand, idx) => (
-                    <span key={idx} className="text-[14px] md:text-2xl font-heading text-white uppercase tracking-tighter opacity-40 hover:opacity-100 transition-opacity cursor-default">
+                    <span key={idx} className="text-[25px] font-heading text-white uppercase tracking-tighter opacity-40 hover:opacity-100 transition-opacity cursor-default">
                       {brand}
                     </span>
                   ))}
@@ -479,7 +479,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 md:p-10"
+            className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 md:p-10 pt-20 md:pt-32"
           >
             <button onClick={closeVideoModal} className="absolute top-24 right-8 md:top-32 md:right-12 z-[2100] w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all shadow-xl border border-white/10 backdrop-blur-md">
               <X size={28} />
@@ -495,8 +495,8 @@ export default function Home() {
                 key={`main-${selectedVideoIndex}`}
                 className={`relative rounded-[24px] overflow-hidden border border-white/20 shadow-[0_0_100px_rgba(255,106,0,0.2)]
                     ${currentCategory?.layout === "landscape"
-                    ? "w-[90vw] max-w-[1200px] aspect-video"
-                    : "w-[90vw] max-w-[420px] aspect-[9/16]"
+                    ? "w-[90vw] max-w-[1200px] aspect-video max-h-[80vh]"
+                    : "h-[80vh] max-h-[800px] aspect-[9/16] w-auto"
                   }
                   `}
               >
@@ -506,10 +506,6 @@ export default function Home() {
                   controls
                   autoPlay
                 />
-                <div className="absolute bottom-12 left-12 right-12 z-20 pointer-events-none">
-                  <p className="text-[#FF6A00] text-sm uppercase tracking-[0.3em] font-bold mb-3">{currentCategory.videos[selectedVideoIndex].category}</p>
-                  <h2 className="text-4xl md:text-6xl font-bold text-white font-heading uppercase leading-none">{currentCategory.videos[selectedVideoIndex].title}</h2>
-                </div>
               </motion.div>
               <motion.div key={`next-${selectedVideoIndex}`} className="hidden xl:block w-[300px] h-[500px] rounded-[32px] overflow-hidden grayscale opacity-30">
                 <video src={currentCategory.videos[(selectedVideoIndex + 1) % currentCategory.videos.length].videoUrl} muted className="w-full h-full object-cover" />
