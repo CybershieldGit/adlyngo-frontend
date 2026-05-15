@@ -62,7 +62,7 @@ const CaseStudyCard = ({ study }) => {
         const slug = study.slug || (study.title ? study.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') : (study.id || study._id));
         router.push(`/case-studies/${slug}`);
       }}
-      className="w-full bg-[#121212] rounded-[24px] md:rounded-[40px] p-8 md:p-16 mb-8 md:mb-12 border border-white/5 overflow-hidden group cursor-pointer relative shadow-2xl"
+      className="w-full bg-[#121212] rounded-[24px] md:rounded-[40px] p-8 md:p-10 lg:p-16 mb-8 md:mb-12 border border-white/5 overflow-hidden group cursor-pointer relative shadow-2xl"
     >
       <div className="flex justify-between items-center mb-6 md:mb-8 relative z-10">
         {study.client?.logo?.url ? (
@@ -97,7 +97,7 @@ const CaseStudyCard = ({ study }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-10 border-t border-white/10">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-10 border-t border-white/10">
         <div>
           <p className="text-white/40 text-[10px] uppercase tracking-widest mb-3 font-bold font-albert">Services</p>
           <p className="text-white text-sm md:text-lg font-bold font-albert tracking-tight">{study.metadata?.services || study.category?.name || "Creative Services"}</p>
@@ -186,7 +186,7 @@ export default function CaseStudiesPage() {
               <motion.h1
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-4xl md:text-8xl lg:text-[100px] font-black font-heading text-white leading-[0.9] uppercase text-center md:text-left"
+                className="text-4xl md:text-6xl lg:text-[100px] font-black font-heading text-white leading-[0.9] uppercase text-center md:text-left"
               >
                 OUR <span className="bg-gradient-to-r from-[#FF4D00] to-[#FF8A00] bg-clip-text text-transparent">CASE STUDIES.</span>
               </motion.h1>
@@ -250,7 +250,7 @@ export default function CaseStudiesPage() {
 
               {/* Metadata section above the card */}
               <div className="relative z-10 border-t border-white/10 pt-12 pb-12">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
                   <div>
                     <p className="text-white/40 text-[10px] uppercase tracking-widest mb-3 font-bold font-albert">Services</p>
                     <p className="text-white text-sm md:text-xl font-bold font-albert">Branding, Product</p>

@@ -169,7 +169,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1100] flex items-end justify-center"
+            className="fixed inset-0 z-[1100] flex items-start md:items-end justify-center"
           >
             <div className="absolute inset-0 bg-black/80 backdrop-blur-3xl md:backdrop-blur-xl" />
 
@@ -178,7 +178,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 100 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[1250px] max-h-[82vh] md:max-h-[90vh] bg-black/20 backdrop-blur-xl border border-white/10 rounded-t-[32px] md:rounded-t-[48px] rounded-b-none overflow-hidden shadow-[0_-20px_100px_rgba(0,0,0,0.8)] flex flex-col"
+              className="relative w-full max-w-[1250px] max-h-[72vh] md:max-h-none mt-[24vh] md:mt-0 bg-black/20 backdrop-blur-xl border border-white/10 rounded-[32px] md:rounded-t-[48px] md:rounded-b-none overflow-hidden shadow-[0_-20px_100px_rgba(0,0,0,0.8)] flex flex-col"
             >
               {/* Header inside modal - EXACT Figma Implementation */}
               <div className="w-full px-6 py-4 md:px-12 md:py-6 flex justify-between items-center relative z-20">
@@ -212,35 +212,35 @@ export default function Home() {
 
               <div className="w-[calc(100%-48px)] md:w-[calc(100%-96px)] mx-auto h-[1px] bg-white/10 relative z-20" />
 
-              <div className="flex-1 p-6 md:p-12 md:pt-6 relative z-20 overflow-y-auto overflow-x-hidden touch-pan-y custom-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
-                <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center gap-12 lg:gap-0">
+              <div className="flex-1 min-h-0 p-6 md:p-12 md:pt-6 pb-12 md:pb-12 relative z-20 overflow-y-auto overflow-x-hidden touch-pan-y custom-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
+                <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-10 md:gap-16">
                   {/* Left Column: Branding & Who We Are */}
-                  <div className="flex flex-col justify-start items-start gap-8 md:gap-10 max-w-full lg:max-w-[500px]">
+                  <div className="flex flex-col justify-start items-start gap-8 md:gap-10 flex-1">
                     <div className="flex flex-col justify-start items-start gap-4 md:gap-5">
                       {/* Main Heading */}
                       <h1 className="flex flex-col" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                        <span className="text-white text-3xl md:text-[56px] leading-[1.1] uppercase">We Don’t Run Ads.</span>
-                        <span className="text-white text-3xl md:text-[56px] leading-[1.1] uppercase">
+                        <span className="text-white text-3xl md:text-5xl lg:text-[56px] leading-[1.1] uppercase">We Don’t Run Ads.</span>
+                        <span className="text-white text-3xl md:text-5xl lg:text-[56px] leading-[1.1] uppercase">
                           We Make Them <span className="text-[#FF6A00]">Speak.</span>
                         </span>
                       </h1>
 
                       {/* Sub-heading */}
-                      <p className="w-full md:w-[478px] text-white text-xs md:text-sm font-normal leading-relaxed opacity-80" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
+                      <p className="w-full text-white text-xs md:text-sm font-normal leading-relaxed opacity-80" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
                         We turn ideas into performance-driven campaigns that actually connect with people not just impressions.
                       </p>
                     </div>
 
                     {/* Who We Are Section */}
                     <div className="flex flex-col justify-start items-start gap-4 md:gap-5 w-full">
-                      <h3 className="text-white text-2xl md:text-[34px] font-normal uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                      <h3 className="text-white text-2xl md:text-3xl lg:text-[34px] font-normal uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
                         WHO WE ARE?
                       </h3>
                       <div className="flex flex-col justify-start items-start gap-3">
-                        <p className="w-full md:w-[484px] text-white text-xs md:text-sm font-normal leading-relaxed opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
+                        <p className="w-full text-white text-xs md:text-sm font-normal leading-relaxed opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
                           Adlyngo is a full-service digital growth agency built for businesses serious about scaling. We combine data-driven performance marketing with premium creative so every rupee works harder.
                         </p>
-                        <p className="w-full md:w-[484px] text-white text-xs md:text-sm font-normal leading-relaxed opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
+                        <p className="w-full text-white text-xs md:text-sm font-normal leading-relaxed opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
                           We don't chase generic briefs. We specialise in Real Estate, Interior Design, E-Commerce, and Beauty — niches we've mastered across strategy, creative and execution.
                         </p>
                       </div>
@@ -248,7 +248,7 @@ export default function Home() {
                   </div>
 
                   {/* Right Column: Statistics Grid */}
-                  <div className="flex flex-col md:flex-row justify-start items-stretch gap-6 md:gap-[30px] w-full lg:w-auto">
+                  <div className="flex flex-col lg:flex-row justify-start items-stretch gap-6 w-full md:w-auto flex-shrink-0">
                     {/* Stat Column 1 */}
                     <div className="w-full md:w-[268px] bg-white/10 rounded-[24px] md:rounded-[30px] p-5 md:p-8 flex flex-col justify-center items-start">
                       <div className="flex flex-col justify-start items-start gap-3 md:gap-[18px] w-full">
@@ -271,23 +271,23 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {/* Stat Column 2 - Hidden on mobile to save space since content is identical */}
-                    <div className="hidden md:flex w-full md:w-[268px] bg-white/10 rounded-[30px] p-8 flex-col justify-center items-start">
-                      <div className="flex flex-col justify-start items-start gap-[18px] w-full">
+                    {/* Stat Column 2 */}
+                    <div className="flex w-full md:w-[268px] bg-white/10 rounded-[24px] md:rounded-[30px] p-5 md:p-8 flex flex-col justify-center items-start">
+                      <div className="flex flex-col justify-start items-start gap-3 md:gap-[18px] w-full">
                         {[
                           { value: "10,000 +", label: "Qualified Leads Generated" },
                           { value: "₹50L+", label: "Ad Spend Managed" },
                           { value: "3-5X", label: "Average Client ROI" },
                           { value: "50 +", label: "Funnels Built & Optimised" }
                         ].map((stat, i) => (
-                          <div key={i} className="flex flex-col justify-start items-start gap-2 w-full">
-                            <div className="text-white text-[34px] font-normal uppercase leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                          <div key={i} className="flex flex-col justify-start items-start gap-1 w-full">
+                            <div className="text-white text-xl md:text-[34px] font-normal uppercase leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
                               {stat.value}
                             </div>
-                            <div className="text-white text-sm font-normal opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
+                            <div className="text-white text-[9px] md:text-sm font-normal opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
                               {stat.label}
                             </div>
-                            {i < 3 && <div className="w-full h-[1px] bg-white/10 mt-3" />}
+                            {i < 3 && <div className="w-full h-[1px] bg-white/10 mt-1.5 md:mt-3" />}
                           </div>
                         ))}
                       </div>
@@ -376,7 +376,7 @@ export default function Home() {
                     transition={{ delay: idx * 0.05 }}
                     className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[40px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
                       ${currentCategory?.layout === "landscape"
-                        ? "w-[85vw] md:w-[70vw] lg:w-[60vw] max-w-[950px] aspect-[16/9] md:aspect-[21/9] h-auto max-h-[40vh] md:max-h-[50vh]"
+                        ? "w-[85vw] md:w-[70vw] lg:w-[60vw] max-w-[950px] aspect-[16/9] lg:aspect-[21/9] h-auto max-h-[40vh] md:max-h-[50vh]"
                         : "w-[65vw] md:w-[35vw] lg:w-[22vw] max-w-[420px] aspect-[9/16] h-auto max-h-[60vh] md:max-h-[68vh]"}
                     `}
                   >
