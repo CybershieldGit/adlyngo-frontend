@@ -201,7 +201,7 @@ export default function Home() {
                   {/* Button */}
                   <button
                     onClick={handleCloseIntro}
-                    className="px-4 py-2 md:w-[170px] md:h-[48px] bg-[#FF6A00] rounded-lg outline outline-[1.5px] outline-white -outline-offset-[1.5px] flex items-center justify-center gap-[10px] hover:scale-105 transition-transform flex-shrink-0"
+                    className="px-4 py-2 md:w-[170px] md:h-[24px] bg-[#FF6A00] rounded-lg outline outline-[1.5px] outline-white -outline-offset-[1.5px] flex items-center justify-center gap-[10px] hover:scale-105 transition-transform flex-shrink-0"
                   >
                     <span className="text-white text-[10px] md:text-base font-medium tracking-[0.24px] uppercase" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
                       LET'S START
@@ -210,7 +210,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="w-[calc(100%-48px)] md:w-[calc(100%-96px)] mx-auto h-[1px] bg-white/10 relative z-20" />
+              <div className="w-[calc(100%-24px)] md:w-[calc(100%-96px)] mx-auto h-[1px] bg-white/10 relative z-20" />
 
               <div className="flex-1 min-h-0 p-6 md:p-12 md:pt-6 pb-12 md:pb-12 relative z-20 overflow-y-auto overflow-x-hidden touch-pan-y custom-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
                 <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-10 md:gap-16">
@@ -374,7 +374,7 @@ export default function Home() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05 }}
-                    className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[40px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
+                    className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[24px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
                       ${currentCategory?.layout === "landscape"
                         ? "w-[85vw] md:w-[70vw] lg:w-[60vw] max-w-[950px] aspect-[16/9] lg:aspect-[21/9] h-auto max-h-[40vh] md:max-h-[50vh]"
                         : "w-[65vw] md:w-[35vw] lg:w-[22vw] max-w-[420px] aspect-[9/16] h-auto max-h-[60vh] md:max-h-[68vh]"}
@@ -491,7 +491,15 @@ export default function Home() {
               <motion.div key={`prev-${selectedVideoIndex}`} className="hidden xl:block w-[300px] h-[500px] rounded-[32px] overflow-hidden grayscale opacity-30">
                 <video src={currentCategory.videos[(selectedVideoIndex - 1 + currentCategory.videos.length) % currentCategory.videos.length].videoUrl} muted className="w-full h-full object-cover" />
               </motion.div>
-              <motion.div key={`main-${selectedVideoIndex}`} className="relative flex-1 max-w-[900px] h-full rounded-[48px] overflow-hidden border border-white/20 shadow-[0_0_100px_rgba(255,106,0,0.2)]">
+              <motion.div
+                key={`main-${selectedVideoIndex}`}
+                className={`relative rounded-[24px] overflow-hidden border border-white/20 shadow-[0_0_100px_rgba(255,106,0,0.2)]
+                    ${currentCategory?.layout === "landscape"
+                    ? "w-[90vw] max-w-[1200px] aspect-video"
+                    : "w-[90vw] max-w-[420px] aspect-[9/16]"
+                  }
+                  `}
+              >
                 <video
                   src={currentCategory.videos[selectedVideoIndex].videoUrl}
                   className="w-full h-full object-cover"
