@@ -315,7 +315,7 @@ export default function Home() {
         </AnimatePresence>
       </div>
 
-      <div className="w-full mx-auto h-full flex flex-col px-6 md:px-16 md:pt-2 pb-6 overflow-hidden relative z-10">
+      <div className="w-full mx-auto h-[100dvh] flex flex-col px-6 md:px-16 md:pt-2 pb-10 md:pb-6 overflow-hidden relative z-10">
         <header className="flex flex-col md:flex-row justify-between items-center md:items-center flex-shrink-0 gap-4">
           <div className="w-full md:w-auto h-[40px] md:h-[80px] overflow-hidden flex items-center">
             <AnimatePresence mode="wait">
@@ -424,7 +424,7 @@ export default function Home() {
 
         <footer className="flex flex-row items-center justify-between gap-4 md:gap-10 flex-shrink-0 overflow-hidden">
           <div className="flex items-center gap-4 md:gap-10 flex-shrink-0">
-            <h3 className="text-xl md:text-[34px] font-bold font-heading whitespace-nowrap">
+            <h3 className="text-[14px] md:text-[34px] font-bold font-heading whitespace-nowrap">
               <span className="text-white uppercase">BRANDS </span>
               <span className="text-[#FF6A00] uppercase">WE SERVE</span>
             </h3>
@@ -446,7 +446,7 @@ export default function Home() {
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="flex items-center gap-12">
                   {["airbnb", "Expedia", "Skyscanner", "Booking", "Marriott", "Netflix"].map((brand, idx) => (
-                    <span key={idx} className="text-xl md:text-2xl font-heading text-white uppercase tracking-tighter opacity-40 hover:opacity-100 transition-opacity cursor-default">
+                    <span key={idx} className="text-[14px] md:text-2xl font-heading text-white uppercase tracking-tighter opacity-40 hover:opacity-100 transition-opacity cursor-default">
                       {brand}
                     </span>
                   ))}
