@@ -177,7 +177,7 @@ export default function Hero() {
       {/* POPUP OVERLAY */}
       <AnimatePresence>
         {isPopupOpen && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
+          <div className="fixed inset-0 z-[200] flex items-start md:items-center justify-center p-4 md:p-10">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -191,7 +191,7 @@ export default function Hero() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 50 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[1400px] max-h-[90vh] md:max-h-[85vh] bg-[#1A1A1A]/80 backdrop-blur-[60px] border border-white/10 rounded-3xl md:rounded-[50px] overflow-hidden shadow-[0_40px_150px_rgba(0,0,0,0.6)] flex flex-col"
+              className="relative w-full max-w-[1400px] max-h-[72vh] md:max-h-[85vh] mt-[24vh] md:mt-0 bg-[#1A1A1A]/80 backdrop-blur-[60px] border border-white/10 rounded-3xl md:rounded-[50px] overflow-hidden shadow-[0_40px_150px_rgba(0,0,0,0.6)] flex flex-col"
             >
               <div className="flex-shrink-0 flex flex-col lg:flex-row items-center justify-between px-6 py-6 md:px-14 md:py-8 border-b border-white/5 relative z-20 bg-black/20">
                 <div className="flex items-center">

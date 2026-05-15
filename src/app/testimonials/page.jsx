@@ -63,7 +63,7 @@ export default function TestimonialsPage() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1, duration: 0.6 }}
-              className="bg-surface/30 border border-white/5 p-10 md:p-14 rounded-[40px] relative overflow-hidden group"
+              className="bg-surface/30 border border-white/5 p-8 md:p-10 lg:p-14 rounded-[40px] relative overflow-hidden group"
             >
               <Quote className="absolute top-10 right-10 text-white/[0.03] group-hover:text-brand/10 transition-colors duration-700" size={120} />
               
