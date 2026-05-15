@@ -161,7 +161,7 @@ export default function Home() {
           lockScrolling();
         }
       }}
-      className="bg-[#0A0A0A] h-screen w-full flex flex-col pt-[140px] md:pt-[80px] overflow-hidden fixed inset-0 touch-auto"
+      className="bg-[#0A0A0A] fixed inset-0 flex flex-col pt-[140px] md:pt-[80px] overflow-hidden touch-auto"
     >
       <AnimatePresence>
         {showIntro && (
@@ -315,7 +315,7 @@ export default function Home() {
         </AnimatePresence>
       </div>
 
-      <div className="w-full mx-auto h-[100dvh] flex flex-col px-6 md:px-16 md:pt-2 pb-10 md:pb-6 overflow-hidden relative z-10">
+      <div className="w-full mx-auto flex-1 flex flex-col px-6 md:px-16 md:pt-2 pb-16 md:pb-6 overflow-hidden relative z-10">
         <header className="flex flex-col md:flex-row justify-between items-center md:items-center flex-shrink-0 gap-4">
           <div className="w-full md:w-auto h-[40px] md:h-[80px] overflow-hidden flex items-center">
             <AnimatePresence mode="wait">
