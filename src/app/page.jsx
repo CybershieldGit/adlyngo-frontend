@@ -178,7 +178,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 100 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[1250px] max-h-[72vh] md:max-h-none mt-[24vh] md:mt-0 bg-black/20 backdrop-blur-xl border border-white/10 rounded-[32px] md:rounded-t-[48px] md:rounded-b-none overflow-hidden shadow-[0_-20px_100px_rgba(0,0,0,0.8)] flex flex-col"
+              className="relative w-full max-w-[1250px] max-h-[72vh] md:max-h-none mt-[14vh] md:mt-0 bg-black/20 backdrop-blur-xl border border-white/10 rounded-[32px] md:rounded-t-[48px] md:rounded-b-none overflow-hidden shadow-[0_-20px_100px_rgba(0,0,0,0.8)] flex flex-col"
             >
               {/* Header inside modal - EXACT Figma Implementation */}
               <div className="w-full px-6 py-4 md:px-12 md:py-6 flex justify-between items-center relative z-20">
