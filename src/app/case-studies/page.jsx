@@ -86,7 +86,7 @@ const CaseStudyCard = ({ study }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 mb-12">
         <div>
-          <h3 className="text-3xl md:text-5xl lg:text-6xl font-albert font-bold text-white mb-4 md:mb-6 leading-[1.1] tracking-tight">
+          <h3 className="text-3xl md:text-5xl font-heading text-white mb-6 uppercase tracking-tight">
             {study.title}
           </h3>
         </div>
@@ -175,7 +175,7 @@ export default function CaseStudiesPage() {
     <>
       <main className="bg-[#212121] min-h-screen flex flex-col relative overflow-x-hidden">
         {/* Section 1: Top Header Section */}
-        <section className="bg-[#171717] relative pt-44 md:pt-64 pb-28 md:pb-40 px-4 md:px-8 z-20">
+        <section className="bg-[#171717] relative pt-24 md:pt-40 pb-12 md:pb-20 px-4 md:px-8 z-20">
           {/* Diagonal Line Watermark Pattern (from creative-gallery) - Contained in its own clipped div */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px]" />
@@ -248,77 +248,55 @@ export default function CaseStudiesPage() {
                 WEBSITE
               </div>
 
-              {/* Metadata section above the card */}
-              <div className="relative z-10 border-t border-white/10 pt-12 pb-12">
-                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                  <div>
-                    <p className="text-white/40 text-[10px] uppercase tracking-widest mb-3 font-bold font-albert">Services</p>
-                    <p className="text-white text-sm md:text-xl font-bold font-albert">Branding, Product</p>
-                  </div>
-                  <div>
-                    <p className="text-white/40 text-[10px] uppercase tracking-widest mb-3 font-bold font-albert">Website</p>
-                    <p className="text-white text-sm md:text-xl font-bold font-albert">www.adlyngo.com</p>
-                  </div>
-                  <div>
-                    <p className="text-white/40 text-[10px] uppercase tracking-widest mb-3 font-bold font-albert">Published</p>
-                    <p className="text-white text-sm md:text-xl font-bold font-albert">20 January 2023</p>
-                  </div>
-                  <div>
-                    <p className="text-white/40 text-[10px] uppercase tracking-widest mb-3 font-bold font-albert">Industry</p>
-                    <p className="text-white text-sm md:text-xl font-bold font-albert">Lifestyle, Music</p>
-                  </div>
-                </div>
-              </div>
+
 
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-[#121212] rounded-[30px] md:rounded-[40px] p-8 md:p-20 border border-white/5 relative overflow-hidden z-10 shadow-2xl"
+                className="relative z-10 bg-white/[0.01] backdrop-blur-2xl rounded-[40px] p-10 md:p-16 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-12 shadow-2xl"
               >
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10">
-                  <div className="flex flex-col justify-between">
-                    <h2 className="text-4xl md:text-6xl font-albert text-white mb-12 leading-tight normal-case tracking-tight">
-                      <span className="font-medium">Trusted by</span> <br /> <span className="font-black">Brands</span>
-                    </h2>
-                    
-                    <div className="flex items-center gap-6 mt-auto">
-                      <span className="text-7xl md:text-9xl font-albert font-bold text-white tracking-tighter">4.89</span>
-                      <div className="bg-white rounded-full px-4 py-2.5 flex gap-1 items-center h-fit">
-                        {[1, 2, 3, 4, 5].map((s) => (
-                          <Star key={s} size={16} fill="#FF4D00" color="#FF4D00" />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col justify-between">
-                    <p className="text-white/60 text-lg md:text-xl leading-relaxed font-albert mb-12 lg:pr-10">
-                      Adlyngo is a full-service digital growth agency built for businesses serious about scaling. We combine data driven performance marketing with premium creative so every rupee work...
-                    </p>
-
-                    <div className="flex items-center gap-5 mt-auto">
-                      <div className="w-16 h-16 rounded-full overflow-hidden bg-white/10 p-0.5">
-                        <Image
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop"
-                          alt="Ravi Verma"
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-cover rounded-full"
-                        />
-                      </div>
-                      <div>
-                        <h4 className="text-white text-xl font-bold font-albert normal-case tracking-tight">Ravi Verma</h4>
-                        <p className="text-white/40 text-sm font-albert">CEO, People Inc.</p>
-                      </div>
+                <div className="flex flex-col items-start gap-8">
+                  <h2 className="text-5xl md:text-6xl font-black text-white uppercase leading-none tracking-tighter">
+                    Trusted by <br /> Brands
+                  </h2>
+                  
+                  <div className="flex items-center gap-6">
+                    <span className="text-7xl md:text-8xl font-albert font-bold text-white tracking-tighter">4.89</span>
+                    <div className="bg-white rounded-full px-4 py-2.5 flex gap-1 items-center h-fit">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star key={s} size={16} fill="#FF4D00" color="#FF4D00" />
+                      ))}
                     </div>
                   </div>
                 </div>
 
-                {/* Pagination dots at bottom center */}
-                <div className="flex justify-center gap-2 mt-12 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2">
-                  {[1, 2, 3, 4, 5, 6, 7].map((i) => (
-                    <div key={i} className={cn("w-1.5 h-1.5 rounded-full transition-colors", i === 1 ? "bg-[#FF4D00]" : "bg-white/20")} />
+                <div className="flex-1 max-w-2xl">
+                  <p className="text-white/60 text-lg md:text-2xl leading-relaxed font-albert mb-8 italic">
+                    "Their team doesn't just deliver creative; they deliver results. The strategic approach to our social media growth has been a game-changer for our brand."
+                  </p>
+
+                  <div className="flex items-center gap-5">
+                    <div className="w-16 h-16 rounded-full overflow-hidden bg-white/10 p-0.5">
+                      <Image
+                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop"
+                        alt="Marcus Thorne"
+                        width={64}
+                        height={64}
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    </div>
+                    <div>
+                      <h4 className="text-white text-xl font-bold font-albert uppercase tracking-tight">Marcus Thorne</h4>
+                      <p className="text-[#FF4D00] text-sm font-bold uppercase tracking-widest">FOUNDER, URBAN EDGE</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pagination dots */}
+                <div className="flex justify-center gap-2 mt-8 md:absolute md:bottom-8 md:right-16">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className={cn("w-2 h-2 rounded-full transition-colors", i === 1 ? "bg-[#FF4D00]" : "bg-white/20")} />
                   ))}
                 </div>
               </motion.div>
