@@ -150,6 +150,10 @@
 //           Join the Movement
 //         </Link>
 //       </section>
-//     </div>
 //   );
 // }
+
+export default function AboutPage() {
+  return null;
+}
+
