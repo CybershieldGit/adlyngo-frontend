@@ -131,11 +131,24 @@ export default function CaseStudiesPage() {
     const fetchProjects = async () => {
       try {
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://adlyngo-next-seven.vercel.app";
-        const url = `${baseUrl}/api/projects?page=1&limit=50`;
-        
-        const response = await fetch(url).catch(() => {
-          return fetch("http://localhost:5005/api/projects?page=1&limit=50");
-        });
+        const path = "/api/projects?page=1&limit=50";
+
+        let response = await fetch(`${baseUrl}${path}`).catch(() => null);
+
+        if (!response || !response.ok) {
+          const fallbackPorts = ["3000", "3001", "5005"];
+          for (const port of fallbackPorts) {
+            const res = await fetch(`http://localhost:${port}${path}`).catch(() => null);
+            if (res && res.ok) {
+              response = res;
+              break;
+            }
+          }
+        }
+
+        if (!response || !response.ok) {
+          throw new Error("Failed to fetch projects from both remote and local API");
+        }
 
         const json = await response.json();
 
@@ -188,12 +201,12 @@ export default function CaseStudiesPage() {
                 animate={{ opacity: 1, x: 0 }}
                 className="text-4xl md:text-6xl lg:text-[100px] font-black font-heading text-white leading-[0.9] uppercase text-center md:text-left"
               >
-                OUR <span className="bg-gradient-to-r from-[#FF4D00] to-[#FF8A00] bg-clip-text text-transparent">CASE STUDIES.</span>
+                OUR <span className="text-[#FF6A00]">CASE STUDIES.</span>
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-white/60 text-sm md:text-base lg:text-lg max-w-lg font-albert leading-relaxed lg:text-right ml-auto"
+                className="text-white/60 text-sm md:text-base max-w-xl font-albert leading-relaxed text-left ml-auto"
               >
                 Every project at Adlyngo is built with one goal: turning creative thinking into measurable business growth through strategy, execution, and performance-focused design.
               </motion.p>

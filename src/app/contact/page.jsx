@@ -68,7 +68,7 @@ export default function ContactPage() {
             <span className="text-white uppercase">LETS GET IN </span>
             <span className="text-[#FF6A00] uppercase">TOUCH</span>
           </h1>
-          <p className="max-w-md text-white/40 text-[9px] md:text-[10px] leading-relaxed text-center md:text-left uppercase tracking-widest font-bold">
+          <p className="max-w-md text-white/40 text-[9px] md:text-[10px] leading-relaxed text-center md:text-left uppercase tracking-widest font-bold font-albert">
             Adlyngo is a full-service digital growth agency built for businesses serious about scaling. We combine data-driven performance marketing with premium creative.
           </p>
         </div>

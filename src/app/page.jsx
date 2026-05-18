@@ -22,7 +22,26 @@ export default function Home() {
 
     const fetchReels = async () => {
       try {
-        const response = await fetch("https://adlyngo-next-seven.vercel.app/api/reels?page=1&limit=50");
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://adlyngo-next-seven.vercel.app";
+        const path = "/api/reels?page=1&limit=50";
+
+        let response = await fetch(`${baseUrl}${path}`).catch(() => null);
+
+        if (!response || !response.ok) {
+          const fallbackPorts = ["3000", "3001", "5005"];
+          for (const port of fallbackPorts) {
+            const res = await fetch(`http://localhost:${port}${path}`).catch(() => null);
+            if (res && res.ok) {
+              response = res;
+              break;
+            }
+          }
+        }
+
+        if (!response || !response.ok) {
+          throw new Error("Failed to fetch reels from both remote and local API");
+        }
+
         const json = await response.json();
 
         if (json.success && json.data.reels) {

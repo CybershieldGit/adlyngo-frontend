@@ -264,10 +264,11 @@ export default function Navbar() {
                         { name: "Testimonials", href: "/testimonials" },
                       ]
                     },
-                    { name: "About", href: "/about", isActive: pathname === "/about" },
+                    // Temporarily disabled About page nav option as the page content is commented out
+                    // { name: "About", href: "/about", isActive: pathname === "/about" },
                     { name: "Services", href: "/services", isActive: pathname === "/services" },
                     { name: "Contact", href: "/contact", isActive: pathname === "/contact" },
-                  ].map((link, i) => (
+                  ].map((link, i, arr) => (
                     <div key={link.name} className="flex flex-col">
                       <Link
                         href={link.href}
@@ -292,7 +293,7 @@ export default function Navbar() {
                           {link.name}
                         </span>
                       </Link>
-                      {i < 3 && <div className="h-[1px] w-full bg-white/5 mt-4" />}
+                      {i < arr.length - 1 && <div className="h-[1px] w-full bg-white/5 mt-4" />}
                     </div>
                   ))}
                 </nav>
