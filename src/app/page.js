@@ -133,12 +133,11 @@ export default function Home() {
                     The Native Tongue of Ads.
                   </div>
 
-                  {/* Button */}
                   <button
                     onClick={handleCloseIntro}
-                    className="w-[170px] h-[48px] bg-[#FF6A00] rounded-lg outline outline-[1.5px] outline-white -outline-offset-[1.5px] flex items-center justify-center gap-[10px] hover:scale-105 transition-transform"
+                    className="px-6 py-2.5 w-[170px] bg-[#FF6A00] border border-[#FF6A00] rounded-lg flex items-center justify-center gap-[10px] hover:bg-transparent hover:scale-105 transition-all duration-300 group shadow-lg shadow-[#FF6A00]/20"
                   >
-                    <span className="text-white text-base font-medium tracking-[0.24px] uppercase" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
+                    <span className="text-white group-hover:text-[#FF6A00] text-[10px] md:text-[11px] font-bold tracking-[0.15em] uppercase transition-colors" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
                       LET'S START
                     </span>
                   </button>
