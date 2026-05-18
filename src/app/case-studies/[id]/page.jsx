@@ -139,14 +139,25 @@ export default function CaseStudyDetailPage() {
   useEffect(() => {
     const fetchStudyData = async () => {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://adlyngo-next-seven.vercel.app";
+        const fetchWithFallback = async (path) => {
+          const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://adlyngo-next-seven.vercel.app";
+          let response = await fetch(`${baseUrl}${path}`).catch(() => null);
+
+          if (!response || !response.ok) {
+            const fallbackPorts = ["3000", "3001", "5005"];
+            for (const port of fallbackPorts) {
+              const res = await fetch(`http://localhost:${port}${path}`).catch(() => null);
+              if (res && res.ok) {
+                response = res;
+                break;
+              }
+            }
+          }
+          return response;
+        };
 
         // 1. Fetch the main study
-        let studyResponse = await fetch(`${baseUrl}/api/projects/${params.id}`).catch(() => null);
-        
-        if (!studyResponse || !studyResponse.ok) {
-          studyResponse = await fetch(`http://localhost:5005/api/projects/${params.id}`).catch(() => null);
-        }
+        let studyResponse = await fetchWithFallback(`/api/projects/${params.id}`);
 
         if (!studyResponse || !studyResponse.ok) {
           setError("Project not found");
@@ -164,15 +175,8 @@ export default function CaseStudyDetailPage() {
           if (project.client?._id) {
             const clientQuery = `client=${project.client._id}&limit=20`;
 
-            let reelsRes = await fetch(`${baseUrl}/api/reels?${clientQuery}`).catch(() => null);
-            if (!reelsRes || !reelsRes.ok) {
-              reelsRes = await fetch(`http://localhost:5005/api/reels?${clientQuery}`).catch(() => null);
-            }
-
-            let galleryRes = await fetch(`${baseUrl}/api/gallery?${clientQuery}`).catch(() => null);
-            if (!galleryRes || !galleryRes.ok) {
-              galleryRes = await fetch(`http://localhost:5005/api/gallery?${clientQuery}`).catch(() => null);
-            }
+            let reelsRes = await fetchWithFallback(`/api/reels?${clientQuery}`);
+            let galleryRes = await fetchWithFallback(`/api/gallery?${clientQuery}`);
 
             const reelsJson = reelsRes ? await reelsRes.json() : { success: false };
             const galleryJson = galleryRes ? await galleryRes.json() : { success: false };
