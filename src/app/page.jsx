@@ -180,7 +180,7 @@ export default function Home() {
           lockScrolling();
         }
       }}
-      className="bg-[#0A0A0A] fixed inset-0 flex flex-col pt-[150px] md:pt-[80px] overflow-hidden touch-auto"
+      className={`bg-[#0A0A0A] fixed inset-0 flex flex-col pt-[150px] md:pt-[80px] overflow-hidden touch-auto ${selectedVideoIndex !== null ? "z-[2000] md:z-auto" : ""}`}
     >
       <AnimatePresence>
         {showIntro && (
@@ -497,13 +497,31 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 md:p-10 pt-20 md:pt-32"
+            onPanEnd={(e, info) => {
+              const threshold = 50;
+              if (info.offset.x < -threshold) {
+                navigateVideo("next");
+              } else if (info.offset.x > threshold) {
+                navigateVideo("prev");
+              }
+            }}
+            className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 md:p-10 md:pt-32"
           >
-            <button onClick={closeVideoModal} className="absolute top-24 right-8 md:top-32 md:right-12 z-[2100] w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all shadow-xl border border-white/10 backdrop-blur-md">
+            <button onClick={closeVideoModal} className="absolute top-4 right-4 md:top-32 md:right-12 z-[2100] w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all shadow-xl border border-white/10 backdrop-blur-md">
               <X size={28} />
             </button>
             <button onClick={() => navigateVideo("prev")} className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 z-50 w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 hidden md:flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowLeft size={32} /></button>
             <button onClick={() => navigateVideo("next")} className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 z-50 w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 hidden md:flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowRight size={32} /></button>
+
+            {/* Invisible tap navigation zones for mobile */}
+            <div 
+              onClick={(e) => { e.stopPropagation(); navigateVideo("prev"); }} 
+              className="absolute left-0 top-0 bottom-0 w-[20vw] z-40 md:hidden cursor-pointer"
+            />
+            <div 
+              onClick={(e) => { e.stopPropagation(); navigateVideo("next"); }} 
+              className="absolute right-0 top-0 bottom-0 w-[20vw] z-40 md:hidden cursor-pointer"
+            />
 
             <div className="relative w-full max-w-[1400px] h-[70vh] flex items-center justify-center gap-10">
               <motion.div key={`prev-${selectedVideoIndex}`} className="hidden xl:block w-[300px] h-[500px] rounded-[32px] overflow-hidden grayscale opacity-30">
@@ -511,10 +529,21 @@ export default function Home() {
               </motion.div>
               <motion.div
                 key={`main-${selectedVideoIndex}`}
-                className={`relative rounded-[24px] overflow-hidden border border-white/20 shadow-[0_0_100px_rgba(255,106,0,0.2)]
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.6}
+                onDragEnd={(e, info) => {
+                  const threshold = 80;
+                  if (info.offset.x < -threshold) {
+                    navigateVideo("next");
+                  } else if (info.offset.x > threshold) {
+                    navigateVideo("prev");
+                  }
+                }}
+                className={`relative rounded-[24px] overflow-hidden border border-white/20 shadow-[0_0_100px_rgba(255,106,0,0.2)] cursor-grab active:cursor-grabbing
                     ${currentCategory?.layout === "landscape"
-                    ? "w-[90vw] max-w-[1200px] aspect-video max-h-[80vh]"
-                    : "h-[80vh] max-h-[800px] aspect-[9/16] w-auto"
+                    ? "w-[90vw] max-w-[1200px] aspect-video max-h-[68vh] md:max-h-[80vh]"
+                    : "h-[68vh] md:h-[80vh] max-h-[800px] aspect-[9/16] w-auto"
                   }
                   `}
               >
