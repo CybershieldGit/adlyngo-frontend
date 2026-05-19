@@ -32,10 +32,20 @@ export default function Footer() {
         <div className="flex flex-row justify-between items-center mb-8">
           <img src="/logo.svg" alt="Adlyngo" className="h-8 md:h-10 w-auto" />
           <div className="flex gap-4">
-            {[FacebookIcon, InstagramIcon, TwitterIcon].map((Icon, i) => (
-              <div key={i} className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all cursor-pointer">
+            {[
+              { Icon: FacebookIcon, href: "https://www.facebook.com/people/Adlyngo/61563700187972/" },
+              { Icon: InstagramIcon, href: "https://www.instagram.com/adlyngo" },
+              { Icon: TwitterIcon, href: "#" }
+            ].map(({ Icon, href }, i) => (
+              <a
+                key={i}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all cursor-pointer"
+              >
                 <Icon />
-              </div>
+              </a>
             ))}
           </div>
         </div>
