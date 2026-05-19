@@ -84,7 +84,7 @@ export default function Home() {
                 second: second
               },
               videos: grouped[name],
-              layout: index === 2 ? "landscape" : "portrait"
+              layout: (name.toLowerCase().includes("commercial") || name.toLowerCase().includes("ads") || name.toLowerCase().includes("landscape")) ? "landscape" : "portrait"
             };
           });
 
@@ -394,7 +394,7 @@ export default function Home() {
                     transition={{ delay: idx * 0.05 }}
                     className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[24px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
                       ${currentCategory?.layout === "landscape"
-                        ? "w-[75vw] md:w-[60vw] lg:w-[50vw] max-w-[950px] aspect-[16/9] lg:aspect-[21/9] h-auto max-h-[38vh] md:max-h-[42vh]"
+                        ? "w-[75vw] md:w-[60vw] lg:w-[50vw] max-w-[950px] aspect-[16/9] h-auto max-h-[38vh] md:max-h-[42vh]"
                         : "h-[45vh] md:h-[60vh] aspect-[9/16] w-auto"}
                     `}
                   >
