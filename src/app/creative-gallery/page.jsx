@@ -39,13 +39,13 @@ const processGalleryItems = async (items) => {
       }
       const img = new window.Image();
       const finalSrc = item.imageUrl ? (item.imageUrl.includes("?") ? `${item.imageUrl}&origin=true` : `${item.imageUrl}?origin=true`) : item.imageUrl;
-      
+
       img.src = finalSrc;
       img.crossOrigin = "anonymous";
-      
+
       img.onload = () => {
         let aspect = img.naturalWidth / img.naturalHeight;
-        
+
         // Detect solid background padding using pixel analysis
         try {
           const canvas = document.createElement("canvas");
@@ -111,13 +111,13 @@ const processGalleryItems = async (items) => {
           const bottom = analyzeEdge(bottomPixels);
 
           const colorDiffMax = 15;
-          const isPillarBox = 
+          const isPillarBox =
             left.solid && right.solid && left.brightness > 130 && right.brightness > 130 &&
             Math.abs(left.avg.r - right.avg.r) < colorDiffMax &&
             Math.abs(left.avg.g - right.avg.g) < colorDiffMax &&
             Math.abs(left.avg.b - right.avg.b) < colorDiffMax;
 
-          const isLetterBox = 
+          const isLetterBox =
             top.solid && bottom.solid && top.brightness > 130 && bottom.brightness > 130 &&
             Math.abs(top.avg.r - bottom.avg.r) < colorDiffMax &&
             Math.abs(top.avg.g - bottom.avg.g) < colorDiffMax &&
@@ -302,7 +302,7 @@ export default function CreativeGallery() {
       <div className="w-full mx-auto relative z-10">
         {categories.map((category, idx) => (
           <section key={category.id} className={cn("mb-32", idx !== 0 && "pt-20 border-t border-white/5")}>
-            <div className="flex justify-between items-end mb-12">
+            <div className="flex justify-between items-end mb-2 mt-2">
               <h2 className="text-4xl md:text-7xl font-bold text-white uppercase tracking-tight font-heading">
                 {category.title} <span className="text-[#FF6A00]">{category.subtitle}</span>
               </h2>
@@ -379,11 +379,11 @@ export default function CreativeGallery() {
               exit={{ scale: 0.9, opacity: 0 }}
               className={cn(
                 "relative rounded-2xl overflow-hidden shadow-2xl bg-[#121212]",
-                selectedImage.aspect === 0.5625 
-                  ? "w-full max-w-[450px] aspect-[3/4]" 
-                  : (selectedImage.aspect === 1.777 
-                      ? "w-full max-w-[800px] aspect-[16/9]" 
-                      : "max-w-full max-h-full aspect-auto")
+                selectedImage.aspect === 0.5625
+                  ? "w-full max-w-[450px] aspect-[3/4]"
+                  : (selectedImage.aspect === 1.777
+                    ? "w-full max-w-[800px] aspect-[16/9]"
+                    : "max-w-full max-h-full aspect-auto")
               )}
               onClick={(e) => e.stopPropagation()}
             >

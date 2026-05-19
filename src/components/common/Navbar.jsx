@@ -151,9 +151,9 @@ export default function Navbar() {
 
           <div className="flex items-center gap-4 md:gap-8">
             <div className="hidden lg:flex items-center gap-4">
-              <SocialIcon><FacebookIcon /></SocialIcon>
-              <SocialIcon><InstagramIcon /></SocialIcon>
-              <SocialIcon><TwitterIcon /></SocialIcon>
+              <SocialIcon href="https://www.facebook.com/people/Adlyngo/61563700187972/"><FacebookIcon /></SocialIcon>
+              <SocialIcon href="https://www.instagram.com/adlyngo"><InstagramIcon /></SocialIcon>
+              <SocialIcon href="#"><TwitterIcon /></SocialIcon>
             </div>
 
             <Link

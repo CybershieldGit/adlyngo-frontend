@@ -356,25 +356,24 @@ export default function Home() {
         </header>
 
         <div className="flex-1 flex items-center min-h-0 relative py-2 pb-12 md:pb-16">
-          <div className="absolute -left-5 md:-left-12 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-4">
-            {categories.map((cat, idx) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategoryIndex(idx)}
-                className="group relative flex items-center justify-center w-6"
-              >
-                {activeCategoryIndex === idx ? (
-                  <div className="w-5 h-5 rounded-full border border-white flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-[#FF6A00]" />
-                  </div>
-                ) : (
-                  <div className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover:bg-white/50 transition-colors" />
-                )}
-              </button>
-            ))}
-          </div>
-
           <div className="w-full h-full relative group/slider">
+            <div className="absolute -left-5 md:-left-12 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-4">
+              {categories.map((cat, idx) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategoryIndex(idx)}
+                  className="group relative flex items-center justify-center w-6"
+                >
+                  {activeCategoryIndex === idx ? (
+                    <div className="w-5 h-5 rounded-full border border-white flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-[#FF6A00]" />
+                    </div>
+                  ) : (
+                    <div className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover:bg-white/50 transition-colors" />
+                  )}
+                </button>
+              ))}
+            </div>
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeCategoryIndex}
