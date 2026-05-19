@@ -355,8 +355,8 @@ export default function Home() {
           </button> */}
         </header>
 
-        <div className="flex-1 flex items-center min-h-0 relative py-2">
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-4">
+        <div className="flex-1 flex items-center min-h-0 relative py-2 pb-12 md:pb-16">
+          <div className="absolute -left-5 md:-left-12 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-4">
             {categories.map((cat, idx) => (
               <button
                 key={cat.id}
@@ -383,7 +383,12 @@ export default function Home() {
                 exit={{ opacity: 0, x: -50 }}
                 transition={{ duration: 0.5 }}
                 ref={scrollRef}
-                className="flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar w-full snap-x snap-mandatory scroll-smooth pl-10 md:pl-20 lg:pl-40 h-full items-center touch-pan-x"
+                className={`flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar w-full snap-x snap-mandatory scroll-smooth h-full items-center touch-pan-x
+                  ${currentCategory?.layout === "landscape"
+                    ? "pl-[2.5vw] pr-[12.5vw] md:pl-[2.5vw] md:pr-[20vw] lg:pl-[0vw] lg:pr-[25vw]"
+                    : "pl-[2.5vw] pr-[23vw] md:pl-[2.5vw] md:pr-[30vw] lg:pl-[0vw] lg:pr-[35vw]"
+                  }
+                `}
               >
                 {currentCategory?.videos?.map((video, idx) => (
                   <motion.div
@@ -507,7 +512,7 @@ export default function Home() {
             }}
             className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 md:p-10 md:pt-32"
           >
-            <button onClick={closeVideoModal} className="absolute top-4 right-4 md:top-32 md:right-12 z-[2100] w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all shadow-xl border border-white/10 backdrop-blur-md">
+            <button onClick={closeVideoModal} className="absolute top-4 left-4 md:left-auto md:top-32 md:right-12 z-[2100] w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all shadow-xl border border-white/10 backdrop-blur-md">
               <X size={28} />
             </button>
             <button onClick={() => navigateVideo("prev")} className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 z-50 w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 hidden md:flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowLeft size={32} /></button>

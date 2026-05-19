@@ -170,6 +170,24 @@ export default function CreativeGallery() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [cols, setCols] = useState(4);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setCols(2);
+      } else if (width < 768) {
+        setCols(3);
+      } else {
+        setCols(4);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -308,13 +326,19 @@ export default function CreativeGallery() {
                   isCropped = true;
                 }
 
+                const totalItems = category.items.length;
+                const itemsPerCol = Math.ceil(totalItems / cols);
+                const rowIndex = i % itemsPerCol;
+                const colIndex = Math.floor(i / itemsPerCol);
+                const delay = rowIndex * 0.12 + colIndex * 0.02;
+
                 return (
                   <motion.div
                     key={item.id}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: i * 0.05 }}
+                    transition={{ delay }}
                     onClick={() => setSelectedImage({ url: item.image, aspect: item.aspect })}
                     className={cn(
                       "break-inside-avoid mb-4 relative rounded-xl overflow-hidden group border border-white/5 bg-[#121212] cursor-pointer",
