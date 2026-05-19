@@ -357,7 +357,7 @@ export default function Home() {
 
         <div className="flex-1 flex items-center min-h-0 relative py-2 pb-12 md:pb-16">
           <div className="w-full h-full relative group/slider">
-            <div className="absolute -left-5 md:-left-12 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-4">
+            <div className="absolute -left-3 md:-left-12 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-4">
               {categories.map((cat, idx) => (
                 <button
                   key={cat.id}
@@ -384,8 +384,8 @@ export default function Home() {
                 ref={scrollRef}
                 className={`flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar w-full snap-x snap-mandatory scroll-smooth h-full items-center touch-pan-x
                   ${currentCategory?.layout === "landscape"
-                    ? "pl-[2.5vw] pr-[12.5vw] md:pl-[2.5vw] md:pr-[20vw] lg:pl-[0vw] lg:pr-[25vw]"
-                    : "pl-[2.5vw] pr-[23vw] md:pl-[2.5vw] md:pr-[30vw] lg:pl-[0vw] lg:pr-[35vw]"
+                    ? "pl-[5.5vw] pr-[12.5vw] md:pl-[2.5vw] md:pr-[20vw] lg:pl-[0vw] lg:pr-[25vw]"
+                    : "pl-[5.5vw] pr-[23vw] md:pl-[2.5vw] md:pr-[30vw] lg:pl-[0vw] lg:pr-[35vw]"
                   }
                 `}
               >
