@@ -1,15 +1,16 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Play, ArrowLeft, ArrowRight, X, Loader2, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Home() {
-  const scrollRef = useRef(null);
+  const scrollRefs = useRef({});
+  const scrollLockRef = useRef(false);
+  const scrollTimeoutRef = useRef(null);
   const [categories, setCategories] = useState([]);
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
-  const [isLocked, setIsLocked] = useState(false);
   const [showIntro, setShowIntro] = useState(false);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -98,6 +99,10 @@ export default function Home() {
     };
 
     fetchReels();
+
+    return () => {
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
   }, []);
 
   const handleCloseIntro = () => {
@@ -112,22 +117,31 @@ export default function Home() {
     if (selectedVideoIndex !== null || categories.length === 0 || showIntro) return;
 
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-      if (isLocked) return;
+      // Clear any pending scroll-lock release timer
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
 
-      // Lowered threshold from 50 to 20 for better responsiveness
-      if (e.deltaY > 20 && activeCategoryIndex < categories.length - 1) {
-        setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
-        lockScrolling();
-      } else if (e.deltaY < -20 && activeCategoryIndex > 0) {
-        setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
-        lockScrolling();
+      // Set the release timer (debounce window)
+      // When wheel events stop for 200ms, reset the scroll lock
+      scrollTimeoutRef.current = setTimeout(() => {
+        scrollLockRef.current = false;
+      }, 200);
+
+      // If already locked, ignore this event
+      if (scrollLockRef.current) return;
+
+      // Check threshold (using 30 for stability with trackpad inertia)
+      if (Math.abs(e.deltaY) > 30) {
+        if (e.deltaY > 30 && activeCategoryIndex < categories.length - 1) {
+          scrollLockRef.current = true;
+          setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
+        } else if (e.deltaY < -30 && activeCategoryIndex > 0) {
+          scrollLockRef.current = true;
+          setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
+        }
       }
     }
-  };
-
-  const lockScrolling = () => {
-    setIsLocked(true);
-    setTimeout(() => setIsLocked(false), 800);
   };
 
   const handleVideoClick = (idx) => {
@@ -149,9 +163,10 @@ export default function Home() {
   };
 
   const scrollSlider = (direction) => {
-    if (scrollRef.current) {
+    const el = scrollRefs.current[activeCategoryIndex];
+    if (el) {
       const scrollAmount = 400;
-      scrollRef.current.scrollBy({
+      el.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth"
       });
@@ -170,14 +185,20 @@ export default function Home() {
     <motion.main
       onWheel={handleWheel}
       onPanEnd={(e, info) => {
-        if (showIntro || selectedVideoIndex !== null || isLocked) return;
+        if (showIntro || selectedVideoIndex !== null || scrollLockRef.current) return;
         const threshold = 30;
         if (info.offset.y < -threshold && activeCategoryIndex < categories.length - 1) {
+          scrollLockRef.current = true;
           setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
-          lockScrolling();
+          setTimeout(() => {
+            scrollLockRef.current = false;
+          }, 800);
         } else if (info.offset.y > threshold && activeCategoryIndex > 0) {
+          scrollLockRef.current = true;
           setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
-          lockScrolling();
+          setTimeout(() => {
+            scrollLockRef.current = false;
+          }, 800);
         }
       }}
       className={`bg-[#0A0A0A] fixed inset-0 flex flex-col pt-[150px] md:pt-[80px] overflow-hidden touch-auto ${selectedVideoIndex !== null ? "z-[2000] md:z-auto" : ""}`}
@@ -355,7 +376,7 @@ export default function Home() {
           </button> */}
         </header>
 
-        <div className="flex-1 flex items-center min-h-0 relative py-2 pb-12 md:pb-16">
+        <div className="flex-1 flex items-center min-h-0 relative py-2 pb-12 md:pb-8">
           <div className="w-full h-full relative group/slider">
             <div className="absolute -left-3 md:-left-12 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-4">
               {categories.map((cat, idx) => (
@@ -374,73 +395,74 @@ export default function Home() {
                 </button>
               ))}
             </div>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeCategoryIndex}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.5 }}
-                ref={scrollRef}
-                className={`flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar w-full snap-x snap-mandatory scroll-smooth h-full items-center touch-pan-x
-                  ${currentCategory?.layout === "landscape"
-                    ? "pl-[5.5vw] pr-[12.5vw] md:pl-[2.5vw] md:pr-[20vw] lg:pl-[0vw] lg:pr-[25vw]"
-                    : "pl-[5.5vw] pr-[23vw] md:pl-[2.5vw] md:pr-[30vw] lg:pl-[0vw] lg:pr-[35vw]"
-                  }
-                `}
-              >
-                {currentCategory?.videos?.map((video, idx) => (
-                  <motion.div
-                    key={`${activeCategoryIndex}-${video?.id}`}
-                    onClick={() => handleVideoClick(idx)}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[24px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
-                      ${currentCategory?.layout === "landscape"
-                        ? "w-[75vw] md:w-[60vw] lg:w-[50vw] max-w-[950px] aspect-[16/9] h-auto max-h-[38vh] md:max-h-[42vh]"
-                        : "h-[45vh] md:h-[60vh] aspect-[9/16] w-auto"}
-                    `}
-                  >
-                    {video.videoUrl ? (
-                      <video
-                        src={video.videoUrl}
-                        poster={video.thumbnail}
-                        muted
-                        loop
-                        playsInline
-                        autoPlay
-                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                      />
-                    ) : (
-                      <Image
-                        src={video?.thumbnail}
-                        alt={video?.title}
-                        fill
-                        sizes={currentCategory?.layout === "landscape" ? "700px" : "260px"}
-                        className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                      />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 rounded-full bg-brand/90 flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 shadow-2xl">
-                        <Play className="text-white fill-white ml-1" size={24} />
+            {categories.map((cat, catIdx) => {
+              const isActive = catIdx === activeCategoryIndex;
+              return (
+                <div
+                  key={cat.id}
+                  ref={(el) => { scrollRefs.current[catIdx] = el; }}
+                  className={`absolute inset-0 flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar w-full snap-x snap-mandatory scroll-smooth h-full items-center touch-pan-x transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
+                    ${cat.layout === "landscape"
+                      ? "pl-[5.5vw] pr-[12.5vw] md:pl-[2.5vw] md:pr-[20vw] lg:pl-[0vw] lg:pr-[25vw]"
+                      : "pl-[5.5vw] pr-[23vw] md:pl-[2.5vw] md:pr-[30vw] lg:pl-[0vw] lg:pr-[35vw]"
+                    }
+                    ${isActive
+                      ? "opacity-100 translate-x-0 pointer-events-auto z-[2]"
+                      : "opacity-0 translate-x-[50px] pointer-events-none z-[1]"
+                    }
+                  `}
+                >
+                  {cat.videos?.map((video, idx) => (
+                    <div
+                      key={`${catIdx}-${video?.id}`}
+                      onClick={() => isActive && handleVideoClick(idx)}
+                      className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[24px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
+                        ${cat.layout === "landscape"
+                          ? "w-[75vw] md:w-[60vw] lg:w-[50vw] max-w-[950px] aspect-[16/9] h-auto max-h-[38vh] md:max-h-[38vh]"
+                          : "h-[45vh] md:h-[54vh] aspect-[9/16] w-auto"}
+                      `}
+                    >
+                      {video.videoUrl ? (
+                        <video
+                          src={video.videoUrl}
+                          poster={video.thumbnail}
+                          muted
+                          loop
+                          playsInline
+                          autoPlay
+                          preload="auto"
+                          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                        />
+                      ) : (
+                        <Image
+                          src={video?.thumbnail}
+                          alt={video?.title}
+                          fill
+                          sizes={cat.layout === "landscape" ? "700px" : "260px"}
+                          className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-brand/90 flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 shadow-2xl">
+                          <Play className="text-white fill-white ml-1" size={24} />
+                        </div>
+                      </div>
+
+                      {/* Top Right Arrow on Hover */}
+                      <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
+                        <ArrowUpRight size={24} />
+                      </div>
+
+                      <div className="absolute bottom-6 left-6 right-6">
+                        <p className="text-[#FF6A00] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">{video?.category}</p>
+                        <h3 className="text-base md:text-lg font-bold text-white font-heading uppercase tracking-tight leading-none">{video?.title}</h3>
                       </div>
                     </div>
-
-                    {/* Top Right Arrow on Hover */}
-                    <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
-                      <ArrowUpRight size={24} />
-                    </div>
-
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <p className="text-[#FF6A00] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">{video?.category}</p>
-                      <h3 className="text-base md:text-lg font-bold text-white font-heading uppercase tracking-tight leading-none">{video?.title}</h3>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </AnimatePresence>
+                  ))}
+                </div>
+              );
+            })}
           </div>
         </div>
 
