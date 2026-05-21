@@ -44,12 +44,12 @@ const SocialIcon = ({ socialLinks }) => {
 const CaseStudyCard = ({ study }) => {
   const router = useRouter();
 
-  const formattedDate = study.createdAt 
+  const formattedDate = study.createdAt
     ? new Date(study.createdAt).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      })
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    })
     : "N/A";
 
   return (
@@ -155,7 +155,7 @@ export default function CaseStudiesPage() {
         if (json.success && json.data.projects) {
           setProjects(json.data.projects);
           console.log("PROJECT DATA SAMPLE:", json.data.projects[0]);
-          
+
           const uniqueCategories = ["ALL", ...new Set(json.data.projects
             .map(p => p.category?.name)
             .filter(name => name)
@@ -195,11 +195,11 @@ export default function CaseStudiesPage() {
           </div>
 
           <div className="max-w-[1400px] mx-auto relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-end">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
               <motion.h1
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-4xl md:text-6xl lg:text-[100px] font-black font-heading text-white leading-[0.9] uppercase text-center md:text-left"
+                className="text-4xl md:text-6xl  font-black font-heading text-white leading-[0.9] uppercase text-center md:text-left"
               >
                 OUR <span className="text-[#FF6A00]">CASE STUDIES.</span>
               </motion.h1>
@@ -273,7 +273,7 @@ export default function CaseStudiesPage() {
                   <h2 className="text-5xl md:text-6xl font-black text-white uppercase leading-none tracking-tighter">
                     Trusted by <br /> Brands
                   </h2>
-                  
+
                   <div className="flex items-center gap-6">
                     <span className="text-7xl md:text-8xl font-albert font-bold text-white tracking-tighter">4.89</span>
                     <div className="bg-white rounded-full px-4 py-2.5 flex gap-1 items-center h-fit">

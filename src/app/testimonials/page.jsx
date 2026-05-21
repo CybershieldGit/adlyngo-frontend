@@ -46,11 +46,11 @@ export default function TestimonialsPage() {
             transition={{ duration: 0.8 }}
           >
             <span className="text-brand uppercase tracking-[0.6em] text-[10px] font-bold mb-4 block">Voices of Impact</span>
-            <h1 className="text-5xl md:text-8xl font-bold text-white uppercase tracking-tighter mb-8">
+            <h1 className="text-4xl md:text-6xl font-bold text-white uppercase tracking-tighter mb-8">
               WHAT THEY <span className="text-brand">SAY.</span>
             </h1>
-            <p className="text-white/40 max-w-2xl mx-auto text-lg md:text-xl font-albert">
-              Don't just take our word for it. Hear from the visionaries and brands we've helped scale through cinematic storytelling.
+            <p className="text-white/40 max-w-2xl mx-auto text-[9px] md:text-[16px] font-albert">
+              Don't just take our word for it. Hear from the visionaries and brands we've <br /> helped scale through cinematic storytelling.
             </p>
           </motion.div>
         </header>
@@ -66,12 +66,12 @@ export default function TestimonialsPage() {
               className="bg-surface/30 border border-white/5 p-8 md:p-10 lg:p-14 rounded-[40px] relative overflow-hidden group"
             >
               <Quote className="absolute top-10 right-10 text-white/[0.03] group-hover:text-brand/10 transition-colors duration-700" size={120} />
-              
+
               <div className="relative z-10">
                 <p className="text-white/80 text-xl md:text-2xl leading-relaxed italic mb-12 font-albert">
                   "{t.content}"
                 </p>
-                
+
                 <div className="flex items-center gap-6 pt-8 border-t border-white/5">
                   <div className="relative w-16 h-16 rounded-full overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
                     <Image
