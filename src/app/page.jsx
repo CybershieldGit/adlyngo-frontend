@@ -364,7 +364,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="text-[34px] md:text-5xl lg:text-[72px] font-bold font-heading leading-none md:leading-[0.8] tracking-wide text-center md:text-left"
+                className="text-4xl md:text-6xl  font-bold font-heading leading-none md:leading-[0.8] tracking-wide text-center md:text-left"
               >
                 <span className="text-white">{currentCategory?.title?.first}</span>
                 <span className="text-[#FF6A00]">{currentCategory?.title?.second}</span>
@@ -540,12 +540,12 @@ export default function Home() {
             <button onClick={() => navigateVideo("next")} className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 z-50 w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 hidden md:flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowRight size={32} /></button>
 
             {/* Invisible tap navigation zones for mobile */}
-            <div 
-              onClick={(e) => { e.stopPropagation(); navigateVideo("prev"); }} 
+            <div
+              onClick={(e) => { e.stopPropagation(); navigateVideo("prev"); }}
               className="absolute left-0 top-0 bottom-0 w-[20vw] z-40 md:hidden cursor-pointer"
             />
-            <div 
-              onClick={(e) => { e.stopPropagation(); navigateVideo("next"); }} 
+            <div
+              onClick={(e) => { e.stopPropagation(); navigateVideo("next"); }}
               className="absolute right-0 top-0 bottom-0 w-[20vw] z-40 md:hidden cursor-pointer"
             />
 

@@ -63,12 +63,12 @@ export default function ContactPage() {
 
         <div className="w-full mx-auto px-6 md:px-24 lg:px-48 relative z-10 flex-grow">
           {/* Header Section - Ultra Compact */}
-          <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-4 mb-8 relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4 mb-8 relative z-10">
             <h1 className="text-4xl md:text-6xl font-black font-heading leading-[0.9] text-center md:text-left">
               <span className="text-white uppercase">LETS GET IN </span>
               <span className="text-[#FF6A00] uppercase">TOUCH</span>
             </h1>
-            <p className="max-w-md text-white/40 text-[9px] md:text-[14px] leading-relaxed text-center md:text-left uppercase tracking-widest font-bold font-albert">
+            <p className="max-w-md text-white/40 text-[9px] md:text-[14px] leading-relaxed text-center md:text-left  font-bold font-albert">
               Adlyngo is a full-service digital growth agency built for businesses serious about scaling. We combine data-driven performance marketing with premium creative.
             </p>
           </div>
