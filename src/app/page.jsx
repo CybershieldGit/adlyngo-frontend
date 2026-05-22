@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Play, ArrowLeft, ArrowRight, X, Loader2, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
@@ -22,6 +22,7 @@ const fetchWithTimeout = async (url, options = {}, timeout = 2500) => {
 function VideoCard({ video, layout, onClick, index }) {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef(null);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const currentRef = cardRef.current;
@@ -33,8 +34,8 @@ function VideoCard({ video, layout, onClick, index }) {
       },
       {
         root: null,
-        rootMargin: "0px",
-        threshold: 0.3, // Triggers when at least 30% of the video is in viewport
+        rootMargin: "100px",
+        threshold: 0.3,
       }
     );
 
@@ -46,6 +47,18 @@ function VideoCard({ video, layout, onClick, index }) {
       }
     };
   }, []);
+
+  // Explicitly play/pause the video when visibility changes
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+
+    if (isVisible) {
+      vid.play().catch(() => {});
+    } else {
+      vid.pause();
+    }
+  }, [isVisible]);
 
   return (
     <motion.div
@@ -62,6 +75,7 @@ function VideoCard({ video, layout, onClick, index }) {
     >
       {video.videoUrl && isVisible ? (
         <video
+          ref={videoRef}
           src={video.videoUrl}
           poster={video.thumbnail}
           muted
@@ -99,14 +113,49 @@ function VideoCard({ video, layout, onClick, index }) {
   );
 }
 
+// Swipe-up curtain transition layers
+const curtainColors = ["#000000", "#FF6A00", "#1A1A1A"];
+function SwipeTransition({ isAnimating, onComplete }) {
+  return (
+    <AnimatePresence onExitComplete={onComplete}>
+      {isAnimating && (
+        <>
+          {curtainColors.map((color, i) => (
+            <motion.div
+              key={`curtain-${i}`}
+              initial={{ y: "100%" }}
+              animate={{ y: "0%" }}
+              exit={{ y: "-100%" }}
+              transition={{
+                duration: 0.45,
+                delay: i * 0.08,
+                ease: [0.76, 0, 0.24, 1],
+              }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                zIndex: 30 + i,
+                backgroundColor: color,
+                borderRadius: "24px",
+              }}
+            />
+          ))}
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function Home() {
   const scrollRef = useRef(null);
   const [categories, setCategories] = useState([]);
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+  const [displayCategoryIndex, setDisplayCategoryIndex] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
   const [showIntro, setShowIntro] = useState(false);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     const hasSeenIntro = sessionStorage.getItem("adlyngo_intro_seen");
@@ -206,20 +255,34 @@ export default function Home() {
     window.dispatchEvent(new Event("introClosed"));
   };
 
-  const currentCategory = categories[activeCategoryIndex] || categories[0];
+  const currentCategory = categories[displayCategoryIndex] || categories[0];
+
+  // Centralized category change with curtain transition
+  const changeCategory = useCallback((newIndex) => {
+    if (newIndex === activeCategoryIndex || newIndex < 0 || newIndex >= categories.length || isTransitioning) return;
+    setActiveCategoryIndex(newIndex);
+    setIsTransitioning(true);
+    // The display swap happens after the curtain covers the view
+    setTimeout(() => {
+      setDisplayCategoryIndex(newIndex);
+    }, 350);
+  }, [activeCategoryIndex, categories.length, isTransitioning]);
+
+  const handleTransitionComplete = useCallback(() => {
+    setIsTransitioning(false);
+  }, []);
 
   const handleWheel = (e) => {
     if (selectedVideoIndex !== null || categories.length === 0 || showIntro) return;
 
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-      if (isLocked) return;
+      if (isLocked || isTransitioning) return;
 
-      // Lowered threshold from 50 to 20 for better responsiveness
       if (e.deltaY > 20 && activeCategoryIndex < categories.length - 1) {
-        setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
+        changeCategory(activeCategoryIndex + 1);
         lockScrolling();
       } else if (e.deltaY < -20 && activeCategoryIndex > 0) {
-        setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
+        changeCategory(activeCategoryIndex - 1);
         lockScrolling();
       }
     }
@@ -227,7 +290,7 @@ export default function Home() {
 
   const lockScrolling = () => {
     setIsLocked(true);
-    setTimeout(() => setIsLocked(false), 800);
+    setTimeout(() => setIsLocked(false), 1200);
   };
 
   const handleVideoClick = (idx) => {
@@ -270,13 +333,13 @@ export default function Home() {
     <motion.main
       onWheel={handleWheel}
       onPanEnd={(e, info) => {
-        if (showIntro || selectedVideoIndex !== null || isLocked) return;
+        if (showIntro || selectedVideoIndex !== null || isLocked || isTransitioning) return;
         const threshold = 30;
         if (info.offset.y < -threshold && activeCategoryIndex < categories.length - 1) {
-          setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
+          changeCategory(activeCategoryIndex + 1);
           lockScrolling();
         } else if (info.offset.y > threshold && activeCategoryIndex > 0) {
-          setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
+          changeCategory(activeCategoryIndex - 1);
           lockScrolling();
         }
       }}
@@ -461,7 +524,7 @@ export default function Home() {
               {categories.map((cat, idx) => (
                 <button
                   key={cat.id}
-                  onClick={() => setActiveCategoryIndex(idx)}
+                  onClick={() => changeCategory(idx)}
                   className="group relative flex items-center justify-center w-6"
                 >
                   {activeCategoryIndex === idx ? (
@@ -474,13 +537,16 @@ export default function Home() {
                 </button>
               ))}
             </div>
+            {/* Swipe-up curtain transition overlay */}
+            <SwipeTransition isAnimating={isTransitioning} onComplete={handleTransitionComplete} />
+
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeCategoryIndex}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.5 }}
+                key={displayCategoryIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
                 ref={scrollRef}
                 className={`flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar w-full snap-x snap-mandatory scroll-smooth h-full items-center touch-pan-x
                   ${currentCategory?.layout === "landscape"
@@ -491,7 +557,7 @@ export default function Home() {
               >
                 {currentCategory?.videos?.map((video, idx) => (
                   <VideoCard
-                    key={`${activeCategoryIndex}-${video?.id}`}
+                    key={`${displayCategoryIndex}-${video?.id}`}
                     video={video}
                     layout={currentCategory?.layout}
                     onClick={() => handleVideoClick(idx)}
