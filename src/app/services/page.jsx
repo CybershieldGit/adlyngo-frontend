@@ -58,7 +58,7 @@ const growthWays = [
 ];
 
 const testimonials = [
-  { 
+  {
     id: 1,
     name: "Ravi Verma",
     role: "CEO, Perpilly Inc.",
@@ -136,11 +136,10 @@ export default function ServicesPage() {
         {/* Value Proposition Section */}
         <div className="text-center mb-24 relative z-10 max-w-5xl mx-auto px-4">
           <div className="mb-10">
-            <h2 className="text-white text-3xl md:text-[48px] font-normal font-albert uppercase leading-[1.1] tracking-tight">
-              Creative. Strategy.Execution.
+            <h2 className="text-white text-3xl md:text-[48px] font-normal font-albert normal-case leading-[1.1] tracking-tight" style={{ textTransform: "none" }}>
+              Creative. Strategy. Execution.
             </h2>
-            <br />
-            <h2 className="text-[#FF6A00] text-3xl md:text-[48px] font-normal font-albert uppercase leading-[1.1] tracking-tight">
+            <h2 className="text-[#FF6A00] text-3xl md:text-[48px] font-normal font-albert normal-case leading-[1.1] tracking-tight" style={{ textTransform: "none", marginTop: "12px" }}>
               Built To Deliver Results.
             </h2>
           </div>
@@ -193,9 +192,9 @@ export default function ServicesPage() {
                 </div>
 
                 <div className="mb-6 p-6 bg-[#3D342F]/80 border border-white/10 rounded-[20px] backdrop-blur-sm shadow-xl">
-                   <p className="text-white text-base md:text-lg font-normal leading-relaxed text-center italic">
-                     "{way.quote}"
-                   </p>
+                  <p className="text-white text-base md:text-lg font-normal leading-relaxed text-center italic">
+                    "{way.quote}"
+                  </p>
                 </div>
 
                 <p className="text-white/70 text-[15px] font-normal leading-relaxed mb-8 font-albert md:max-w-[280px]">
@@ -214,8 +213,8 @@ export default function ServicesPage() {
 
         {/* Trusted By Section with Glassmorphism */}
         <div className="relative mb-32 z-10">
-          <div className="relative z-10 bg-white/[0.03] backdrop-blur-2xl rounded-[40px] p-10 md:p-16 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-12 shadow-2xl">
-            <div className="flex flex-col gap-6">
+          <div className="relative z-10 bg-white/[0.03] backdrop-blur-2xl rounded-[40px] p-10 md:p-16 border border-white/10 flex flex-col md:flex-row items-center md:items-stretch justify-between gap-12 shadow-2xl">
+            <div className="flex flex-col justify-between gap-6">
               <h3 className="text-4xl md:text-5xl font-normal text-white font-heading uppercase leading-none">Trusted by <br /> Brands</h3>
               <div className="flex items-center gap-4">
                 <span className="text-7xl font-black text-white font-heading">4.89</span>
@@ -226,8 +225,8 @@ export default function ServicesPage() {
                 </div>
               </div>
             </div>
-            
-            <div className="flex-1 max-w-xl min-h-[250px] flex flex-col">
+
+            <div className="flex-1 max-w-xl flex flex-col justify-between">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentTestimonial}
@@ -235,12 +234,12 @@ export default function ServicesPage() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.5 }}
-                  className="flex-1"
+                  className="flex-1 flex flex-col justify-between gap-8"
                 >
-                  <p className="text-white/60 text-lg leading-relaxed mb-8 font-albert">
+                  <p className="text-white/60 text-lg leading-relaxed mb-0 font-albert -mt-1.5">
                     {testimonials[currentTestimonial].quote}
                   </p>
-                  
+
                   <div className="flex items-center gap-4">
                     <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white/20 bg-white/5">
                       <img src={testimonials[currentTestimonial].image} className="w-full h-full object-cover" alt={testimonials[currentTestimonial].name} />

@@ -199,7 +199,7 @@ export default function CaseStudiesPage() {
               <motion.h1
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-4xl md:text-6xl  font-black font-heading text-white leading-[0.9] uppercase text-center md:text-left"
+                className="text-6xl md:text-8xl  font-black font-heading text-white leading-[0.9] uppercase text-center md:text-left"
               >
                 OUR <span className="text-[#FF6A00]">CASE STUDIES.</span>
               </motion.h1>
@@ -257,7 +257,7 @@ export default function CaseStudiesPage() {
             {/* Testimonial Section with Background Text */}
             <div className="relative mt-20 md:mt-40 pb-20">
               {/* Large background text behind everything */}
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 text-[25vw] font-black text-white/[0.04] uppercase pointer-events-none select-none tracking-widest leading-none whitespace-nowrap z-0">
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 text-[25vw] font-black text-white/[0.02] uppercase pointer-events-none select-none tracking-widest leading-none whitespace-nowrap z-0">
                 WEBSITE
               </div>
 
@@ -267,9 +267,9 @@ export default function CaseStudiesPage() {
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="relative z-10 bg-white/[0.01] backdrop-blur-2xl rounded-[40px] p-10 md:p-16 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-12 shadow-2xl"
+                className="relative z-10 bg-white/[0.01] backdrop-blur-2xl rounded-[40px] p-10 md:p-16 border border-white/10 flex flex-col md:flex-row items-center md:items-stretch justify-between gap-12 shadow-2xl"
               >
-                <div className="flex flex-col items-start gap-8">
+                <div className="flex flex-col items-start justify-between gap-8">
                   <h2 className="text-5xl md:text-6xl font-black text-white uppercase leading-none tracking-tighter">
                     Trusted by <br /> Brands
                   </h2>
@@ -284,8 +284,8 @@ export default function CaseStudiesPage() {
                   </div>
                 </div>
 
-                <div className="flex-1 max-w-2xl">
-                  <p className="text-white/60 text-lg md:text-2xl leading-relaxed font-albert mb-8 italic">
+                <div className="flex-1 max-w-2xl flex flex-col justify-between gap-8">
+                  <p className="text-white/60 text-lg md:text-2xl leading-relaxed font-albert mb-0 italic -mt-1.5 md:-mt-3">
                     "Their team doesn't just deliver creative; they deliver results. The strategic approach to our social media growth has been a game-changer for our brand."
                   </p>
 
