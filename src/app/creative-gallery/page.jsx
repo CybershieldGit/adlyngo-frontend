@@ -6,6 +6,85 @@ import { cn } from "@/lib/utils";
 import { Loader2, X, ZoomIn } from "lucide-react";
 import Image from "next/image";
 
+// Helper function to fetch with a timeout abort controller
+const fetchWithTimeout = async (url, options = {}, timeout = 2500) => {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(id);
+    return response;
+  } catch (err) {
+    clearTimeout(id);
+    throw err;
+  }
+};
+
+const formatCategories = (items) => {
+  const grouped = items.reduce((acc, item) => {
+    const categoryName = item.category?.name || "OTHER";
+    if (!acc[categoryName]) {
+      acc[categoryName] = [];
+    }
+    acc[categoryName].push(item);
+    return acc;
+  }, {});
+
+  return Object.keys(grouped).map((name, index) => {
+    const words = name.trim().split(/\s+/);
+    let first = "";
+    let second = "";
+
+    if (words.length >= 2) {
+      first = words[0];
+      second = words.slice(1).join(" ");
+    } else {
+      first = words[0];
+      second = "";
+    }
+
+    return {
+      id: `cat-${index}`,
+      title: first + (second ? " " : ""),
+      subtitle: second,
+      items: grouped[name].map((item, i) => {
+        let aspect = item.aspect || 1.0;
+        if (!item.aspect) {
+          const lowerTitle = (item.title || "").toLowerCase();
+          if (
+            lowerTitle.includes("trend") || lowerTitle.includes("yoyo") ||
+            lowerTitle.includes("acadour") || lowerTitle.includes("bella") ||
+            lowerTitle.includes("cinnamon") || lowerTitle.includes("almond") ||
+            lowerTitle.includes("castor") || lowerTitle.includes("coconut") ||
+            lowerTitle.includes("oil")
+          ) {
+            aspect = 0.5625;
+          }
+        }
+
+        let size = "col-span-1 row-span-1";
+        if (aspect > 1.25) {
+          size = "col-span-2 row-span-1"; // horizontal
+        } else if (aspect < 0.8) {
+          size = "col-span-1 row-span-2"; // vertical
+        } else {
+          // square: organically make every 5th item a large square
+          if (i % 5 === 0) {
+            size = "col-span-2 row-span-2";
+          }
+        }
+        return {
+          id: item._id,
+          title: item.title,
+          image: item.imageUrl,
+          aspect: aspect,
+          size
+        };
+      })
+    };
+  });
+};
+
 // Simplified SmartImage component without massive zooms
 function SmartImage({ src, alt, className }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -195,17 +274,22 @@ export default function CreativeGallery() {
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://adlyngo-next-seven.vercel.app";
         const path = "/api/gallery?page=1&limit=100";
 
-        let response = await fetch(`${baseUrl}${path}`).catch(() => null);
+        const fetchUrl = async (url) => {
+          const res = await fetchWithTimeout(url, {}, 2000).catch(() => null);
+          return res && res.ok ? res : null;
+        };
 
-        if (!response || !response.ok) {
+        let response = await fetchUrl(`${baseUrl}${path}`);
+
+        if (!response) {
           const fallbackPorts = ["3000", "3001", "5005"];
-          for (const port of fallbackPorts) {
-            const res = await fetch(`http://localhost:${port}${path}`).catch(() => null);
-            if (res && res.ok) {
-              response = res;
-              break;
-            }
-          }
+          const promises = fallbackPorts.map(port => 
+            fetchWithTimeout(`http://localhost:${port}${path}`, {}, 1000)
+              .then(res => (res && res.ok ? res : null))
+              .catch(() => null)
+          );
+          const results = await Promise.all(promises);
+          response = results.find(res => res !== null);
         }
 
         if (!response || !response.ok) {
@@ -215,64 +299,21 @@ export default function CreativeGallery() {
         const json = await response.json();
 
         if (json.success && json.data.items) {
-          const processedItems = await processGalleryItems(json.data.items);
+          const rawItems = json.data.items;
 
-          // Group items by category
-          const grouped = processedItems.reduce((acc, item) => {
-            const categoryName = item.category?.name || "OTHER";
-            if (!acc[categoryName]) {
-              acc[categoryName] = [];
-            }
-            acc[categoryName].push(item);
-            return acc;
-          }, {});
+          // 1. Instantly render raw items with basic aspect ratio fallbacks
+          setCategories(formatCategories(rawItems));
+          setLoading(false);
 
-          // Convert grouped object to categories array
-          const formattedCategories = Object.keys(grouped).map((name, index) => {
-            const words = name.trim().split(/\s+/);
-            let first = "";
-            let second = "";
-
-            if (words.length >= 2) {
-              first = words[0];
-              second = words.slice(1).join(" ");
-            } else {
-              first = words[0];
-              second = "";
-            }
-
-            return {
-              id: `cat-${index}`,
-              title: first + (second ? " " : ""),
-              subtitle: second,
-              items: grouped[name].map((item, i) => {
-                let size = "col-span-1 row-span-1";
-                if (item.aspect > 1.25) {
-                  size = "col-span-2 row-span-1"; // horizontal
-                } else if (item.aspect < 0.8) {
-                  size = "col-span-1 row-span-2"; // vertical
-                } else {
-                  // square: organically make every 5th item a large square
-                  if (i % 5 === 0) {
-                    size = "col-span-2 row-span-2";
-                  }
-                }
-                return {
-                  id: item._id,
-                  title: item.title,
-                  image: item.imageUrl,
-                  aspect: item.aspect,
-                  size
-                };
-              })
-            };
+          // 2. Compute true aspect ratios asynchronously in the background
+          processGalleryItems(rawItems).then((processedItems) => {
+            setCategories(formatCategories(processedItems));
+          }).catch((err) => {
+            console.error("Background image aspect ratio analysis failed:", err);
           });
-
-          setCategories(formattedCategories);
         }
       } catch (error) {
         console.error("Failed to fetch gallery:", error);
-      } finally {
         setLoading(false);
       }
     };

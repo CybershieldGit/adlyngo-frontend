@@ -5,6 +5,100 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Play, ArrowLeft, ArrowRight, X, Loader2, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 
+// Helper function to fetch with a timeout abort controller
+const fetchWithTimeout = async (url, options = {}, timeout = 2500) => {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(id);
+    return response;
+  } catch (err) {
+    clearTimeout(id);
+    throw err;
+  }
+};
+
+function VideoCard({ video, layout, onClick, index }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    const currentRef = cardRef.current;
+    if (typeof window === "undefined" || !currentRef) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.3, // Triggers when at least 30% of the video is in viewport
+      }
+    );
+
+    observer.observe(currentRef);
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onClick={onClick}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05 }}
+      className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
+        ${layout === "landscape"
+          ? "w-[75vw] md:w-[60vw] lg:w-[50vw] max-w-[950px] aspect-[16/9] h-auto max-h-[38vh] md:max-h-[42vh]"
+          : "h-[45vh] md:h-[60vh] aspect-[9/16] w-auto"}
+      `}
+    >
+      {video.videoUrl && isVisible ? (
+        <video
+          src={video.videoUrl}
+          poster={video.thumbnail}
+          muted
+          loop
+          playsInline
+          autoPlay
+          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+        />
+      ) : (
+        <Image
+          src={video.thumbnail}
+          alt={video.title}
+          fill
+          sizes={layout === "landscape" ? "(max-width: 768px) 75vw, 50vw" : "300px"}
+          className="object-cover transition-transform duration-1000 group-hover:scale-110"
+          priority={index < 2}
+        />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-16 h-16 rounded-full bg-brand/90 flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 shadow-2xl">
+          <Play className="text-white fill-white ml-1" size={24} />
+        </div>
+      </div>
+
+      <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
+        <ArrowUpRight size={24} />
+      </div>
+
+      <div className="absolute bottom-6 left-6 right-6">
+        <p className="text-[#FF6A00] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">{video.category}</p>
+        <h3 className="text-base md:text-lg font-bold text-white font-heading uppercase tracking-tight leading-none">{video.title}</h3>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function Home() {
   const scrollRef = useRef(null);
   const [categories, setCategories] = useState([]);
@@ -25,17 +119,23 @@ export default function Home() {
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://adlyngo-next-seven.vercel.app";
         const path = "/api/reels?page=1&limit=50";
 
-        let response = await fetch(`${baseUrl}${path}`).catch(() => null);
+        const fetchUrl = async (url) => {
+          const res = await fetchWithTimeout(url, {}, 2000).catch(() => null);
+          return res && res.ok ? res : null;
+        };
 
-        if (!response || !response.ok) {
+        let response = await fetchUrl(`${baseUrl}${path}`);
+
+        if (!response) {
+          // Fetch fallbacks concurrently to save time and reduce timeout lag
           const fallbackPorts = ["3000", "3001", "5005"];
-          for (const port of fallbackPorts) {
-            const res = await fetch(`http://localhost:${port}${path}`).catch(() => null);
-            if (res && res.ok) {
-              response = res;
-              break;
-            }
-          }
+          const promises = fallbackPorts.map(port => 
+            fetchWithTimeout(`http://localhost:${port}${path}`, {}, 1000)
+              .then(res => (res && res.ok ? res : null))
+              .catch(() => null)
+          );
+          const results = await Promise.all(promises);
+          response = results.find(res => res !== null);
         }
 
         if (!response || !response.ok) {
@@ -390,54 +490,13 @@ export default function Home() {
                 `}
               >
                 {currentCategory?.videos?.map((video, idx) => (
-                  <motion.div
+                  <VideoCard
                     key={`${activeCategoryIndex}-${video?.id}`}
+                    video={video}
+                    layout={currentCategory?.layout}
                     onClick={() => handleVideoClick(idx)}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[24px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
-                      ${currentCategory?.layout === "landscape"
-                        ? "w-[75vw] md:w-[60vw] lg:w-[50vw] max-w-[950px] aspect-[16/9] h-auto max-h-[38vh] md:max-h-[42vh]"
-                        : "h-[45vh] md:h-[60vh] aspect-[9/16] w-auto"}
-                    `}
-                  >
-                    {video.videoUrl ? (
-                      <video
-                        src={video.videoUrl}
-                        poster={video.thumbnail}
-                        muted
-                        loop
-                        playsInline
-                        autoPlay
-                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                      />
-                    ) : (
-                      <Image
-                        src={video?.thumbnail}
-                        alt={video?.title}
-                        fill
-                        sizes={currentCategory?.layout === "landscape" ? "700px" : "260px"}
-                        className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                      />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 rounded-full bg-brand/90 flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 shadow-2xl">
-                        <Play className="text-white fill-white ml-1" size={24} />
-                      </div>
-                    </div>
-
-                    {/* Top Right Arrow on Hover */}
-                    <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
-                      <ArrowUpRight size={24} />
-                    </div>
-
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <p className="text-[#FF6A00] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">{video?.category}</p>
-                      <h3 className="text-base md:text-lg font-bold text-white font-heading uppercase tracking-tight leading-none">{video?.title}</h3>
-                    </div>
-                  </motion.div>
+                    index={idx}
+                  />
                 ))}
               </motion.div>
             </AnimatePresence>

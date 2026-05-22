@@ -108,6 +108,55 @@ const SocialIcon = ({ socials }) => {
   );
 };
 
+// Helper function to fetch with a timeout abort controller
+const fetchWithTimeout = async (url, options = {}, timeout = 2500) => {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(id);
+    return response;
+  } catch (err) {
+    clearTimeout(id);
+    throw err;
+  }
+};
+
+const formatGalleryItems = (items) => {
+  return items.map((item, i) => {
+    let aspect = item.aspect || 1.0;
+    if (!item.aspect) {
+      const lowerTitle = (item.title || "").toLowerCase();
+      if (
+        lowerTitle.includes("trend") || lowerTitle.includes("yoyo") ||
+        lowerTitle.includes("acadour") || lowerTitle.includes("bella") ||
+        lowerTitle.includes("cinnamon") || lowerTitle.includes("almond") ||
+        lowerTitle.includes("castor") || lowerTitle.includes("coconut") ||
+        lowerTitle.includes("oil")
+      ) {
+        aspect = 0.5625;
+      }
+    }
+
+    let size = "col-span-1 row-span-1 aspect-square";
+    if (aspect > 1.25) {
+      size = "col-span-2 row-span-1 aspect-[16/9]"; // horizontal
+    } else if (aspect < 0.8) {
+      size = "col-span-1 row-span-2 aspect-[3/4]"; // vertical
+    } else {
+      // square: make every 5th item a large square
+      if (i % 5 === 0) {
+        size = "col-span-2 row-span-2 aspect-square";
+      }
+    }
+    return {
+      ...item,
+      aspect,
+      size
+    };
+  });
+};
+
 // Simplified SmartImage component without massive zooms
 function SmartImage({ src, alt, className }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -302,17 +351,23 @@ export default function CaseStudyDetailPage() {
       try {
         const fetchWithFallback = async (path) => {
           const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://adlyngo-next-seven.vercel.app";
-          let response = await fetch(`${baseUrl}${path}`).catch(() => null);
+          
+          const fetchUrl = async (url) => {
+            const res = await fetchWithTimeout(url, {}, 2000).catch(() => null);
+            return res && res.ok ? res : null;
+          };
 
-          if (!response || !response.ok) {
+          let response = await fetchUrl(`${baseUrl}${path}`);
+
+          if (!response) {
             const fallbackPorts = ["3000", "3001", "5005"];
-            for (const port of fallbackPorts) {
-              const res = await fetch(`http://localhost:${port}${path}`).catch(() => null);
-              if (res && res.ok) {
-                response = res;
-                break;
-              }
-            }
+            const promises = fallbackPorts.map(port => 
+              fetchWithTimeout(`http://localhost:${port}${path}`, {}, 1000)
+                .then(res => (res && res.ok ? res : null))
+                .catch(() => null)
+            );
+            const results = await Promise.all(promises);
+            response = results.find(res => res !== null);
           }
           return response;
         };
@@ -359,29 +414,15 @@ export default function CaseStudyDetailPage() {
                 return clientId === project.client?._id || clientId === project.client?.id;
               });
               
-              // Process aspects in parallel
-              const processedItems = await processGalleryItems(filteredItems);
-              
-              // Format with sizes based on computed aspect ratios
-              const formattedItems = processedItems.map((item, i) => {
-                let size = "col-span-1 row-span-1 aspect-square";
-                if (item.aspect > 1.25) {
-                  size = "col-span-2 row-span-1 aspect-[16/9]"; // horizontal
-                } else if (item.aspect < 0.8) {
-                  size = "col-span-1 row-span-2 aspect-[3/4]"; // vertical
-                } else {
-                  // square: make every 5th item a large square
-                  if (i % 5 === 0) {
-                    size = "col-span-2 row-span-2 aspect-square";
-                  }
-                }
-                return {
-                  ...item,
-                  size
-                };
+              // 1. Render items immediately with basic aspects
+              setGalleryItems(formatGalleryItems(filteredItems));
+
+              // 2. Process aspects in the background asynchronously
+              processGalleryItems(filteredItems).then((processedItems) => {
+                setGalleryItems(formatGalleryItems(processedItems));
+              }).catch((err) => {
+                console.error("Background aspect analysis failed for case study details:", err);
               });
-              
-              setGalleryItems(formattedItems);
             }
           }
         } else {
