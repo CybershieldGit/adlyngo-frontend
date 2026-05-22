@@ -56,7 +56,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-12">
           <div className="lg:col-span-7 space-y-8">
             <h3 className="text-4xl md:text-5xl font-normal text-white font-heading leading-[1.1] uppercase max-w-2xl">
-              Let's make something great work together.
+              Let&apos;s make something great work together.
             </h3>
             <div className="flex flex-col md:flex-row gap-12">
               <div className="space-y-1.5">
@@ -65,7 +65,27 @@ export default function Footer() {
               </div>
               <div className="space-y-1.5">
                 <p className="text-white/40 text-[9px] uppercase tracking-widest font-bold">Say Hello!!</p>
-                <p className="text-white text-lg font-bold">+91 9595 333 111</p>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                  <span className="text-white text-lg font-bold font-albert">
+                    +91 9891 656 535
+                  </span>
+                  <a
+                    href="https://wa.me/919891656535"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10 text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] hover:scale-105 transition-all shadow-md w-fit"
+                    title="Chat with us on WhatsApp"
+                  >
+                    <svg
+                      className="w-3.5 h-3.5 fill-current"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.725 1.45h.007c5.456 0 9.897-4.437 9.902-9.899.002-2.646-1.02-5.133-2.877-6.99C16.549 1.85 14.07 .827 11.995.827 6.539.827 2.1 5.26 2.095 10.722c0 1.625.441 3.212 1.278 4.62l-.993 3.626 3.714-.974zm13.155-7.447c-.266-.134-1.58-.78-1.823-.867-.243-.088-.419-.133-.596.134-.176.265-.685.867-.838 1.042-.154.177-.308.2-.574.067-.266-.134-1.127-.415-2.148-1.327-.79-.705-1.326-1.579-1.482-1.846-.155-.266-.016-.41.118-.543.12-.12.266-.31.4-.464.133-.155.177-.265.266-.442.088-.176.044-.33-.021-.463-.067-.134-.596-1.439-.818-1.97-.216-.52-.45-.45-.618-.458-.16-.008-.344-.01-.528-.01-.184 0-.485.07-.74.354-.254.283-.972.951-.972 2.32 0 1.369.995 2.693 1.137 2.883.141.19 1.958 2.99 4.743 4.195.662.287 1.179.458 1.583.587.665.21 1.27.18 1.748.11.533-.08 1.58-.646 1.802-1.238.22-.593.22-1.102.155-1.209-.066-.107-.243-.176-.51-.31z" />
+                    </svg>
+                    <span className="text-[11px] font-bold uppercase tracking-wider font-albert">Chat With Us</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -74,7 +94,7 @@ export default function Footer() {
             <div className="space-y-4">
               <p className="text-white font-bold text-xs uppercase tracking-wider">Company</p>
               <ul className="space-y-3 text-white/40 text-[13px] font-normal">
-                <li><NextLink href="/case-studies" className="hover:text-white transition-colors">Portfolio</NextLink></li>
+                <li><NextLink href="/" className="hover:text-white transition-colors">Portfolio</NextLink></li>
                 <li><NextLink href="/services" className="hover:text-white transition-colors">Services</NextLink></li>
                 <li><NextLink href="/contact" className="hover:text-white transition-colors">Contact</NextLink></li>
               </ul>
@@ -118,9 +138,8 @@ export default function Footer() {
             </p>
 
             <div className="flex items-center gap-6">
-              <NextLink href="#" className="text-white/40 text-[10px] md:text-[12px] hover:text-white transition-colors">Privacy Policy</NextLink>
+              <NextLink href="/privacy-policy" className="text-white/40 text-[10px] md:text-[12px] hover:text-white transition-colors">Privacy Policy</NextLink>
               <div className="w-[1px] h-3 bg-white/10" />
-              <NextLink href="#" className="text-white/40 text-[10px] md:text-[12px] hover:text-white transition-colors">Terms & Conditions</NextLink>
             </div>
           </div>
 
