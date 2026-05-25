@@ -270,12 +270,12 @@ export default function CaseStudiesPage() {
                 className="relative z-10 bg-white/[0.01] backdrop-blur-2xl rounded-[40px] p-10 md:p-16 border border-white/10 flex flex-col md:flex-row items-center md:items-stretch justify-between gap-12 shadow-2xl"
               >
                 <div className="flex flex-col items-start justify-between gap-8">
-                  <h2 className="text-5xl md:text-6xl font-black text-white uppercase leading-none tracking-tighter">
+                  <h2 className="text-4xl md:text-5xl font-black text-white uppercase leading-none tracking-tighter">
                     Trusted by <br /> Brands
                   </h2>
 
                   <div className="flex items-center gap-6">
-                    <span className="text-7xl md:text-8xl font-albert font-bold text-white tracking-tighter">4.89</span>
+                    <span className="text-7xl font-albert font-bold text-white tracking-tighter">4.89</span>
                     <div className="bg-white rounded-full px-4 py-2.5 flex gap-1 items-center h-fit">
                       {[1, 2, 3, 4, 5].map((s) => (
                         <Star key={s} size={16} fill="#FF4D00" color="#FF4D00" />

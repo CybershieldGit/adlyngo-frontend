@@ -2,6 +2,7 @@ import { Bebas_Neue, Inter, Albert_Sans } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/common/SmoothScroll";
 import Navbar from "@/components/common/Navbar";
+import LeadPopup from "@/components/common/LeadPopup";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
         <SmoothScroll>
           <Navbar />
           <main>{children}</main>
+          <LeadPopup />
         </SmoothScroll>
       </body>
     </html>
