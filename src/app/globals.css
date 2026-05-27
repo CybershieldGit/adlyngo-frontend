@@ -9,6 +9,7 @@
   --font-heading: "Bebas Neue", sans-serif;
   --font-body: "Albert Sans", sans-serif;
   --font-albert: "Albert Sans", sans-serif;
+  --font-sans: "Albert Sans", sans-serif;
   
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -20,6 +21,8 @@
 :root {
   --background: #050505;
   --foreground: #E5E5E5;
+  --font-albert: var(--font-body);
+  --font-sans: var(--font-body);
 }
 
 body {
