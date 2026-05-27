@@ -267,25 +267,25 @@ export default function CaseStudiesPage() {
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="relative z-10 bg-white/[0.01] backdrop-blur-2xl rounded-[40px] p-10 md:p-16 border border-white/10 flex flex-col md:flex-row items-center md:items-stretch justify-between gap-12 shadow-2xl"
+                className="relative z-10 bg-white/[0.03] backdrop-blur-2xl rounded-[40px] p-10 md:p-16 border border-white/10 flex flex-col md:flex-row items-center md:items-stretch justify-between gap-12 shadow-2xl"
               >
-                <div className="flex flex-col items-start justify-between gap-8">
-                  <h2 className="text-4xl md:text-5xl font-black text-white uppercase leading-none tracking-tighter">
+                <div className="flex flex-col justify-between gap-6">
+                  <h2 className="text-4xl md:text-5xl font-normal text-white font-heading uppercase leading-none">
                     Trusted by <br /> Brands
                   </h2>
 
-                  <div className="flex items-center gap-6">
-                    <span className="text-7xl font-albert font-bold text-white tracking-tighter">4.89</span>
-                    <div className="bg-white rounded-full px-4 py-2.5 flex gap-1 items-center h-fit">
-                      {[1, 2, 3, 4, 5].map((s) => (
-                        <Star key={s} size={16} fill="#FF4D00" color="#FF4D00" />
+                  <div className="flex items-center gap-4">
+                    <span className="text-7xl font-black text-white font-heading">4.89</span>
+                    <div className="flex items-center bg-white p-2 px-4 rounded-full gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={18} className="fill-[#FF6A00] text-[#FF6A00]" />
                       ))}
                     </div>
                   </div>
                 </div>
 
                 <div className="flex-1 max-w-2xl flex flex-col justify-between gap-8">
-                  <p className="text-white/60 text-lg md:text-2xl leading-relaxed font-albert mb-0 italic -mt-1.5 md:-mt-3">
+                  <p className="text-white/60 text-lg leading-relaxed font-albert mb-0 italic -mt-1.5">
                     "Their team doesn't just deliver creative; they deliver results. The strategic approach to our social media growth has been a game-changer for our brand."
                   </p>
 

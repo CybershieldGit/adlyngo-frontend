@@ -14,6 +14,8 @@ export default function Home() {
   const [showIntro, setShowIntro] = useState(false);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
   useEffect(() => {
     const hasSeenIntro = sessionStorage.getItem("adlyngo_intro_seen");
@@ -172,6 +174,30 @@ export default function Home() {
       });
     }
   };
+
+  const updateScrollButtons = useCallback(() => {
+    const el = scrollRefs.current[activeCategoryIndex];
+    if (el) {
+      const { scrollLeft, scrollWidth, clientWidth } = el;
+      setCanScrollLeft(scrollLeft > 5);
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
+    } else {
+      setCanScrollLeft(false);
+      setCanScrollRight(false);
+    }
+  }, [activeCategoryIndex]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      updateScrollButtons();
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [activeCategoryIndex, categories, updateScrollButtons]);
+
+  useEffect(() => {
+    window.addEventListener("resize", updateScrollButtons);
+    return () => window.removeEventListener("resize", updateScrollButtons);
+  }, [updateScrollButtons]);
 
   if (loading) {
     return (
@@ -378,6 +404,32 @@ export default function Home() {
 
         <div className="flex-1 flex items-center min-h-0 relative py-2 pb-12 md:pb-8">
           <div className="w-full h-full relative group/slider">
+            {/* Left Scroll Button */}
+            <button
+              onClick={() => scrollSlider("left")}
+              className={`hidden md:flex absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/60 border border-white/20 items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] hover:scale-110 active:scale-95 transition-all duration-300 shadow-lg backdrop-blur-md ${
+                canScrollLeft
+                  ? "pointer-events-auto opacity-0 md:group-hover/slider:opacity-100 focus:opacity-100"
+                  : "pointer-events-none opacity-0"
+              }`}
+              aria-label="Scroll left"
+            >
+              <ChevronLeft size={24} strokeWidth={1.5} />
+            </button>
+
+            {/* Right Scroll Button */}
+            <button
+              onClick={() => scrollSlider("right")}
+              className={`hidden md:flex absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/60 border border-white/20 items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] hover:scale-110 active:scale-95 transition-all duration-300 shadow-lg backdrop-blur-md ${
+                canScrollRight
+                  ? "pointer-events-auto opacity-0 md:group-hover/slider:opacity-100 focus:opacity-100"
+                  : "pointer-events-none opacity-0"
+              }`}
+              aria-label="Scroll right"
+            >
+              <ChevronRight size={24} strokeWidth={1.5} />
+            </button>
+
             <div className="absolute -left-3 md:-left-12 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-4">
               {categories.map((cat, idx) => (
                 <button
@@ -401,6 +453,7 @@ export default function Home() {
                 <div
                   key={cat.id}
                   ref={(el) => { scrollRefs.current[catIdx] = el; }}
+                  onScroll={updateScrollButtons}
                   className={`absolute inset-0 flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar w-full snap-x snap-mandatory scroll-smooth h-full items-center touch-pan-x transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
                     ${cat.layout === "landscape"
                       ? "pl-[5.5vw] pr-[12.5vw] md:pl-[2.5vw] md:pr-[20vw] lg:pl-[0vw] lg:pr-[25vw]"
@@ -497,22 +550,6 @@ export default function Home() {
                 </div>
               ))}
             </motion.div>
-          </div>
-
-          {/* Navigation Arrows - Desktop/Tablet Only */}
-          <div className="hidden md:flex items-center gap-3 flex-shrink-0 ml-4">
-            <button
-              onClick={() => scrollSlider("left")}
-              className="w-12 h-12 rounded-full bg-black border border-white/20 flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all duration-300"
-            >
-              <ChevronLeft size={24} strokeWidth={1.5} />
-            </button>
-            <button
-              onClick={() => scrollSlider("right")}
-              className="w-12 h-12 rounded-full bg-black border border-white/20 flex items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] transition-all duration-300"
-            >
-              <ChevronRight size={24} strokeWidth={1.5} />
-            </button>
           </div>
         </footer>
       </div>
