@@ -17,7 +17,7 @@ function SmartImage({ src, alt, className }) {
       alt={alt}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{ transform: `scale(${isHovered ? 1.18 : 1.12})` }}
+      // style={{ transform: `scale(${isHovered ? 1.18 : 1.12})` }}
       className={cn(
         "transition-transform duration-1000 ease-out origin-center block",
         className ? className : "w-full h-full object-cover"

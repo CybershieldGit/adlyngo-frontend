@@ -16,6 +16,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const [visibleRange, setVisibleRange] = useState({ start: 0, end: 10 });
+  const containerRefs = useRef({});
 
   useEffect(() => {
     const hasSeenIntro = sessionStorage.getItem("adlyngo_intro_seen");
@@ -119,28 +121,26 @@ export default function Home() {
     if (selectedVideoIndex !== null || categories.length === 0 || showIntro) return;
 
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-      // Clear any pending scroll-lock release timer
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
       }
 
-      // Set the release timer (debounce window)
-      // When wheel events stop for 200ms, reset the scroll lock
       scrollTimeoutRef.current = setTimeout(() => {
         scrollLockRef.current = false;
       }, 200);
 
-      // If already locked, ignore this event
       if (scrollLockRef.current) return;
 
-      // Check threshold (using 30 for stability with trackpad inertia)
       if (Math.abs(e.deltaY) > 30) {
         if (e.deltaY > 30 && activeCategoryIndex < categories.length - 1) {
           scrollLockRef.current = true;
           setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
+          // Reset visible range when category changes
+          setVisibleRange({ start: 0, end: 10 });
         } else if (e.deltaY < -30 && activeCategoryIndex > 0) {
           scrollLockRef.current = true;
           setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
+          setVisibleRange({ start: 0, end: 10 });
         }
       }
     }
@@ -165,10 +165,10 @@ export default function Home() {
   };
 
   const scrollSlider = (direction) => {
-    const el = scrollRefs.current[activeCategoryIndex];
-    if (el) {
+    const container = containerRefs.current[activeCategoryIndex];
+    if (container) {
       const scrollAmount = 400;
-      el.scrollBy({
+      container.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth"
       });
@@ -176,9 +176,9 @@ export default function Home() {
   };
 
   const updateScrollButtons = useCallback(() => {
-    const el = scrollRefs.current[activeCategoryIndex];
-    if (el) {
-      const { scrollLeft, scrollWidth, clientWidth } = el;
+    const container = containerRefs.current[activeCategoryIndex];
+    if (container) {
+      const { scrollLeft, scrollWidth, clientWidth } = container;
       setCanScrollLeft(scrollLeft > 5);
       setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
     } else {
@@ -186,6 +186,40 @@ export default function Home() {
       setCanScrollRight(false);
     }
   }, [activeCategoryIndex]);
+
+  // Handle scroll to update visible range for virtualization
+  const handleScroll = useCallback((e) => {
+    const container = e.target;
+    if (!container) return;
+
+    const scrollLeft = container.scrollLeft;
+    const containerWidth = container.clientWidth;
+    const itemWidth = currentCategory?.layout === "landscape" ? 350 : 200; // Approximate width
+
+    const startIndex = Math.floor(scrollLeft / itemWidth);
+    const endIndex = Math.min(
+      startIndex + Math.ceil(containerWidth / itemWidth) + 2,
+      currentCategory?.videos?.length || 0
+    );
+
+    setVisibleRange({
+      start: Math.max(0, startIndex - 1),
+      end: endIndex
+    });
+  }, [currentCategory]);
+
+  useEffect(() => {
+    const container = containerRefs.current[activeCategoryIndex];
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+      // Initial calculation
+      handleScroll({ target: container });
+
+      return () => {
+        container.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [activeCategoryIndex, currentCategory, handleScroll]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -246,10 +280,8 @@ export default function Home() {
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="relative w-full max-w-[1250px] max-h-[72vh] md:max-h-none mt-[14vh] md:mt-0 bg-black/20 backdrop-blur-xl border border-white/10 rounded-[32px] md:rounded-t-[48px] md:rounded-b-none overflow-hidden shadow-[0_-20px_100px_rgba(0,0,0,0.8)] flex flex-col"
             >
-              {/* Header inside modal - EXACT Figma Implementation */}
               <div className="w-full px-6 py-4 md:px-12 md:py-6 flex justify-between items-center relative z-20">
                 <div className="flex items-center justify-between w-full gap-4">
-                  {/* Logo Area */}
                   <div className="w-[120px] h-[32px] md:w-[207.67px] md:h-[54.73px] relative flex-shrink-0">
                     <Image
                       src="/logo.svg"
@@ -259,7 +291,6 @@ export default function Home() {
                     />
                   </div>
 
-                  {/* Tagline */}
                   <div className="hidden md:block text-white text-[34px] font-normal uppercase tracking-tight" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
                     The Native Tongue of Ads.
                   </div>
@@ -279,10 +310,8 @@ export default function Home() {
 
               <div className="flex-1 min-h-0 p-6 md:p-12 md:pt-6 pb-12 md:pb-12 relative z-20 overflow-y-auto overflow-x-hidden touch-pan-y custom-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
                 <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-10 md:gap-16">
-                  {/* Left Column: Branding & Who We Are */}
                   <div className="flex flex-col justify-start items-start gap-8 md:gap-10 flex-1">
                     <div className="flex flex-col justify-start items-start gap-4 md:gap-5">
-                      {/* Main Heading */}
                       <h1 className="flex flex-col" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
                         <span className="text-white text-3xl md:text-5xl lg:text-[56px] leading-[1.1] uppercase">We Don’t Run Ads.</span>
                         <span className="text-white text-3xl md:text-5xl lg:text-[56px] leading-[1.1] uppercase">
@@ -290,13 +319,11 @@ export default function Home() {
                         </span>
                       </h1>
 
-                      {/* Sub-heading */}
                       <p className="w-full text-white text-xs md:text-sm font-normal leading-relaxed opacity-80" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
                         We turn ideas into performance-driven campaigns that actually connect with people not just impressions.
                       </p>
                     </div>
 
-                    {/* Who We Are Section */}
                     <div className="flex flex-col justify-start items-start gap-4 md:gap-5 w-full">
                       <h3 className="text-white text-2xl md:text-3xl lg:text-[34px] font-normal uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
                         WHO WE ARE?
@@ -312,9 +339,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Right Column: Statistics Grid */}
                   <div className="flex flex-col lg:flex-row justify-start items-stretch gap-6 w-full md:w-auto flex-shrink-0">
-                    {/* Stat Column 1 */}
                     <div className="w-full md:w-[268px] bg-white/10 rounded-[24px] md:rounded-[30px] p-5 md:p-8 flex flex-col justify-center items-start">
                       <div className="flex flex-col justify-start items-start gap-3 md:gap-[18px] w-full">
                         {[
@@ -336,7 +361,6 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {/* Stat Column 2 */}
                     <div className="flex w-full md:w-[268px] bg-white/10 rounded-[24px] md:rounded-[30px] p-5 md:p-8 flex flex-col justify-center items-start">
                       <div className="flex flex-col justify-start items-start gap-3 md:gap-[18px] w-full">
                         {[
@@ -390,41 +414,34 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="text-4xl md:text-6xl  font-bold font-heading leading-none md:leading-[0.8] tracking-wide text-center md:text-left"
+                className="text-4xl md:text-6xl font-bold font-heading leading-none md:leading-[0.8] tracking-wide text-center md:text-left"
               >
                 <span className="text-white">{currentCategory?.title?.first}</span>
                 <span className="text-[#FF6A00]">{currentCategory?.title?.second}</span>
               </motion.h1>
             </AnimatePresence>
           </div>
-          {/* <button className="hidden md:flex items-center gap-2.5 px-6 py-2.5 bg-[#181818]/40 border border-white rounded-lg text-white text-sm font-medium font-albert leading-none hover:bg-white hover:text-black transition-all">
-            View All
-          </button> */}
         </header>
 
         <div className="flex-1 flex items-center min-h-0 relative py-2 pb-12 md:pb-8">
           <div className="w-full h-full relative group/slider">
-            {/* Left Scroll Button */}
             <button
               onClick={() => scrollSlider("left")}
-              className={`hidden md:flex absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/60 border border-white/20 items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] hover:scale-110 active:scale-95 transition-all duration-300 shadow-lg backdrop-blur-md ${
-                canScrollLeft
-                  ? "pointer-events-auto opacity-0 md:group-hover/slider:opacity-100 focus:opacity-100"
-                  : "pointer-events-none opacity-0"
-              }`}
+              className={`hidden md:flex absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/60 border border-white/20 items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] hover:scale-110 active:scale-95 transition-all duration-300 shadow-lg backdrop-blur-md ${canScrollLeft
+                ? "pointer-events-auto opacity-0 md:group-hover/slider:opacity-100 focus:opacity-100"
+                : "pointer-events-none opacity-0"
+                }`}
               aria-label="Scroll left"
             >
               <ChevronLeft size={24} strokeWidth={1.5} />
             </button>
 
-            {/* Right Scroll Button */}
             <button
               onClick={() => scrollSlider("right")}
-              className={`hidden md:flex absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/60 border border-white/20 items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] hover:scale-110 active:scale-95 transition-all duration-300 shadow-lg backdrop-blur-md ${
-                canScrollRight
-                  ? "pointer-events-auto opacity-0 md:group-hover/slider:opacity-100 focus:opacity-100"
-                  : "pointer-events-none opacity-0"
-              }`}
+              className={`hidden md:flex absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/60 border border-white/20 items-center justify-center text-white hover:bg-[#FF6A00] hover:border-[#FF6A00] hover:scale-110 active:scale-95 transition-all duration-300 shadow-lg backdrop-blur-md ${canScrollRight
+                ? "pointer-events-auto opacity-0 md:group-hover/slider:opacity-100 focus:opacity-100"
+                : "pointer-events-none opacity-0"
+                }`}
               aria-label="Scroll right"
             >
               <ChevronRight size={24} strokeWidth={1.5} />
@@ -447,13 +464,18 @@ export default function Home() {
                 </button>
               ))}
             </div>
+
             {categories.map((cat, catIdx) => {
               const isActive = catIdx === activeCategoryIndex;
+
               return (
                 <div
                   key={cat.id}
-                  ref={(el) => { scrollRefs.current[catIdx] = el; }}
-                  onScroll={updateScrollButtons}
+                  ref={(el) => {
+                    containerRefs.current[catIdx] = el;
+                    scrollRefs.current[catIdx] = el;
+                  }}
+                  onScroll={() => updateScrollButtons()}
                   className={`absolute inset-0 flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar w-full snap-x snap-mandatory scroll-smooth h-full items-center touch-pan-x transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
                     ${cat.layout === "landscape"
                       ? "pl-[5.5vw] pr-[12.5vw] md:pl-[2.5vw] md:pr-[20vw] lg:pl-[0vw] lg:pr-[25vw]"
@@ -465,54 +487,61 @@ export default function Home() {
                     }
                   `}
                 >
-                  {cat.videos?.map((video, idx) => (
-                    <div
-                      key={`${catIdx}-${video?.id}`}
-                      onClick={() => isActive && handleVideoClick(idx)}
-                      className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[24px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500
-                        ${cat.layout === "landscape"
-                          ? "w-[75vw] md:w-[60vw] lg:w-[50vw] max-w-[950px] aspect-[16/9] h-auto max-h-[38vh] md:max-h-[38vh]"
-                          : "h-[45vh] md:h-[54vh] aspect-[9/16] w-auto"}
-                      `}
-                    >
-                      {video.videoUrl ? (
-                        <video
-                          src={video.videoUrl}
-                          poster={video.thumbnail}
-                          muted
-                          loop
-                          playsInline
-                          autoPlay
-                          preload="auto"
-                          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                        />
-                      ) : (
-                        <Image
-                          src={video?.thumbnail}
-                          alt={video?.title}
-                          fill
-                          sizes={cat.layout === "landscape" ? "700px" : "260px"}
-                          className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                        />
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-16 h-16 rounded-full bg-brand/90 flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 shadow-2xl">
-                          <Play className="text-white fill-white ml-1" size={24} />
+                  {cat.videos?.map((video, idx) => {
+                    // Only render videos within the visible range for performance
+                    if (idx < visibleRange.start || idx > visibleRange.end) {
+                      return <div key={idx} style={{ width: cat.layout === "landscape" ? "75vw" : "auto" }} />;
+                    }
+
+                    return (
+                      <div
+                        key={`${catIdx}-${video?.id}`}
+                        onClick={() => isActive && handleVideoClick(idx)}
+                        className={`group relative flex-shrink-0 cursor-pointer rounded-[24px] md:rounded-[24px] border border-white/10 md:border-white/20 overflow-hidden snap-center bg-black transition-all duration-500 hover:scale-[1.02]
+                          ${cat.layout === "landscape"
+                            ? "w-[75vw] md:w-[60vw] lg:w-[50vw] max-w-[950px] aspect-[16/9] h-auto max-h-[38vh] md:max-h-[38vh]"
+                            : "h-[45vh] md:h-[54vh] aspect-[9/16] w-auto"}
+                        `}
+                      >
+                        {video.videoUrl ? (
+                          <video
+                            src={video.videoUrl}
+                            poster={video.thumbnail}
+                            muted
+                            loop
+                            playsInline
+                            autoPlay
+                            preload="metadata"
+                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                          />
+                        ) : (
+                          <Image
+                            src={video?.thumbnail}
+                            alt={video?.title}
+                            fill
+                            sizes={cat.layout === "landscape" ? "700px" : "260px"}
+                            className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                            loading="lazy"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-16 h-16 rounded-full bg-brand/90 flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 shadow-2xl">
+                            <Play className="text-white fill-white ml-1" size={24} />
+                          </div>
+                        </div>
+
+                        <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
+                          <ArrowUpRight size={24} />
+                        </div>
+
+                        <div className="absolute bottom-6 left-6 right-6">
+                          <p className="text-[#FF6A00] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">{video?.category}</p>
+                          <h3 className="text-base md:text-lg font-bold text-white font-heading uppercase tracking-tight leading-none line-clamp-2">{video?.title}</h3>
                         </div>
                       </div>
-
-                      {/* Top Right Arrow on Hover */}
-                      <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
-                        <ArrowUpRight size={24} />
-                      </div>
-
-                      <div className="absolute bottom-6 left-6 right-6">
-                        <p className="text-[#FF6A00] text-[10px] uppercase tracking-[0.2em] font-bold mb-1">{video?.category}</p>
-                        <h3 className="text-base md:text-lg font-bold text-white font-heading uppercase tracking-tight leading-none">{video?.title}</h3>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               );
             })}
@@ -576,7 +605,6 @@ export default function Home() {
             <button onClick={() => navigateVideo("prev")} className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 z-50 w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 hidden md:flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowLeft size={32} /></button>
             <button onClick={() => navigateVideo("next")} className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 z-50 w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 hidden md:flex items-center justify-center text-white hover:bg-[#FF6A00] transition-all"><ArrowRight size={32} /></button>
 
-            {/* Invisible tap navigation zones for mobile */}
             <div
               onClick={(e) => { e.stopPropagation(); navigateVideo("prev"); }}
               className="absolute left-0 top-0 bottom-0 w-[20vw] z-40 md:hidden cursor-pointer"
