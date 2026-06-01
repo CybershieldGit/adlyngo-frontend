@@ -104,11 +104,46 @@ export default function ServicesPage() {
       </div>
 
       {/* Bottom Page Watermark - Lifted above footer */}
-      <div className="absolute bottom-0 left-0 w-full h-screen flex items-end justify-center pointer-events-none select-none z-0 overflow-hidden pb-[450px]">
-        <h2 className="text-[25vw] font-black font-heading leading-none text-white opacity-[0.04] whitespace-nowrap uppercase text-center tracking-tighter">
-          WEBSITE
-        </h2>
+      <div className="absolute bottom-0 left-0 w-full h-screen flex items-end justify-center pointer-events-none select-none z-1000 overflow-hidden pb-[440px]">
+        <div
+          className="flex whitespace-nowrap items-center"
+          style={{
+            animation: 'scrollLeft 60s linear infinite'
+          }}
+        >
+          {growthWays.map((item, index) => (
+            <h2
+              key={index}
+              className="text-[10vw] font-black font-heading leading-none text-white opacity-[0.04] uppercase text-center tracking-tighter mx-4 inline-block align-middle"
+              style={{ lineHeight: 1 }}
+            >
+              {item?.title}
+            </h2>
+          ))}
+          {/* Duplicate for seamless loop */}
+          {growthWays.map((item, index) => (
+            <h2
+              key={`dup-${index}`}
+              className="text-[20vw] font-black font-heading leading-none text-white opacity-[0.04] uppercase text-center tracking-tighter mx-4 inline-block align-middle"
+              style={{ lineHeight: 1 }}
+            >
+              {item?.title}
+            </h2>
+          ))}
+        </div>
       </div>
+
+      <style jsx>{`
+        @keyframes scrollLeft {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+      `}
+      </style>
 
       <div className="w-full mx-auto px-6 md:px-16 lg:px-[70px] relative z-10">
         {/* Header Section */}
