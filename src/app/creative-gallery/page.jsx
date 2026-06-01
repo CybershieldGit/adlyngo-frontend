@@ -303,7 +303,7 @@ export default function CreativeGallery() {
         {categories.map((category, idx) => (
           <section key={category.id} className={cn("mb-32", idx !== 0 && "pt-20 border-t border-white/5")}>
             <div className="flex justify-between items-end mb-2 mt-2">
-              <h2 className="text-4xl md:text-6xl font-bold text-white uppercase tracking-tight font-heading">
+              <h2 className="text-4xl md:text-8xl font-bold text-white uppercase tracking-tight font-heading">
                 {category.title} <span className="text-[#FF6A00]">{category.subtitle}</span>
               </h2>
               {/* <button className="px-8 py-3 border border-white/10 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
