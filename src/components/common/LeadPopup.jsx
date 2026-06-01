@@ -253,33 +253,46 @@ export default function LeadPopup() {
                     </p>
 
                     {/* Features Grid - Flex row / horizontal scroll on mobile, Grid on desktop */}
-                    <div className="flex overflow-x-auto gap-3 mt-2 no-scrollbar pb-2 snap-x snap-mandatory sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-x-visible sm:pb-0">
+                    <div className="flex overflow-x-auto gap-3 mt-2 no-scrollbar pb-2 snap-x snap-mandatory sm:grid sm:grid-cols-4 sm:gap-2.5 sm:overflow-x-visible sm:pb-0">
                       {[
                         {
                           title: "Custom Strategy",
                           desc: "Tailored roadmap for your business goals.",
+                          iconPath: "/images/custom-strategy.png"
                         },
                         {
                           title: "Growth Focused",
                           desc: "Performance-driven marketing that delivers results.",
+                          iconPath: "/images/growth-focused.png"
                         },
                         {
                           title: "Quick Response",
                           desc: "We get back to you within 24 hours, always.",
+                          iconPath: "/images/quick-response.png"
                         },
                         {
                           title: "Trusted Partner",
                           desc: "Helping startups & businesses scale with confidence.",
+                          iconPath: "/images/trusted-partner.png"
                         },
                       ].map((item, idx) => (
                         <div
                           key={idx}
-                          className="flex flex-col gap-1 p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors duration-300 flex-shrink-0 w-[240px] sm:w-auto snap-center"
+                          className="flex flex-col gap-1.5 p-5 sm:p-3.5 rounded-[20px] bg-[#1E1E1E]/40 border border-white/5 hover:border-white/10 transition-all duration-300 flex-shrink-0 w-[240px] sm:w-auto snap-center items-start text-left"
                         >
-                          <span className="text-white font-bold font-albert text-[10px] sm:text-[11px] tracking-wider uppercase">
+                          <div className="w-11 h-11 sm:w-9 sm:h-9 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm">
+                            <Image
+                              src={item.iconPath}
+                              alt={item.title}
+                              width={24}
+                              height={24}
+                              className="w-6 h-6 sm:w-5 sm:h-5 object-contain"
+                            />
+                          </div>
+                          <span className="text-white font-bold font-heading text-lg sm:text-xs md:text-sm tracking-wide uppercase leading-none mt-1">
                             {item.title}
                           </span>
-                          <span className="text-white/50 font-albert text-xs leading-normal">
+                          <span className="text-white/60 font-albert text-xs sm:text-[10px] md:text-[11px] leading-relaxed">
                             {item.desc}
                           </span>
                         </div>

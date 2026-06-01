@@ -1,4 +1,4 @@
-import { Bebas_Neue, Inter, Albert_Sans } from "next/font/google";
+import { Bebas_Neue, Albert_Sans } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/common/SmoothScroll";
 import Navbar from "@/components/common/Navbar";
@@ -10,13 +10,8 @@ const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
 });
 
-const inter = Inter({
-  variable: "--font-body",
-  subsets: ["latin"],
-});
-
 const albertSans = Albert_Sans({
-  variable: "--font-albert",
+  variable: "--font-body",
   subsets: ["latin"],
   weight: ["300", "400", "500", "700", "800", "900"],
 });
@@ -31,7 +26,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) { 
   return (
-    <html lang="en" className={`${bebasNeue.variable} ${inter.variable} ${albertSans.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${bebasNeue.variable} ${albertSans.variable}`} suppressHydrationWarning>
       <body className="antialiased selection:bg-brand selection:text-white">
         <SmoothScroll>
           <Navbar />
