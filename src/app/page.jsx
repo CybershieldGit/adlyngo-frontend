@@ -136,7 +136,8 @@ export default function Home() {
   const [sortOrder, setSortOrder] = useState({});
   const [, startTransition] = useTransition();
   const scrollLeftRef = useRef(0);
-  const [visibleVideos, setVisibleVideos] = useState(new Set()); // Track which videos are visible
+  const [visibleVideos, setVisibleVideos] = useState(new Set());
+  const [direction, setDirection] = useState(0); // -1 for up, 1 for down
 
   const saveScrollPosition = useCallback((categoryId, scrollLeft) => {
     if (typeof window !== 'undefined') {
@@ -343,21 +344,27 @@ export default function Home() {
       if (Math.abs(e.deltaY) > 30) {
         if (e.deltaY > 30 && activeCategoryIndex < categories.length - 1) {
           scrollLockRef.current = true;
+          setDirection(1); // Moving down
           const currentContainer = containerRefs.current[activeCategoryIndex];
           if (currentContainer) {
             saveScrollPosition(activeCategoryIndex, currentContainer.scrollLeft);
           }
-          setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
-          // Clear visible videos when switching categories
-          setVisibleVideos(new Set());
+          setTimeout(() => {
+            setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
+            // Clear visible videos when switching categories
+            setVisibleVideos(new Set());
+          }, 200);
         } else if (e.deltaY < -30 && activeCategoryIndex > 0) {
           scrollLockRef.current = true;
+          setDirection(-1); // Moving up
           const currentContainer = containerRefs.current[activeCategoryIndex];
           if (currentContainer) {
             saveScrollPosition(activeCategoryIndex, currentContainer.scrollLeft);
           }
-          setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
-          setVisibleVideos(new Set());
+          setTimeout(() => {
+            setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
+            setVisibleVideos(new Set());
+          }, 200);
         }
       }
     }
@@ -485,33 +492,6 @@ export default function Home() {
   return (
     <motion.main
       onWheel={handleWheel}
-      onPanEnd={(e, info) => {
-        if (showIntro || selectedVideoIndex !== null || scrollLockRef.current) return;
-        const threshold = 30;
-        if (info.offset.y < -threshold && activeCategoryIndex < categories.length - 1) {
-          scrollLockRef.current = true;
-          const currentContainer = containerRefs.current[activeCategoryIndex];
-          if (currentContainer) {
-            saveScrollPosition(activeCategoryIndex, currentContainer.scrollLeft);
-          }
-          setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
-          setVisibleVideos(new Set());
-          setTimeout(() => {
-            scrollLockRef.current = false;
-          }, 800);
-        } else if (info.offset.y > threshold && activeCategoryIndex > 0) {
-          scrollLockRef.current = true;
-          const currentContainer = containerRefs.current[activeCategoryIndex];
-          if (currentContainer) {
-            saveScrollPosition(activeCategoryIndex, currentContainer.scrollLeft);
-          }
-          setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
-          setVisibleVideos(new Set());
-          setTimeout(() => {
-            scrollLockRef.current = false;
-          }, 800);
-        }
-      }}
       className={`bg-[#0A0A0A] fixed inset-0 flex flex-col pt-[150px] md:pt-[80px] overflow-hidden touch-auto ${selectedVideoIndex !== null ? "z-[2000] md:z-auto" : ""}`}
     >
       {/* Intro Modal */}
@@ -627,15 +607,30 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Background watermark */}
+      {/* Background watermark with fade animation */}
       <div className="absolute inset-0 flex items-start justify-center pointer-events-none select-none z-0 overflow-hidden pt-20">
         <AnimatePresence mode="wait">
           <motion.h2
             key={currentCategory?.id}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 0.04, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={{
+              opacity: 0,
+              scale: 0.95,
+              y: direction === 1 ? 50 : direction === -1 ? -50 : 0
+            }}
+            animate={{
+              opacity: 0.04,
+              scale: 1,
+              y: 0
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0.95,
+              y: direction === 1 ? -50 : direction === -1 ? 50 : 0
+            }}
+            transition={{
+              duration: 0.6,
+              ease: [0.16, 1, 0.3, 1]
+            }}
             className="text-[25vw] font-black font-heading leading-none text-white whitespace-nowrap uppercase text-center tracking-widest"
           >
             {currentCategory?.title?.first}{currentCategory?.title?.second}
@@ -651,10 +646,22 @@ export default function Home() {
               <AnimatePresence mode="wait">
                 <motion.h1
                   key={activeCategoryIndex}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
+                  initial={{
+                    opacity: 0,
+                    y: direction === 1 ? 30 : direction === -1 ? -30 : 20
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: direction === 1 ? -30 : direction === -1 ? 30 : -20
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
                   className="text-4xl md:text-6xl font-bold font-heading leading-none md:leading-[0.8] tracking-wide text-center md:text-left"
                 >
                   <span className="text-white">{currentCategory?.title?.first}</span>
@@ -665,17 +672,21 @@ export default function Home() {
           </div>
 
           {currentCategory && currentCategory.videos?.length > 0 && (
-            <button
+            <motion.button
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
               onClick={() => toggleSortOrder(activeCategoryIndex)}
               className="group relative flex items-center gap-2 px-4 py-2 md:px-6 md:py-2.5 rounded-full border border-white/20 bg-black/40 backdrop-blur-md hover:bg-[#FF6A00]/20 hover:border-[#FF6A00] transition-all duration-500"
             >
               <ArrowUpDown size={18} className="text-white group-hover:text-[#FF6A00] transition-colors" />
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#FF6A00]/0 via-[#FF6A00]/5 to-[#FF6A00]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            </button>
+            </motion.button>
           )}
         </header>
 
-        {/* Video Slider */}
+        {/* Video Slider with fade animation */}
         <div className="flex-1 flex items-center min-h-0 relative py-2 pb-12 md:pb-8">
           <div className="w-full h-full relative group/slider">
             <button
@@ -704,54 +715,88 @@ export default function Home() {
                     if (currentContainer) {
                       saveScrollPosition(activeCategoryIndex, currentContainer.scrollLeft);
                     }
+                    setDirection(idx > activeCategoryIndex ? 1 : -1);
                     setActiveCategoryIndex(idx);
                     setVisibleVideos(new Set());
                   }}
-                  className="group relative flex items-center justify-center w-6"
+                  className="group relative flex items-center justify-center w-6 transition-all duration-300"
                 >
-                  {activeCategoryIndex === idx ? (
-                    <div className="w-5 h-5 rounded-full border border-white flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-[#FF6A00]" />
-                    </div>
-                  ) : (
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover:bg-white/50 transition-colors" />
-                  )}
+                  <motion.div
+                    animate={{
+                      scale: activeCategoryIndex === idx ? 1 : 0.7,
+                      opacity: activeCategoryIndex === idx ? 1 : 0.5
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {activeCategoryIndex === idx ? (
+                      <div className="w-5 h-5 rounded-full border border-white flex items-center justify-center">
+                        <div className="w-2 h-2 rounded-full bg-[#FF6A00]" />
+                      </div>
+                    ) : (
+                      <div className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover:bg-white/50 transition-colors" />
+                    )}
+                  </motion.div>
                 </button>
               ))}
             </div>
 
-            {/* Video Grid - Only one category rendered at a time */}
-            {categories.map((cat, catIdx) => {
-              const isActive = catIdx === activeCategoryIndex;
-              if (!isActive) return null;
+            {/* Video Grid - Only one category rendered at a time with fade animation */}
+            <AnimatePresence mode="wait">
+              {categories.map((cat, catIdx) => {
+                const isActive = catIdx === activeCategoryIndex;
+                if (!isActive) return null;
 
-              return (
-                <div
-                  key={cat.id}
-                  ref={(el) => {
-                    containerRefs.current[catIdx] = el;
-                  }}
-                  className={`absolute inset-0 flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar w-full snap-x snap-mandatory scroll-smooth h-full items-center touch-pan-x transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
-                    ${cat.layout === "landscape"
-                      ? "pl-[5.5vw] pr-[12.5vw] md:pl-[2.5vw] md:pr-[20vw] lg:pl-[0vw] lg:pr-[25vw]"
-                      : "pl-[5.5vw] pr-[23vw] md:pl-[2.5vw] md:pr-[30vw] lg:pl-[0vw] lg:pr-[35vw]"
-                    }
-                  `}
-                >
-                  {cat.videos?.map((video, idx) => (
-                    <VideoCard
-                      key={`${catIdx}-${video?.id}`}
-                      video={video}
-                      category={cat}
-                      isActive={isActive}
-                      onClick={handleVideoClick}
-                      index={idx}
-                      onVisible={handleVideoVisible}
-                    />
-                  ))}
-                </div>
-              );
-            })}
+                return (
+                  <motion.div
+                    key={cat.id}
+                    initial={{
+                      opacity: 0,
+                      x: 0,
+                      y: direction === 1 ? 50 : direction === -1 ? -50 : 0
+                    }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                      y: 0
+                    }}
+                    exit={{
+                      opacity: 0,
+                      x: 0,
+                      y: direction === 1 ? -50 : direction === -1 ? 50 : 0
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      ease: [0.16, 1, 0.3, 1]
+                    }}
+                    className="absolute inset-0"
+                  >
+                    <div
+                      ref={(el) => {
+                        containerRefs.current[catIdx] = el;
+                      }}
+                      className={`flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar w-full snap-x snap-mandatory scroll-smooth h-full items-center touch-pan-x
+                        ${cat.layout === "landscape"
+                          ? "pl-[5.5vw] pr-[12.5vw] md:pl-[2.5vw] md:pr-[20vw] lg:pl-[0vw] lg:pr-[25vw]"
+                          : "pl-[5.5vw] pr-[23vw] md:pl-[2.5vw] md:pr-[30vw] lg:pl-[0vw] lg:pr-[35vw]"
+                        }
+                      `}
+                    >
+                      {cat.videos?.map((video, idx) => (
+                        <VideoCard
+                          key={`${catIdx}-${video?.id}`}
+                          video={video}
+                          category={cat}
+                          isActive={isActive}
+                          onClick={handleVideoClick}
+                          index={idx}
+                          onVisible={handleVideoVisible}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
           </div>
         </div>
 
