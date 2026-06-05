@@ -136,7 +136,7 @@ export default function CaseStudiesPage() {
         let response = await fetch(`${baseUrl}${path}`).catch(() => null);
 
         if (!response || !response.ok) {
-          const fallbackPorts = ["3000", "3001", "5005"];
+          const fallbackPorts = ["3000", "3001", "3002", "3003", "3004", "3005", "5005"];
           for (const port of fallbackPorts) {
             const res = await fetch(`http://localhost:${port}${path}`).catch(() => null);
             if (res && res.ok) {
