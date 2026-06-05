@@ -138,6 +138,8 @@ export default function Home() {
   const scrollLeftRef = useRef(0);
   const [visibleVideos, setVisibleVideos] = useState(new Set());
   const [direction, setDirection] = useState(0); // -1 for up, 1 for down
+  const touchStartY = useRef(null);
+  const touchStartX = useRef(null);
 
   const saveScrollPosition = useCallback((categoryId, scrollLeft) => {
     if (typeof window !== 'undefined') {
@@ -229,7 +231,7 @@ export default function Home() {
         let response = await fetch(`${baseUrl}${path}`).catch(() => null);
 
         if (!response || !response.ok) {
-          const fallbackPorts = ["3000", "3001", "5005"];
+          const fallbackPorts = ["3000", "3001", "3002", "3003", "3004", "3005", "5005"];
           for (const port of fallbackPorts) {
             const res = await fetch(`http://localhost:${port}${path}`).catch(() => null);
             if (res && res.ok) {
@@ -370,6 +372,56 @@ export default function Home() {
     }
   };
 
+  const handleTouchStart = (e) => {
+    if (selectedVideoIndex !== null || categories.length === 0 || showIntro) return;
+    const touch = e.touches[0];
+    touchStartY.current = touch.clientY;
+    touchStartX.current = touch.clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStartY.current === null || touchStartX.current === null) return;
+    if (selectedVideoIndex !== null || categories.length === 0 || showIntro) return;
+
+    const touch = e.touches[0];
+    const diffY = touchStartY.current - touch.clientY;
+    const diffX = touchStartX.current - touch.clientX;
+
+    // Only handle vertical swipe if Y-axis movement is dominant
+    if (Math.abs(diffY) > Math.abs(diffX)) {
+      // Swipe threshold to trigger category transition (e.g. 50px)
+      if (Math.abs(diffY) > 50) {
+        if (diffY > 0 && activeCategoryIndex < categories.length - 1) {
+          // Swipe up -> go down (next category)
+          setDirection(1);
+          const currentContainer = containerRefs.current[activeCategoryIndex];
+          if (currentContainer) {
+            saveScrollPosition(activeCategoryIndex, currentContainer.scrollLeft);
+          }
+          setActiveCategoryIndex(prev => Math.min(prev + 1, categories.length - 1));
+          setVisibleVideos(new Set());
+        } else if (diffY < 0 && activeCategoryIndex > 0) {
+          // Swipe down -> go up (previous category)
+          setDirection(-1);
+          const currentContainer = containerRefs.current[activeCategoryIndex];
+          if (currentContainer) {
+            saveScrollPosition(activeCategoryIndex, currentContainer.scrollLeft);
+          }
+          setActiveCategoryIndex(prev => Math.max(prev - 1, 0));
+          setVisibleVideos(new Set());
+        }
+        // Reset so we only trigger once per swipe
+        touchStartY.current = null;
+        touchStartX.current = null;
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchStartY.current = null;
+    touchStartX.current = null;
+  };
+
   const handleVideoClick = (idx) => {
     setSelectedVideoIndex(idx);
   };
@@ -492,6 +544,9 @@ export default function Home() {
   return (
     <motion.main
       onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       className={`bg-[#0A0A0A] fixed inset-0 flex flex-col pt-[150px] md:pt-[80px] overflow-hidden touch-auto ${selectedVideoIndex !== null ? "z-[2000] md:z-auto" : ""}`}
     >
       {/* Intro Modal */}
