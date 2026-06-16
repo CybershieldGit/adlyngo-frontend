@@ -160,26 +160,31 @@ export default function Home() {
     return 0;
   }, []);
 
-  const sortVideosByDate = useCallback((videos, order = 'desc') => {
+  const sortVideosByPriority = useCallback((videos, order = 'asc') => {
     return [...videos].sort((a, b) => {
+      const priorityA = a.order ?? 0;
+      const priorityB = b.order ?? 0;
+      if (priorityA !== priorityB) {
+        return order === 'asc' ? priorityA - priorityB : priorityB - priorityA;
+      }
       const dateA = new Date(a.createdAt);
       const dateB = new Date(b.createdAt);
-      return order === 'desc' ? dateB - dateA : dateA - dateB;
+      return dateB - dateA;
     });
   }, []);
 
   const toggleSortOrder = useCallback((categoryIndex) => {
     startTransition(() => {
       setSortOrder(prev => {
-        const currentOrder = prev[categoryIndex] || 'desc';
-        const newOrder = currentOrder === 'desc' ? 'asc' : 'desc';
+        const currentOrder = prev[categoryIndex] || 'asc';
+        const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
 
         setCategories(prevCategories => {
           const updatedCategories = [...prevCategories];
           const category = updatedCategories[categoryIndex];
 
           if (category && category.videos) {
-            const sortedVideos = sortVideosByDate(category.videos, newOrder);
+            const sortedVideos = sortVideosByPriority(category.videos, newOrder);
             updatedCategories[categoryIndex] = {
               ...category,
               videos: sortedVideos
@@ -202,7 +207,7 @@ export default function Home() {
         saveScrollPosition(categoryIndex, 0);
       }
     }, 100);
-  }, [sortVideosByDate, saveScrollPosition]);
+  }, [sortVideosByPriority, saveScrollPosition]);
 
   // Handle video visibility
   const handleVideoVisible = useCallback((videoIndex, isVisible) => {
@@ -260,6 +265,7 @@ export default function Home() {
               thumbnail: reel.thumbnail?.url || "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2070&auto=format&fit=crop",
               videoUrl: reel.reelUrl,
               duration: "0:30",
+              order: reel.order ?? 0,
               createdAt: reel?.createdAt || new Date().toISOString()
             });
             return acc;
@@ -278,7 +284,7 @@ export default function Home() {
               second = "";
             }
 
-            const sortedVideos = sortVideosByDate(grouped[name], 'desc');
+            const sortedVideos = sortVideosByPriority(grouped[name], 'asc');
 
             return {
               id: index,
@@ -293,7 +299,7 @@ export default function Home() {
 
           const initialSortOrder = {};
           formattedCategories.forEach((_, idx) => {
-            initialSortOrder[idx] = 'desc';
+            initialSortOrder[idx] = 'asc';
           });
 
           startTransition(() => {
@@ -319,7 +325,7 @@ export default function Home() {
     return () => {
       if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     };
-  }, [sortVideosByDate]);
+  }, [sortVideosByPriority]);
 
   const handleCloseIntro = () => {
     setShowIntro(false);
