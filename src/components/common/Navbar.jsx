@@ -10,9 +10,10 @@ import { useLenis } from "lenis/react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { name: "Video Gallery", href: "/" },
+  { name: "Home", href: "/home" },
+  { name: "Video Gallery", href: "/video-gallery" },
   { name: "Creative Gallery", href: "/creative-gallery" },
-  { name: "Case Studies", href: "/case-studies" },
+  // { name: "Case Studies", href: "/case-studies" },
   { name: "Testimonials", href: "/testimonials" },
 ];
 
@@ -84,7 +85,7 @@ export default function Navbar() {
   const [isIntroShowing, setIsIntroShowing] = useState(false);
 
   useEffect(() => {
-    if (pathname === "/") {
+    if (pathname === "/video-gallery") {
       const hasSeenIntro = sessionStorage.getItem("adlyngo_intro_seen");
       if (!hasSeenIntro) {
         setIsIntroShowing(true);
@@ -114,7 +115,7 @@ export default function Navbar() {
 
         <nav className="w-full mx-auto flex items-center justify-between px-6 md:px-16 lg:px-[70px] py-4 relative">
           <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center group">
+            <Link href="/home" className="flex items-center group">
               <img
                 src="/logo.svg"
                 alt="Adlyngo"
@@ -131,14 +132,14 @@ export default function Navbar() {
                     href={link.href}
                     className={cn(
                       "font-albert transition-all duration-300 whitespace-nowrap",
-                      ((pathname === link.href) || (pathname === "/" && link.name === "Video Gallery"))
+                      ((pathname === link.href) || (pathname === "/video-gallery" && link.name === "Video Gallery") || (pathname === "/home" && link.name === "Home"))
                         ? "text-[16px] font-medium text-white"
                         : "text-[14px] font-normal text-white/50 hover:text-white"
                     )}
                   >
                     {link.name}
                   </Link>
-                  {((pathname === link.href) || (pathname === "/" && link.name === "Video Gallery")) && (
+                  {((pathname === link.href) || (pathname === "/video-gallery" && link.name === "Video Gallery") || (pathname === "/home" && link.name === "Home")) && (
                     <motion.div
                       layoutId="nav-triangle"
                       className="absolute -bottom-[18px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-[#FF4D00] z-20"
@@ -189,9 +190,10 @@ export default function Navbar() {
             <div className="max-w-max mx-auto bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-1 overflow-x-auto no-scrollbar pointer-events-auto shadow-2xl">
               <div className="flex items-center">
                 {[
-                  { name: "Video Gallery", href: "/" },
+                  { name: "Home", href: "/home" },
+                  { name: "Video Gallery", href: "/video-gallery" },
                   { name: "Creative Gallery", href: "/creative-gallery" },
-                  { name: "Case Studies", href: "/case-studies" },
+                  // { name: "Case Studies", href: "/case-studies" },
                   { name: "Testimonials", href: "/testimonials" },
                 ].map((item) => {
                   const isActive = pathname === item.href;
@@ -255,10 +257,16 @@ export default function Navbar() {
                 <nav className="flex flex-col gap-4 md:gap-6 relative z-10">
                   {[
                     {
+                      name: "Home",
+                      href: "/home",
+                      isActive: pathname === "/home",
+                    },
+                    {
                       name: "Portfolio",
-                      href: "/",
-                      isActive: ["/case-studies", "/", "/creative-gallery", "/testimonials"].includes(pathname),
+                      href: "/creative-gallery",
+                      isActive: ["/case-studies", "/creative-gallery", "/video-gallery", "/testimonials"].includes(pathname),
                       subLinks: [
+                        { name: "Video Gallery", href: "/video-gallery" },
                         { name: "Creative Gallery", href: "/creative-gallery" },
                         { name: "Case Studies", href: "/case-studies" },
                         { name: "Testimonials", href: "/testimonials" },

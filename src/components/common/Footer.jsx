@@ -95,7 +95,8 @@ export default function Footer() {
             <div className="space-y-4">
               <p className="text-white font-bold text-xs uppercase tracking-wider">Company</p>
               <ul className="space-y-3 text-white/40 text-[13px] font-normal">
-                <li><NextLink href="/" className="hover:text-white transition-colors">Portfolio</NextLink></li>
+                <li><NextLink href="/home" className="hover:text-white transition-colors">Home</NextLink></li>
+                <li><NextLink href="/creative-gallery" className="hover:text-white transition-colors">Portfolio</NextLink></li>
                 <li><NextLink href="/services" className="hover:text-white transition-colors">Services</NextLink></li>
                 <li><NextLink href="/contact" className="hover:text-white transition-colors">Contact</NextLink></li>
               </ul>
@@ -103,7 +104,7 @@ export default function Footer() {
             <div className="space-y-4">
               <p className="text-white font-bold text-xs uppercase tracking-wider">Quicklinks</p>
               <ul className="space-y-3 text-white/40 text-[13px] font-normal">
-                <li><NextLink href="/" className="hover:text-white transition-colors">Video Gallery</NextLink></li>
+                <li><NextLink href="/video-gallery" className="hover:text-white transition-colors">Video Gallery</NextLink></li>
                 <li><NextLink href="/creative-gallery" className="hover:text-white transition-colors">Creative Gallery</NextLink></li>
                 <li><NextLink href="/case-studies" className="hover:text-white transition-colors">Case Studies</NextLink></li>
                 <li><NextLink href="/testimonials" className="hover:text-white transition-colors">Testimonials</NextLink></li>

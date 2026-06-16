@@ -13,7 +13,7 @@ export async function middleware(request) {
   } catch {}
 
   if (on && pathname !== "/maintenance") return NextResponse.redirect(new URL("/maintenance", request.url));
-  if (!on && pathname === "/maintenance") return NextResponse.redirect(new URL("/", request.url));
+  if (!on && pathname === "/maintenance") return NextResponse.redirect(new URL("/home", request.url));
   return NextResponse.next();
 }
 
