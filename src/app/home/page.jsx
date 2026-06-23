@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import Footer from "@/components/common/Footer";
 import BrandMarqueeStrip from "@/components/home/BrandMarqueeStrip";
 import FunnelIndustriesSections from "@/components/home/FunnelIndustriesSections";
@@ -56,15 +57,21 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div
-            className="rounded-2xl bg-[#c8c8c8] min-h-[220px] lg:min-h-0 lg:h-full"
-            aria-label="Hero visual placeholder"
-          />
+          <div className="relative min-h-[220px] overflow-hidden rounded-2xl border border-white/10 lg:min-h-0 lg:h-full">
+            <Image
+              src="/images/Futuristic.png"
+              alt="Futuristic growth marketing visual"
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+          </div>
         </div>
       </section>
 
       {/* Growth stats */}
-      <section className="px-6 md:px-16 lg:px-[70px] py-10 md:py-12 lg:py-2 bg-black">
+      <section className="px-6 md:px-16 lg:px-[70px] py-10 md:py-12 lg:py-6 bg-black">
         <div className="w-full">
           <BrandMarqueeStrip className="-mx-6 md:-mx-16 lg:-mx-[70px] mb-8 lg:mb-10" />
 

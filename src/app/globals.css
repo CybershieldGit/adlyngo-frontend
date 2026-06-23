@@ -98,6 +98,10 @@ html.lenis {
   animation: marquee-x 35s linear infinite;
 }
 
+.marquee-track:has(.brand-logo-box:hover) {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
     animation: none;
