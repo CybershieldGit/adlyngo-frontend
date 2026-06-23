@@ -168,63 +168,34 @@ export default function LeadConsultationContent({
     <div
       className={
         isInline
-          ? "grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,620px)] gap-8 lg:gap-10 xl:gap-14 items-center"
+          ? "grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,620px)] gap-8 lg:gap-10 xl:gap-14 items-start"
           : "grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch"
       }
     >
       <div
         className={`${isInline ? "" : "lg:col-span-6"} ${leftOrder} flex flex-col ${
-          isInline ? "justify-center gap-6 lg:gap-8 w-full" : "justify-between gap-6 lg:gap-8 pt-2 lg:pt-4"
+          isInline ? "justify-start gap-6 lg:gap-8 w-full" : "justify-between gap-6 lg:gap-8 pt-2 lg:pt-4"
         }`}
       >
-        <div className={`flex flex-col gap-6 ${isInline ? "w-full items-center text-center" : ""}`}>
+        <div className="flex flex-col gap-6 w-full items-start text-left">
           <span className="text-[#FF6A00] text-xs font-bold uppercase tracking-[0.2em] font-albert">
             Your Growth Partner
           </span>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[44px] font-heading leading-[0.95] text-white uppercase tracking-tight">
+          <h2 className="text-[72px] font-heading leading-[0.95] text-white uppercase tracking-tight">
             Let&apos;s build what&apos;s next for <br />
             <span className="text-[#FF6A00]">your business</span>
           </h2>
 
-          <p className={`text-white/60 font-albert text-sm leading-relaxed max-w-lg ${isInline ? "mx-auto" : ""}`}>
+          <p className="text-white/60 font-albert text-sm leading-relaxed max-w-lg">
             Share your goals and our experts will design a data-driven strategy to accelerate your growth.
           </p>
 
-          <div
-            className={`flex overflow-x-auto gap-3 mt-2 no-scrollbar pb-2 snap-x snap-mandatory sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-2.5 sm:overflow-x-visible sm:pb-0 ${
-              isInline ? "w-full justify-center" : ""
-            }`}
-          >
-            {FEATURE_ITEMS.map((item) => (
-              <div
-                key={item.title}
-                className={`flex flex-col gap-1.5 p-5 sm:p-3.5 rounded-[20px] bg-[#1E1E1E]/40 border border-white/5 hover:border-white/10 transition-all duration-300 flex-shrink-0 w-[240px] sm:w-auto snap-center ${
-                  isInline ? "items-center text-center" : "items-start text-left"
-                }`}
-              >
-                <div className="w-11 h-11 sm:w-9 sm:h-9 rounded-full bg-white flex items-center justify-center mb-1 shadow-sm">
-                  <Image
-                    src={item.iconPath}
-                    alt={item.title}
-                    width={24}
-                    height={24}
-                    className="w-6 h-6 sm:w-5 sm:h-5 object-contain"
-                  />
-                </div>
-                <span className="text-white font-bold font-heading text-lg sm:text-xs md:text-sm tracking-wide uppercase leading-none mt-1">
-                  {item.title}
-                </span>
-                <span className="text-white/60 font-albert text-xs sm:text-[10px] md:text-[11px] leading-relaxed">
-                  {item.desc}
-                </span>
-              </div>
-            ))}
-          </div>
+
         </div>
 
-        <div className={`flex flex-col gap-4 ${isInline ? "mt-0 items-center text-center" : "mt-2"}`}>
-          <div className={`flex items-center gap-3 ${isInline ? "justify-center" : ""}`}>
+        <div className={`flex flex-col gap-4 ${isInline ? "mt-0 items-start text-left" : "mt-2"}`}>
+          <div className="flex items-center gap-3">
             <div className="flex -space-x-3">
               {CLIENT_AVATARS.map((src, i) => (
                 <div key={i} className="w-8 h-8 rounded-full border-2 border-black overflow-hidden">
@@ -243,10 +214,10 @@ export default function LeadConsultationContent({
 
       <div className={`${isInline ? "min-w-0" : "lg:col-span-6"} ${rightOrder}`}>
         <div
-          className={`relative bg-[#131313] rounded-2xl md:rounded-[24px] p-4 sm:p-6 lg:p-8 flex flex-col gap-4 sm:gap-6 overflow-hidden h-full justify-between ${
+          className={`relative rounded-2xl md:rounded-[24px] p-4 sm:p-6 lg:p-8 flex flex-col gap-4 sm:gap-6 overflow-hidden h-full justify-between ${
             isInline
-              ? "border border-white/10 shadow-[0_0_24px_rgba(100,100,100,0.1),0_25px_70px_-15px_rgba(100,100,100,0.12)]"
-              : "border border-white/5"
+              ? "border border-white/[0.06] bg-[#1f1f1f] shadow-[0_8px_32px_rgba(0,0,0,0.25)]"
+              : "border border-white/5 bg-[#131313]"
           }`}
         >
           <div className="absolute top-0 right-0 overflow-hidden w-28 h-28 pointer-events-none">
@@ -256,14 +227,11 @@ export default function LeadConsultationContent({
           </div>
 
           <div className="flex items-center gap-3 pr-8">
-            <div className="w-10 h-10 flex-shrink-0">
-              <FormIcon />
-            </div>
             <div className="flex flex-col">
-              <h3 className="text-base sm:text-lg md:text-xl font-heading text-white uppercase tracking-wide leading-none">
+              <h3 className="text-[24px] font-heading text-white uppercase tracking-wide leading-none">
                 Get Your Free Growth Consultation
               </h3>
-              <p className="text-white/50 text-[10px] sm:text-[11px] font-albert mt-1 leading-tight">
+              <p className="mt-1 font-albert text-[14px] leading-snug text-white/50">
                 Fill in the details and we&apos;ll schedule a call with our growth expert.
               </p>
             </div>

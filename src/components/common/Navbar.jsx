@@ -265,6 +265,7 @@ export default function Navbar() {
 
                 <nav className="flex flex-col gap-4 md:gap-6 relative z-10">
                   {[
+                    { name: "Home", href: "/home", isActive: pathname === "/home" },
                     {
                       name: "Portfolio",
                       href: "/creative-gallery",
