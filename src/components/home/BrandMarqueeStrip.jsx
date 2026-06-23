@@ -24,7 +24,7 @@ const logos = [
 
 function LogoBox({ logo, alt }) {
   return (
-    <div className="group flex h-12 w-[100px] shrink-0 items-center justify-center rounded-xl bg-white px-3 py-2 shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] md:h-[54px] md:w-[120px] md:px-3.5 md:py-2.5">
+    <div className="brand-logo-box group flex h-12 w-[100px] shrink-0 cursor-pointer items-center justify-center rounded-xl bg-white px-3 py-2 shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] md:h-[54px] md:w-[120px] md:px-3.5 md:py-2.5">
       <img
         src={logo}
         alt={alt}
@@ -41,7 +41,7 @@ function LogoBox({ logo, alt }) {
 export default function BrandMarqueeStrip({ className = "" }) {
   return (
     <div className={className}>
-      <div className="relative overflow-hidden border-b border-white/[0.06] bg-[#4a4a4a]">
+      <div className="relative overflow-hidden border-b border-white/[0.06]">
         <div
           className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-[120px] lg:w-[220px]"
           style={{
@@ -59,7 +59,7 @@ export default function BrandMarqueeStrip({ className = "" }) {
           aria-hidden
         />
 
-        <div className="marquee-track flex w-max items-center gap-[18px] py-4 hover:[animation-play-state:paused] md:gap-7 md:py-5">
+        <div className="marquee-track flex w-max items-center gap-[18px] py-4 md:gap-7 md:py-5">
           {logos.map((logo, i) => (
             <LogoBox key={i} logo={logo} alt={`brand-${i + 1}`} />
           ))}
