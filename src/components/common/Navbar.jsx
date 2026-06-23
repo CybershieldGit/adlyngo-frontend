@@ -10,7 +10,6 @@ import { useLenis } from "lenis/react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { name: "Home", href: "/home" },
   { name: "Video Gallery", href: "/video-gallery" },
   { name: "Creative Gallery", href: "/creative-gallery" },
   // { name: "Case Studies", href: "/case-studies" },
@@ -85,11 +84,9 @@ export default function Navbar() {
   const [isIntroShowing, setIsIntroShowing] = useState(false);
 
   useEffect(() => {
-    if (pathname === "/video-gallery") {
+    if (pathname === "/video-gallery" || pathname === "/home") {
       const hasSeenIntro = sessionStorage.getItem("adlyngo_intro_seen");
-      if (!hasSeenIntro) {
-        setIsIntroShowing(true);
-      }
+      setIsIntroShowing(!hasSeenIntro);
     } else {
       setIsIntroShowing(false);
     }
@@ -102,9 +99,27 @@ export default function Navbar() {
     return () => window.removeEventListener("introClosed", handleIntroClosed);
   }, [pathname]);
 
+  useEffect(() => {
+    const header = document.querySelector("[data-site-header]");
+    if (!header) return;
+
+    const setHeight = () => {
+      document.documentElement.style.setProperty(
+        "--site-header-height",
+        `${header.offsetHeight}px`
+      );
+    };
+
+    setHeight();
+    const observer = new ResizeObserver(setHeight);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <header
+        data-site-header
         className={cn(
           "fixed top-0 left-0 w-full z-[999] transition-all duration-500",
           scrolled ? "bg-black/90 backdrop-blur-md" : "bg-[#0A0A0A]",
@@ -132,14 +147,14 @@ export default function Navbar() {
                     href={link.href}
                     className={cn(
                       "font-albert transition-all duration-300 whitespace-nowrap",
-                      ((pathname === link.href) || (pathname === "/video-gallery" && link.name === "Video Gallery") || (pathname === "/home" && link.name === "Home"))
+                      ((pathname === link.href) || (pathname === "/video-gallery" && link.name === "Video Gallery"))
                         ? "text-[16px] font-medium text-white"
                         : "text-[14px] font-normal text-white/50 hover:text-white"
                     )}
                   >
                     {link.name}
                   </Link>
-                  {((pathname === link.href) || (pathname === "/video-gallery" && link.name === "Video Gallery") || (pathname === "/home" && link.name === "Home")) && (
+                  {((pathname === link.href) || (pathname === "/video-gallery" && link.name === "Video Gallery")) && (
                     <motion.div
                       layoutId="nav-triangle"
                       className="absolute -bottom-[18px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-[#FF4D00] z-20"
@@ -189,13 +204,7 @@ export default function Navbar() {
           >
             <div className="max-w-max mx-auto bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-1 overflow-x-auto no-scrollbar pointer-events-auto shadow-2xl">
               <div className="flex items-center">
-                {[
-                  { name: "Home", href: "/home" },
-                  { name: "Video Gallery", href: "/video-gallery" },
-                  { name: "Creative Gallery", href: "/creative-gallery" },
-                  // { name: "Case Studies", href: "/case-studies" },
-                  { name: "Testimonials", href: "/testimonials" },
-                ].map((item) => {
+                {navLinks.map((item) => {
                   const isActive = pathname === item.href;
                   return (
                     <Link
@@ -256,11 +265,6 @@ export default function Navbar() {
 
                 <nav className="flex flex-col gap-4 md:gap-6 relative z-10">
                   {[
-                    {
-                      name: "Home",
-                      href: "/home",
-                      isActive: pathname === "/home",
-                    },
                     {
                       name: "Portfolio",
                       href: "/creative-gallery",

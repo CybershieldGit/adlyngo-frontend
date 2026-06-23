@@ -147,7 +147,7 @@ export default function Footer() {
 
           <div className="flex items-center gap-4">
             <span className="text-white/20 text-[10px] uppercase tracking-widest font-bold">Powered by</span>
-            <img src="/cybershield.svg" alt="Cybershield" className="h-4 md:h-5 w-auto [filter:brightness(0)_invert(1)] opacity-40 hover:opacity-100 transition-opacity" />
+            <img src="/cybershield.svg" alt="Cybershield" className="h-4 md:h-5 w-auto opacity-70 hover:opacity-100 transition-opacity" />
           </div>
         </div>
       </div>

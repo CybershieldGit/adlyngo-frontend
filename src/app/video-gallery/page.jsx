@@ -128,7 +128,7 @@ export default function Home() {
   const scrollTimeoutRef = useRef(null);
   const [categories, setCategories] = useState([]);
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
-  const [showIntro, setShowIntro] = useState(false);
+  const [introBlocking, setIntroBlocking] = useState(false);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
   const [loading, setLoading] = useState(true);
   const containerRefs = useRef({});
@@ -224,10 +224,14 @@ export default function Home() {
 
   useEffect(() => {
     const hasSeenIntro = sessionStorage.getItem("adlyngo_intro_seen");
-    if (!hasSeenIntro) {
-      setShowIntro(true);
-    }
+    setIntroBlocking(!hasSeenIntro);
 
+    const handleIntroClosed = () => setIntroBlocking(false);
+    window.addEventListener("introClosed", handleIntroClosed);
+    return () => window.removeEventListener("introClosed", handleIntroClosed);
+  }, []);
+
+  useEffect(() => {
     const fetchReels = async () => {
       try {
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://adlyngo-next-seven.vercel.app";
@@ -327,16 +331,10 @@ export default function Home() {
     };
   }, [sortVideosByPriority]);
 
-  const handleCloseIntro = () => {
-    setShowIntro(false);
-    sessionStorage.setItem("adlyngo_intro_seen", "true");
-    window.dispatchEvent(new Event("introClosed"));
-  };
-
   const currentCategory = categories[activeCategoryIndex] || categories[0];
 
   const handleWheel = (e) => {
-    if (selectedVideoIndex !== null || categories.length === 0 || showIntro) return;
+    if (selectedVideoIndex !== null || categories.length === 0 || introBlocking) return;
 
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
       if (scrollTimeoutRef.current) {
@@ -379,7 +377,7 @@ export default function Home() {
   };
 
   const handleTouchStart = (e) => {
-    if (selectedVideoIndex !== null || categories.length === 0 || showIntro) return;
+    if (selectedVideoIndex !== null || categories.length === 0 || introBlocking) return;
     const touch = e.touches[0];
     touchStartY.current = touch.clientY;
     touchStartX.current = touch.clientX;
@@ -387,7 +385,7 @@ export default function Home() {
 
   const handleTouchMove = (e) => {
     if (touchStartY.current === null || touchStartX.current === null) return;
-    if (selectedVideoIndex !== null || categories.length === 0 || showIntro) return;
+    if (selectedVideoIndex !== null || categories.length === 0 || introBlocking) return;
 
     const touch = e.touches[0];
     const diffY = touchStartY.current - touch.clientY;
@@ -555,119 +553,6 @@ export default function Home() {
       onTouchEnd={handleTouchEnd}
       className={`bg-[#0A0A0A] fixed inset-0 flex flex-col pt-[150px] md:pt-[80px] overflow-hidden touch-auto ${selectedVideoIndex !== null ? "z-[2000] md:z-auto" : ""}`}
     >
-      {/* Intro Modal */}
-      <AnimatePresence>
-        {showIntro && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1100] flex items-start md:items-end justify-center"
-          >
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-3xl md:backdrop-blur-xl" />
-            <motion.div
-              initial={{ opacity: 0, y: 100 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 100 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[1250px] max-h-[72vh] md:max-h-none mt-[14vh] md:mt-0 bg-black/20 backdrop-blur-xl border border-white/10 rounded-[32px] md:rounded-t-[48px] md:rounded-b-none overflow-hidden shadow-[0_-20px_100px_rgba(0,0,0,0.8)] flex flex-col"
-            >
-              <div className="w-full px-6 py-4 md:px-12 md:py-6 flex justify-between items-center relative z-20">
-                <div className="flex items-center justify-between w-full gap-4">
-                  <div className="w-[120px] h-[32px] md:w-[207.67px] md:h-[54.73px] relative flex-shrink-0">
-                    <Image src="/logo.svg" alt="Adlyngo" fill className="object-contain" />
-                  </div>
-                  <div className="hidden md:block text-white text-[34px] font-normal uppercase tracking-tight" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                    The Native Tongue of Ads.
-                  </div>
-                  <button
-                    onClick={handleCloseIntro}
-                    className="px-6 py-2.5 md:w-[170px] bg-[#FF6A00] border border-[#FF6A00] rounded-lg flex items-center justify-center gap-[10px] hover:bg-transparent hover:scale-105 transition-all duration-300 flex-shrink-0 group shadow-lg shadow-[#FF6A00]/20"
-                  >
-                    <span className="text-white group-hover:text-[#FF6A00] text-[10px] md:text-[11px] font-bold tracking-[0.15em] uppercase transition-colors" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
-                      LET'S START
-                    </span>
-                  </button>
-                </div>
-              </div>
-              <div className="w-[calc(100%-24px)] md:w-[calc(100%-96px)] mx-auto h-[1px] bg-white/10 relative z-20" />
-              <div className="flex-1 min-h-0 p-6 md:p-12 md:pt-6 pb-12 md:pb-12 relative z-20 overflow-y-auto overflow-x-hidden touch-pan-y custom-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
-                <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-10 md:gap-16">
-                  <div className="flex flex-col justify-start items-start gap-8 md:gap-10 flex-1">
-                    <div className="flex flex-col justify-start items-start gap-4 md:gap-5">
-                      <h1 className="flex flex-col" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                        <span className="text-white text-3xl md:text-5xl lg:text-[56px] leading-[1.1] uppercase">We DonΓÇÖt Run Ads.</span>
-                        <span className="text-white text-3xl md:text-5xl lg:text-[56px] leading-[1.1] uppercase">
-                          We Make Them <span className="text-[#FF6A00]">Speak.</span>
-                        </span>
-                      </h1>
-                      <p className="w-full text-white text-xs md:text-sm font-normal leading-relaxed opacity-80" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
-                        We turn ideas into performance-driven campaigns that actually connect with people not just impressions.
-                      </p>
-                    </div>
-                    <div className="flex flex-col justify-start items-start gap-4 md:gap-5 w-full">
-                      <h3 className="text-white text-2xl md:text-3xl lg:text-[34px] font-normal uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                        WHO WE ARE?
-                      </h3>
-                      <div className="flex flex-col justify-start items-start gap-3">
-                        <p className="w-full text-white text-xs md:text-sm font-normal leading-relaxed opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
-                          Adlyngo is a full-service digital growth agency built for businesses serious about scaling. We combine data-driven performance marketing with premium creative so every rupee works harder.
-                        </p>
-                        <p className="w-full text-white text-xs md:text-sm font-normal leading-relaxed opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
-                          We don't chase generic briefs. We specialise in Real Estate, Interior Design, E-Commerce, and Beauty ΓÇö niches we've mastered across strategy, creative and execution.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-col lg:flex-row justify-start items-stretch gap-6 w-full md:w-auto flex-shrink-0">
-                    <div className="w-full md:w-[268px] bg-white/10 rounded-[24px] md:rounded-[30px] p-5 md:p-8 flex flex-col justify-center items-start">
-                      <div className="flex flex-col justify-start items-start gap-3 md:gap-[18px] w-full">
-                        {[
-                          { value: "10,000 +", label: "Qualified Leads Generated" },
-                          { value: "Γé╣50L+", label: "Ad Spend Managed" },
-                          { value: "3-5X", label: "Average Client ROI" },
-                          { value: "50 +", label: "Funnels Built & Optimised" }
-                        ].map((stat, i) => (
-                          <div key={i} className="flex flex-col justify-start items-start gap-1 w-full">
-                            <div className="text-white text-xl md:text-[34px] font-normal uppercase leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                              {stat.value}
-                            </div>
-                            <div className="text-white text-[9px] md:text-sm font-normal opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
-                              {stat.label}
-                            </div>
-                            {i < 3 && <div className="w-full h-[1px] bg-white/10 mt-1.5 md:mt-3" />}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="flex w-full md:w-[268px] bg-white/10 rounded-[24px] md:rounded-[30px] p-5 md:p-8 flex flex-col justify-center items-start">
-                      <div className="flex flex-col justify-start items-start gap-3 md:gap-[18px] w-full">
-                        {[
-                          { value: "10,000 +", label: "Qualified Leads Generated" },
-                          { value: "Γé╣50L+", label: "Ad Spend Managed" },
-                          { value: "3-5X", label: "Average Client ROI" },
-                          { value: "50 +", label: "Funnels Built & Optimised" }
-                        ].map((stat, i) => (
-                          <div key={i} className="flex flex-col justify-start items-start gap-1 w-full">
-                            <div className="text-white text-xl md:text-[34px] font-normal uppercase leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                              {stat.value}
-                            </div>
-                            <div className="text-white text-[9px] md:text-sm font-normal opacity-60" style={{ fontFamily: "'Albert Sans', sans-serif" }}>
-                              {stat.label}
-                            </div>
-                            {i < 3 && <div className="w-full h-[1px] bg-white/10 mt-1.5 md:mt-3" />}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Background watermark with fade animation */}
       <div className="absolute inset-0 flex items-start justify-center pointer-events-none select-none z-0 overflow-hidden pt-20">
         <AnimatePresence mode="wait">

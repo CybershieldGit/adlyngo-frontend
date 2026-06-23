@@ -23,6 +23,7 @@
   --foreground: #E5E5E5;
   --font-albert: var(--font-body);
   --font-sans: var(--font-body);
+  --site-header-height: 73px;
 }
 
 body {
@@ -81,4 +82,25 @@ html.lenis {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  will-change: transform;
+  animation: marquee-x 35s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+    transform: none;
+  }
 }
