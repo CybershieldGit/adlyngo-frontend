@@ -20,15 +20,9 @@ export default function HomePage() {
   return (
     <div className="bg-dark text-muted min-h-screen">
       {/* Hero */}
-      <section className="mt-[var(--site-header-height)] px-6 md:px-16 lg:px-[70px] pt-5 md:pt-6 lg:pt-7 pb-10 md:pb-5 lg:pb-7 bg-surface">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-5 items-stretch">
+      <section className="mt-[var(--site-header-height)] pt-5 md:pt-6 lg:pt-7 pb-10 md:pb-5 lg:pb-7 bg-surface">
+        <div className="home-container grid lg:grid-cols-2 gap-8 lg:gap-5 items-stretch">
           <div className="flex flex-col gap-6 lg:gap-7">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] w-fit">
-              <span className="w-2 h-2 rounded-full bg-brand shrink-0" aria-hidden />
-              <span className="text-brand text-[10px] md:text-xs font-albert font-bold uppercase tracking-[0.2em]">
-                Performance Marketing Elite
-              </span>
-            </div>
 
             <h1 className="text-[clamp(2.25rem,5.5vw,4.5rem)] text-white leading-[0.9]">
               We Don&apos;t Bring You<br />
@@ -49,7 +43,7 @@ export default function HomePage() {
                 Book Free Growth Audit
               </Link>
               <Link
-                href="/case-studies"
+                href="/testimonials"
                 className="inline-flex items-center justify-center border border-white text-white px-5 md:px-6 py-2.5 md:py-3 rounded-lg font-albert font-semibold text-sm hover:bg-white/5 transition-colors"
               >
                 View Success Stories
@@ -71,9 +65,9 @@ export default function HomePage() {
       </section>
 
       {/* Growth stats */}
-      <section className="px-6 md:px-16 lg:px-[70px] py-10 md:py-12 lg:py-6 bg-black">
-        <div className="w-full">
-          <BrandMarqueeStrip className="-mx-6 md:-mx-16 lg:-mx-[70px] mb-8 lg:mb-10" />
+      <section className="py-10 md:py-12 lg:py-6 bg-black">
+        <div className="home-container w-full">
+          <BrandMarqueeStrip className="mb-8 lg:mb-10" />
 
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-8 lg:mb-10">
             <div className="flex flex-col gap-4 lg:gap-5">

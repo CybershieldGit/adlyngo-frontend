@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -144,7 +144,7 @@ function FunnelServicePanel({ service }) {
       <h3 className="font-heading font-normal text-[clamp(1.375rem,5.5vw,36px)] leading-[110%] md:leading-[100%] tracking-[0] text-white mb-4 md:mb-5 max-w-full md:max-w-[507px]">
         {service.title}
       </h3>
-      <p className="font-albert font-normal text-white/50 text-[clamp(1rem,3.5vw,24px)] leading-[140%] md:leading-[100%] tracking-[0] mb-6 md:mb-8 lg:mb-10 max-w-full md:max-w-[507px]">
+      <p className="mb-6 max-w-full font-albert text-[18px] font-normal leading-[140%] tracking-[0] text-white/50 md:mb-8 md:max-w-[507px] lg:mb-10 md:leading-[100%]">
         {service.description}
       </p>
 
@@ -193,9 +193,23 @@ function FunnelSection() {
     setActive(id);
   };
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActive((currentId) => {
+        const currentIndex = funnelServices.findIndex((item) => item.id === currentId);
+        const nextIndex = (currentIndex + 1) % funnelServices.length;
+        setDirection(1);
+        prevIndexRef.current = nextIndex;
+        return funnelServices[nextIndex].id;
+      });
+    }, 4000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <section className="px-6 md:px-16 lg:px-[70px] pt-12 md:pt-14 pb-12 md:pb-16 bg-black">
-      <div className="w-full">
+    <section className="pt-12 md:pt-14 pb-12 md:pb-16 bg-black">
+      <div className="home-container w-full">
         <h2 className="text-[clamp(2.25rem,4.5vw,3.75rem)] text-white leading-[0.92] mb-4">
           Mastering the Full Funnel
         </h2>
@@ -334,9 +348,21 @@ function IndustryImageStack({ activeId }) {
 function IndustriesSection() {
   const [active, setActive] = useState(industryItems[0].id);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActive((currentId) => {
+        const currentIndex = industryItems.findIndex((item) => item.id === currentId);
+        const nextIndex = (currentIndex + 1) % industryItems.length;
+        return industryItems[nextIndex].id;
+      });
+    }, 4000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <section className="px-6 md:px-16 lg:px-[70px] py-12 md:py-16 lg:py-20 bg-black overflow-hidden">
-      <div className="w-full grid grid-cols-1 lg:grid-cols-[530px_1fr] lg:gap-16 xl:gap-24 items-center">
+    <section className="py-12 md:py-16 lg:py-20 bg-black overflow-hidden">
+      <div className="home-container w-full grid grid-cols-1 lg:grid-cols-[530px_1fr] lg:gap-16 xl:gap-24 items-center">
         <IndustryImageStack activeId={active} />
 
         <div className="flex flex-col items-start lg:items-end w-full min-w-0">

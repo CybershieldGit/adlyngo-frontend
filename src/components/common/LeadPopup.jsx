@@ -35,16 +35,16 @@ export default function LeadPopup() {
         }, 7000);
       };
       window.addEventListener("introClosed", handleIntroClosed);
-
+      
       return () => {
         window.removeEventListener("introClosed", handleIntroClosed);
         if (timerRef.current) clearTimeout(timerRef.current);
       };
     }
 
-    timerRef.current = setTimeout(() => {
-      openModal();
-    }, 7000);
+      timerRef.current = setTimeout(() => {
+        openModal();
+      }, 7000);
 
     let hasBlurred = false;
 
@@ -124,7 +124,7 @@ export default function LeadPopup() {
 
             <div className="p-4 sm:p-8 lg:p-10">
               <LeadConsultationContent onDone={handleClose} doneLabel="Done" />
-            </div>
+              </div>
           </motion.div>
         </motion.div>
       )}

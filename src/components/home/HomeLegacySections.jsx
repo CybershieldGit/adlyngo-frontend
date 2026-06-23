@@ -97,7 +97,7 @@ function PainCard({ pain, className = "" }) {
           <Icon className="text-brand" size={16} />
         </div>
       </div>
-      <p className="p-4 font-albert text-white/70 text-sm leading-relaxed">{pain.text}</p>
+      <p className="p-4 font-albert text-[24px] leading-relaxed text-white/70">{pain.text}</p>
     </div>
   );
 }
@@ -160,90 +160,40 @@ function WebsiteCard({ site }) {
       href={site.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block h-full rounded-xl border border-white/10 bg-[#111111] overflow-hidden hover:border-brand/30 transition-colors"
+      className="group block h-full overflow-hidden rounded-xl border border-white/10 bg-[#111111] transition-colors hover:border-brand/30"
     >
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#111111]">
-        <Image
-          src={site.image}
-          alt=""
-          fill
-          className="object-cover object-top"
-          sizes="(max-width: 768px) 85vw, 320px"
-          aria-hidden
-        />
-
-        <div className="absolute inset-0 z-[1] overflow-hidden bg-white">
-          <div className="h-[320%] w-full transition-transform duration-[5000ms] ease-in-out will-change-transform group-hover:-translate-y-[68%]">
-            <iframe
-              src={site.url}
-              title={`${site.name} website preview`}
-              loading="lazy"
-              tabIndex={-1}
-              className="h-full w-full border-0 pointer-events-none bg-white"
-            />
-          </div>
+      <div className="relative h-[260px] overflow-hidden bg-white sm:h-[300px] md:h-[340px]">
+        <div className="w-full transition-transform duration-[6000ms] ease-in-out will-change-transform group-hover:-translate-y-[78%]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={site.image}
+            alt={site.name}
+            className="block w-full h-auto"
+            loading="lazy"
+          />
         </div>
 
-        <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-[#111111]/90 via-[#111111]/10 to-transparent" />
-        <div className="absolute top-3 right-3 z-[3] flex h-7 w-7 items-center justify-center rounded-md bg-black/70 border border-white/10">
-          <ExternalLink size={12} className="text-white/60 group-hover:text-brand transition-colors" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#111111]/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute top-3 right-3 z-[1] flex h-7 w-7 items-center justify-center rounded-md border border-white/10 bg-black/70">
+          <ExternalLink size={12} className="text-white/60 transition-colors group-hover:text-brand" />
         </div>
       </div>
+
       <div className="p-4">
-        <h4 className="font-albert font-semibold text-white text-sm mb-1">{site.name}</h4>
-        <p className="font-albert text-white/50 text-xs leading-relaxed line-clamp-2">{site.desc}</p>
-        <p className="font-albert text-white/25 text-[10px] mt-2 truncate">{domain}</p>
+        <h4 className="mb-1 font-heading text-sm uppercase tracking-wide text-white">{site.name}</h4>
+        <p className="line-clamp-2 font-albert text-xs leading-relaxed text-white/50">{site.desc}</p>
+        <p className="mt-2 truncate font-albert text-[10px] text-white/25">{domain}</p>
       </div>
     </a>
   );
 }
 
-function WebsiteCarousel({ websites }) {
-  const trackRef = useRef(null);
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActive((prev) => (prev + 1) % websites.length);
-    }, 3500);
-    return () => clearInterval(timer);
-  }, [websites.length]);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    const slide = track?.children[active];
-    if (!track || !slide) return;
-
-    const offset = slide.offsetLeft - (track.clientWidth - slide.clientWidth) / 2;
-    track.scrollTo({ left: Math.max(0, offset), behavior: "smooth" });
-  }, [active]);
-
+function WebsiteShowcase({ websites }) {
   return (
-    <div className="w-full">
-      <div
-        ref={trackRef}
-        className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth pb-2 justify-center md:overflow-x-visible w-full"
-      >
-        {websites.map((site) => (
-          <div
-            key={site.url}
-            className="snap-center shrink-0 w-[85vw] max-w-[320px] sm:w-[300px] md:w-[320px]"
-          >
-            <WebsiteCard site={site} />
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-center gap-2 mt-4">
-        {websites.map((site, i) => (
-          <button
-            key={site.url}
-            type="button"
-            aria-label={`Go to ${site.name}`}
-            onClick={() => setActive(i)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${i === active ? "w-6 bg-brand" : "w-1.5 bg-white/25"}`}
-          />
-        ))}
-      </div>
+    <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+      {websites.map((site) => (
+        <WebsiteCard key={site.url} site={site} />
+      ))}
     </div>
   );
 }
@@ -419,19 +369,25 @@ const services = [
         name: "Converro",
         url: "https://www.converro.io/",
         desc: "Engage prospects at scale with intelligent outreach.",
-        image: "/images/websites/converro.png",
+        image: "/images/Converro.png",
       },
       {
         name: "Phonotel",
         url: "https://www.phonotel.com/",
         desc: "AI-powered cloud telephony & IVR for Indian businesses.",
-        image: "/images/websites/phonotel.png",
+        image: "/images/phonotel.png",
       },
       {
         name: "iDigital Studies",
         url: "https://www.idigitalstudies.com/",
         desc: "AI-integrated digital marketing institute in Noida.",
-        image: "/images/websites/idigital-studies.png",
+        image: "/images/idigitalstudies.png",
+      },
+      {
+        name: "Rakaar Rituals",
+        url: "https://rakaarituals.com/",
+        desc: "Premium wellness & bath rituals rooted in stillness.",
+        image: "/images/rakaarituals.png",
       },
     ],
   },
@@ -481,7 +437,7 @@ function ServicesIsland() {
       </div>
 
       {service.websites ? (
-        <WebsiteCarousel websites={service.websites} />
+        <WebsiteShowcase websites={service.websites} />
       ) : service.useReels ? (
         <ReelCarousel />
       ) : (
@@ -527,8 +483,8 @@ export default function HomeLegacySections() {
   return (
     <>
       {/* Pain points */}
-      <section className="px-6 md:px-16 lg:px-[70px] py-10 md:py-12 lg:py-20 border-t border-white/5 bg-black overflow-hidden">
-        <div className="w-full">
+      <section className="py-10 md:py-12 lg:py-20 border-t border-white/5 bg-black overflow-hidden">
+        <div className="home-container w-full">
           <h2 className="font-heading text-[clamp(2rem,5vw,3.25rem)] md:text-5xl text-white text-left mb-4 uppercase">
             Sound familiar?
           </h2>
@@ -540,8 +496,8 @@ export default function HomeLegacySections() {
       </section>
 
       {/* Services */}
-      <section className="px-6 md:px-16 lg:px-[70px] py-10 md:py-12 lg:py-20 bg-black border-t border-white/5">
-        <div className="w-full">
+      <section className="py-10 md:py-12 lg:py-20 bg-black border-t border-white/5">
+        <div className="home-container w-full">
           <h2 className="font-heading text-[clamp(2rem,5vw,3.25rem)] md:text-5xl text-white mb-3 uppercase">
             Everything your brand needs to grow.
           </h2>
@@ -553,8 +509,8 @@ export default function HomeLegacySections() {
       </section>
 
       {/* Process */}
-      <section className="px-6 md:px-16 lg:px-[70px] py-10 md:py-12 lg:py-20 bg-black border-t border-white/5">
-        <div className="w-full">
+      <section className="py-10 md:py-12 lg:py-20 bg-black border-t border-white/5">
+        <div className="home-container w-full">
           <h2 className="font-heading text-[clamp(2rem,5vw,3.25rem)] md:text-5xl text-white mb-8 uppercase">
             How we grow your business.
           </h2>
