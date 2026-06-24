@@ -9,7 +9,7 @@ export default function HomeContactSection() {
         <div className="absolute -bottom-10 left-[-5%] h-[320px] w-[420px] rounded-full bg-[#1c1c1c] blur-[90px]" />
       </div>
 
-      <div className="relative z-10 home-container w-full">
+      <div className="relative z-10 site-container w-full">
         <LeadConsultationContent variant="inline" formOrder="content-first" doneLabel="Submit Another" />
       </div>
     </section>

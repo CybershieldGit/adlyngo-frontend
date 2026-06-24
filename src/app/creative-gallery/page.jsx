@@ -289,7 +289,7 @@ export default function CreativeGallery() {
   }
 
   return (
-    <main className="bg-[#0A0A0A] min-h-screen pt-32 pb-20 px-6 md:px-16 lg:px-[70px]">
+    <main className="bg-[#0A0A0A] min-h-screen pt-32 pb-20">
       {/* Background Watermark */}
       <div className="fixed inset-0 flex items-start justify-center pointer-events-none select-none z-0 overflow-hidden pt-40 opacity-[0.04]">
         <h2 className="text-[25vw] font-black font-heading leading-none text-white whitespace-nowrap uppercase text-center tracking-normal">
@@ -299,7 +299,7 @@ export default function CreativeGallery() {
 
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px] z-0" />
 
-      <div className="w-full mx-auto relative z-10">
+      <div className="site-container relative z-10 w-full mx-auto">
         {categories.map((category, idx) => (
           <section key={category.id} className={cn("mb-32", idx !== 0 && "pt-20 border-t border-white/5")}>
             <div className="flex justify-between items-end mb-2 mt-2">

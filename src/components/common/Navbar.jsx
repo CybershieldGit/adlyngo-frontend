@@ -128,7 +128,7 @@ export default function Navbar() {
       >
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px]" />
 
-        <nav className="w-full mx-auto flex items-center justify-between px-6 md:px-16 lg:px-[70px] py-4 relative">
+        <nav className="site-container flex items-center justify-between py-4 relative">
           <div className="flex items-center gap-6">
             <Link href="/home" className="flex items-center group">
               <img

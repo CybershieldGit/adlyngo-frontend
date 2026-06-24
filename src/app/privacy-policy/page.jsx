@@ -16,7 +16,7 @@ export default function PrivacyPolicyPage() {
           </h2>
         </div>
 
-        <div className="w-full max-w-4xl mx-auto px-6 md:px-8 relative z-10 flex-grow pb-24 font-albert">
+        <div className="site-container relative z-10 w-full flex-grow pb-24 font-albert">
           {/* Header Section */}
           <div className="flex flex-col items-center text-center gap-4 mb-16 relative z-10">
             <h1 className="text-6xl md:text-8xl font-black font-heading leading-[0.9] text-white uppercase">
