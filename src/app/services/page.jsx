@@ -145,7 +145,7 @@ export default function ServicesPage() {
       `}
       </style>
 
-      <div className="w-full mx-auto px-6 md:px-16 lg:px-[70px] relative z-10">
+      <div className="site-container relative z-10 w-full">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start gap-10 mb-12 relative z-10">
           <h1 className="text-6xl md:text-8xl font-black font-heading leading-none">

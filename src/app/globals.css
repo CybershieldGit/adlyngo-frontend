@@ -84,16 +84,25 @@ html.lenis {
   scrollbar-width: none;
 }
 
+.site-container,
 .home-container {
   width: 100%;
-  max-width: 1300px;
+  max-width: 1500px;
   margin-inline: auto;
   padding-inline: 1.5rem;
 }
 
 @media (min-width: 768px) {
+  .site-container,
   .home-container {
     padding-inline: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-container,
+  .home-container {
+    padding-inline: 70px;
   }
 }
 

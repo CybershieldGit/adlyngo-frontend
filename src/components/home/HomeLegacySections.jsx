@@ -7,16 +7,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
   Megaphone, TrendingDown, Users, Eye, Wallet,
-  Globe, Video, Share2, Target, Camera, Palette,
+  Globe, Video, Camera,
   ExternalLink, Play, Loader2,
 } from "lucide-react";
 
 const REEL_FALLBACK_THUMB =
   "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2070&auto=format&fit=crop";
 
-async function fetchGalleryReels() {
+const CREATIVE_FALLBACK_THUMB =
+  "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=800&auto=format&fit=crop";
+
+async function fetchFromApi(path) {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://adlyngo-next-seven.vercel.app";
-  const path = "/api/reels?page=1&limit=50";
 
   let response = await fetch(`${baseUrl}${path}`).catch(() => null);
 
@@ -30,6 +32,36 @@ async function fetchGalleryReels() {
       }
     }
   }
+
+  return response;
+}
+
+async function fetchGalleryCreatives(offset = 0, limit = 10) {
+  const response = await fetchFromApi(`/api/gallery?page=1&limit=100`);
+
+  if (!response?.ok) return [];
+
+  const json = await response.json();
+  if (!json.success || !json.data?.items) return [];
+
+  return json.data.items
+    .map((item) => ({
+      id: item._id,
+      title: item.title || "Creative",
+      image: item.imageUrl || item.image?.url || CREATIVE_FALLBACK_THUMB,
+      order: item.order ?? 0,
+      createdAt: item.createdAt || new Date().toISOString(),
+    }))
+    .sort((a, b) => {
+      if (a.order !== b.order) return a.order - b.order;
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    })
+    .slice(offset, offset + limit);
+}
+
+async function fetchGalleryReels() {
+  const path = "/api/reels?page=1&limit=50";
+  const response = await fetchFromApi(path);
 
   if (!response?.ok) return [];
 
@@ -65,7 +97,7 @@ const pains = [
   },
   {
     icon: Users,
-    text: "Your business is 90% referrals — one dry month and you panic",
+    text: "Your business is 90% referrals one dry month and you panic",
     image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=600&auto=format&fit=crop",
   },
   {
@@ -358,6 +390,81 @@ function ReelCarousel() {
   );
 }
 
+function CreativeCard({ item }) {
+  return (
+    <Link
+      href="/creative-gallery"
+      className="group block h-full overflow-hidden rounded-xl border border-white/10 bg-[#111111] transition-colors hover:border-brand/30"
+    >
+      <div className="relative aspect-square w-full overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={item.image}
+          alt={item.title}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <p className="font-heading text-[10px] uppercase tracking-wide text-white line-clamp-2">{item.title}</p>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function CreativeShowcase() {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchGalleryCreatives(10, 10).then((data) => {
+      if (!cancelled) {
+        setItems(data);
+        setLoading(false);
+      }
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full flex justify-start py-16">
+        <Loader2 className="animate-spin text-brand" size={28} />
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <div className="w-full py-10 text-left">
+        <p className="font-albert text-white/50 text-sm mb-4">No creatives yet.</p>
+        <Link href="/creative-gallery" className="text-brand font-albert font-semibold text-sm uppercase tracking-wider hover:underline">
+          View creative gallery →
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full">
+      <div className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth pb-2">
+        {items.map((item) => (
+          <div key={item.id} className="snap-start shrink-0 w-[160px] sm:w-[200px]">
+            <CreativeCard item={item} />
+          </div>
+        ))}
+      </div>
+      <p className="text-left mt-4">
+        <Link href="/creative-gallery" className="text-brand font-albert font-semibold text-xs uppercase tracking-wider hover:underline">
+          View full gallery →
+        </Link>
+      </p>
+    </div>
+  );
+}
+
 const services = [
   {
     icon: Globe,
@@ -392,10 +499,10 @@ const services = [
     ],
   },
   { icon: Video, tab: "UGC Ads", title: "UGC & Creative Ads", desc: "Scroll-stopping creative that proves your product works.", useReels: true },
-  { icon: Share2, tab: "Social", title: "Social Media Management", desc: "Consistent content that builds community and drives sales." },
-  { icon: Target, tab: "Leads", title: "Lead Generation", desc: "Meta & Google campaigns that fill your pipeline with intent." },
-  { icon: Camera, tab: "Shoots", title: "Shoots & Cinematics", desc: "Premium production that makes your brand unforgettable." },
-  { icon: Palette, tab: "Branding", title: "Branding & Graphics", desc: "Visual identity that earns trust before the first conversation." },
+  // { icon: Share2, tab: "Social", title: "Social Media Management", desc: "Consistent content that builds community and drives sales." },
+  // { icon: Target, tab: "Leads", title: "Lead Generation", desc: "Meta & Google campaigns that fill your pipeline with intent." },
+  { icon: Camera, tab: "Creative", title: "Creative & Cinematics", desc: "Premium production that makes your brand unforgettable.", useCreatives: true },
+  // { icon: Palette, tab: "Branding", title: "Branding & Graphics", desc: "Visual identity that earns trust before the first conversation." },
 ];
 
 function ServicesIsland() {
@@ -438,6 +545,8 @@ function ServicesIsland() {
 
       {service.websites ? (
         <WebsiteShowcase websites={service.websites} />
+      ) : service.useCreatives ? (
+        <CreativeShowcase />
       ) : service.useReels ? (
         <ReelCarousel />
       ) : (
@@ -484,7 +593,7 @@ export default function HomeLegacySections() {
     <>
       {/* Pain points */}
       <section className="py-10 md:py-12 lg:py-20 border-t border-white/5 bg-black overflow-hidden">
-        <div className="home-container w-full">
+        <div className="site-container w-full">
           <h2 className="font-heading text-[clamp(2rem,5vw,3.25rem)] md:text-5xl text-white text-left mb-4 uppercase">
             Sound familiar?
           </h2>
@@ -497,7 +606,7 @@ export default function HomeLegacySections() {
 
       {/* Services */}
       <section className="py-10 md:py-12 lg:py-20 bg-black border-t border-white/5">
-        <div className="home-container w-full">
+        <div className="site-container w-full">
           <h2 className="font-heading text-[clamp(2rem,5vw,3.25rem)] md:text-5xl text-white mb-3 uppercase">
             Everything your brand needs to grow.
           </h2>
@@ -510,7 +619,7 @@ export default function HomeLegacySections() {
 
       {/* Process */}
       <section className="py-10 md:py-12 lg:py-20 bg-black border-t border-white/5">
-        <div className="home-container w-full">
+        <div className="site-container w-full">
           <h2 className="font-heading text-[clamp(2rem,5vw,3.25rem)] md:text-5xl text-white mb-8 uppercase">
             How we grow your business.
           </h2>

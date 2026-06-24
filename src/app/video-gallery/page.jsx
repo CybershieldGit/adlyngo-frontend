@@ -585,7 +585,7 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="w-full mx-auto flex-1 flex flex-col px-6 md:px-16 md:pt-2 pb-[4vh] md:pb-6 overflow-hidden relative z-10">
+      <div className="site-container relative z-10 flex flex-1 flex-col overflow-hidden pb-[4vh] md:pb-6 md:pt-2">
         <header className="flex flex-row md:flex-row justify-between items-center md:items-center flex-shrink-0 gap-4">
           <div className="w-full md:w-auto flex items-center gap-4 md:gap-6">
             <div className="h-[50px] md:h-[80px] overflow-hidden flex items-center">

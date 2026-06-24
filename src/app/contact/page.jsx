@@ -62,7 +62,7 @@ export default function ContactPage() {
           </h2>
         </div>
 
-        <div className="w-full mx-auto px-6 md:px-16 relative z-10 flex-grow">
+        <div className="site-container relative z-10 w-full flex-grow">
           {/* Header Section - Ultra Compact */}
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4 mb-8 relative z-10">
             <h1 className="text-6xl md:text-8xl font-black font-heading leading-[0.9] text-center md:text-left">

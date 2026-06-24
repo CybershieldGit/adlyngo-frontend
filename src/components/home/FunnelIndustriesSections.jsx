@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import LottieAnimation from "@/components/common/LottieAnimation";
 
 const funnelServices = [
   {
@@ -13,7 +14,7 @@ const funnelServices = [
     description:
       "We create performance ad campaigns that attract people actually interested in buying your service or product.",
     includes: ["Meta Ads", "Google Ads", "Landing Pages", "CRM Setup", "Lead Qualification", "Retargeting Funnels"],
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop",
+    lottie: "/funel/Leads%20qualification.json",
   },
   {
     id: "websites",
@@ -28,7 +29,7 @@ const funnelServices = [
       "Speed Optimization",
       "Mobile Responsive Design",
     ],
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop",
+    lottie: "/funel/website.json",
   },
   {
     id: "ugc",
@@ -36,7 +37,7 @@ const funnelServices = [
     title: "Your Product Is Good. Your Ads Just Haven't Proved It Yet.",
     description: "We create ad creatives designed to stop scrolling and increase conversions.",
     includes: ["UGC Videos", "Reels", "Scriptwriting", "Product Showcases", "Hook-Based Ads", "Voiceover Ads"],
-    image: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?q=80&w=800&auto=format&fit=crop",
+    lottie: "/funel/Create%20ADS.json",
   },
   {
     id: "social",
@@ -51,7 +52,7 @@ const funnelServices = [
       "Engagement Management",
       "Monthly Analytics",
     ],
-    image: "https://images.unsplash.com/photo-1611162617474-5b21e469e113?q=80&w=800&auto=format&fit=crop",
+    lottie: "/funel/Social%20Media%20Marketing.json",
   },
   {
     id: "shoots",
@@ -66,7 +67,7 @@ const funnelServices = [
       "Drone Shots",
       "Editing & Color Grading",
     ],
-    image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=800&auto=format&fit=crop",
+    lottie: "/funel/Movie%20scene.json",
   },
   {
     id: "branding",
@@ -74,7 +75,7 @@ const funnelServices = [
     title: "A Business Without A Brand Is Just Another Option.",
     description: "We create visual identities that make businesses look trustworthy and memorable.",
     includes: ["Logos", "Brochures", "Catalogues", "Brand Identity", "Social Media Creatives", "Ad Graphics"],
-    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=800&auto=format&fit=crop",
+    lottie: "/funel/Brand%20Animation.json",
   },
 ];
 
@@ -141,19 +142,19 @@ const funnelCardVariants = {
 function FunnelServicePanel({ service }) {
   return (
     <>
-      <h3 className="font-heading font-normal text-[clamp(1.375rem,5.5vw,36px)] leading-[110%] md:leading-[100%] tracking-[0] text-white mb-4 md:mb-5 max-w-full md:max-w-[507px]">
+      <h3 className="font-heading font-normal text-[clamp(1.375rem,5.5vw,36px)] leading-[110%] md:leading-[100%] tracking-[0] text-white mb-3 md:mb-4 max-w-full md:max-w-[507px]">
         {service.title}
       </h3>
-      <p className="mb-6 max-w-full font-albert text-[18px] font-normal leading-[140%] tracking-[0] text-white/50 md:mb-8 md:max-w-[507px] lg:mb-10 md:leading-[100%]">
+      <p className="mb-4 max-w-full font-albert text-[18px] font-normal leading-[140%] tracking-[0] text-white/50 md:mb-5 md:max-w-[507px] md:leading-[100%]">
         {service.description}
       </p>
 
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-end md:gap-8">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center md:gap-7">
         <div className="min-w-0 flex-1">
-          <p className="font-heading font-normal text-[#FF6A00] text-[clamp(1.25rem,4vw,36px)] leading-[100%] tracking-[0] uppercase mb-3 md:mb-4 align-middle">
+          <p className="font-heading font-normal text-[#FF6A00] text-[clamp(1.25rem,4vw,36px)] leading-[100%] tracking-[0] uppercase mb-2 md:mb-3 align-middle">
             Includes:
           </p>
-          <ul className="space-y-1.5 md:space-y-2">
+          <ul className="space-y-1 md:space-y-1.5">
             {service.includes.map((item) => (
               <li
                 key={item}
@@ -165,13 +166,12 @@ function FunnelServicePanel({ service }) {
           </ul>
         </div>
 
-        <div className="relative w-full sm:w-[45%] lg:w-[300px] h-[180px] sm:h-[220px] md:h-[72%] md:max-h-[420px] shrink-0">
-          <Image
-            src={service.image}
-            alt=""
-            fill
+        <div className="relative h-[170px] w-full shrink-0 overflow-hidden sm:h-[215px] sm:w-[42%] lg:h-[275px] lg:w-[280px]">
+          <LottieAnimation
+            src={service.lottie}
             className="object-contain object-right-bottom"
-            sizes="(max-width: 1024px) 50vw, 300px"
+            ariaLabel={service.label}
+            blendWith="#1a1a1a"
           />
         </div>
       </div>
@@ -182,6 +182,7 @@ function FunnelServicePanel({ service }) {
 function FunnelSection() {
   const [active, setActive] = useState(funnelServices[0].id);
   const [direction, setDirection] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const prevIndexRef = useRef(0);
   const service = funnelServices.find((item) => item.id === active) ?? funnelServices[0];
 
@@ -194,6 +195,8 @@ function FunnelSection() {
   };
 
   useEffect(() => {
+    if (isPaused) return;
+
     const timer = setInterval(() => {
       setActive((currentId) => {
         const currentIndex = funnelServices.findIndex((item) => item.id === currentId);
@@ -205,11 +208,11 @@ function FunnelSection() {
     }, 4000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isPaused]);
 
   return (
     <section className="pt-12 md:pt-14 pb-12 md:pb-16 bg-black">
-      <div className="home-container w-full">
+      <div className="site-container w-full">
         <h2 className="text-[clamp(2.25rem,4.5vw,3.75rem)] text-white leading-[0.92] mb-4">
           Mastering the Full Funnel
         </h2>
@@ -217,8 +220,8 @@ function FunnelSection() {
           We deploy bespoke growth vectors across the digital landscape to ensure your brand dominates every touchpoint.
         </p>
 
-        <div className="w-full flex flex-col gap-6 lg:grid lg:grid-cols-[auto_750px] lg:gap-[10px] lg:h-[600px] lg:items-start">
-          <nav className="flex gap-3 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1 lg:mx-0 lg:px-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:pt-10 lg:shrink-0">
+        <div className="w-full flex flex-col gap-6 lg:grid lg:grid-cols-[auto_750px] lg:gap-[10px] lg:items-start">
+          <nav className="flex gap-3 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1 lg:mx-0 lg:px-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:pt-2 lg:shrink-0">
             {funnelServices.map((item) => {
               const isActive = item.id === active;
               return (
@@ -242,8 +245,12 @@ function FunnelSection() {
             })}
           </nav>
 
-          <div className="relative w-full lg:w-[750px] min-h-[400px] lg:h-[600px] rounded-[18px] border border-[#2a2a2a] bg-[#1a1a1a] shadow-[0_0_24px_rgba(100,100,100,0.1)] overflow-hidden min-w-0">
-            <AnimatePresence initial={false} custom={direction}>
+          <div
+            className="relative w-full lg:w-[750px] rounded-[18px] border border-[#2a2a2a] bg-[#1a1a1a] shadow-[0_0_24px_rgba(100,100,100,0.1)] overflow-hidden min-w-0"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            <AnimatePresence initial={false} custom={direction} mode="wait">
               <motion.div
                 key={active}
                 custom={direction}
@@ -252,7 +259,7 @@ function FunnelSection() {
                 animate="center"
                 exit="exit"
                 transition={funnelCardTransition}
-                className="absolute inset-0 flex flex-col pt-7 px-5 pb-7 sm:pt-8 sm:px-7 md:pt-[50px] md:px-[52px] md:pb-10 bg-[#1a1a1a] will-change-transform"
+                className="relative flex flex-col px-5 py-6 sm:px-7 sm:py-7 md:px-10 md:py-9 bg-[#1a1a1a] will-change-transform"
               >
                 <FunnelServicePanel service={service} />
               </motion.div>
@@ -362,7 +369,7 @@ function IndustriesSection() {
 
   return (
     <section className="py-12 md:py-16 lg:py-20 bg-black overflow-hidden">
-      <div className="home-container w-full grid grid-cols-1 lg:grid-cols-[530px_1fr] lg:gap-16 xl:gap-24 items-center">
+      <div className="site-container w-full grid grid-cols-1 lg:grid-cols-[530px_1fr] lg:gap-16 xl:gap-24 items-center">
         <IndustryImageStack activeId={active} />
 
         <div className="flex flex-col items-start lg:items-end w-full min-w-0">

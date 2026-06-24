@@ -41,20 +41,20 @@ function LogoBox({ logo, alt }) {
 export default function BrandMarqueeStrip({ className = "" }) {
   return (
     <div className={className}>
-      <div className="relative overflow-hidden border-b border-white/[0.06]">
+      <div className="relative overflow-hidden">
         <div
-          className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-[120px] lg:w-[220px]"
+          className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-[48px] sm:w-[72px] lg:w-[96px]"
           style={{
             background:
-              "linear-gradient(to right, #000000 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0) 100%)",
+              "linear-gradient(to right, #121212 0%, rgba(18, 18, 18, 0.85) 40%, rgba(18, 18, 18, 0) 100%)",
           }}
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-y-0 right-0 z-[2] w-[120px] lg:w-[220px]"
+          className="pointer-events-none absolute inset-y-0 right-0 z-[2] w-[48px] sm:w-[72px] lg:w-[96px]"
           style={{
             background:
-              "linear-gradient(to left, #000000 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0) 100%)",
+              "linear-gradient(to left, #121212 0%, rgba(18, 18, 18, 0.85) 40%, rgba(18, 18, 18, 0) 100%)",
           }}
           aria-hidden
         />

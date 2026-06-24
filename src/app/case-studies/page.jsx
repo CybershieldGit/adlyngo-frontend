@@ -194,7 +194,7 @@ export default function CaseStudiesPage() {
             <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px]" />
           </div>
 
-          <div className="max-w-[1400px] mx-auto relative z-10">
+          <div className="site-container relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
               <motion.h1
                 initial={{ opacity: 0, x: -30 }}
@@ -246,7 +246,7 @@ export default function CaseStudiesPage() {
           {/* Diagonal Line Watermark Pattern */}
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(45deg,#ffffff_25%,transparent_25%,transparent_50%,#ffffff_50%,#ffffff_75%,transparent_75%,transparent)] bg-[length:4px_4px]" />
 
-          <div className="max-w-[1400px] mx-auto relative z-10">
+          <div className="site-container relative z-10">
             {/* Case Study Cards */}
             <div className="space-y-12 md:space-y-20">
               {filteredStudies.map((study) => (

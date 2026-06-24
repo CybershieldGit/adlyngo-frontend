@@ -27,8 +27,8 @@ const TwitterIcon = () => (
 
 export default function Footer() {
   return (
-    <footer className="pt-16 pb-8 bg-black px-6 md:px-10 lg:px-12 relative z-10 overflow-hidden">
-      <div className="w-full mx-auto">
+    <footer className="relative z-10 overflow-hidden bg-black pt-16 pb-8">
+      <div className="site-container w-full">
         {/* Top Row: Logo & Socials */}
         <div className="flex flex-row justify-between items-center mb-8">
           <img src="/logo.svg" alt="Adlyngo" className="h-8 md:h-10 w-auto" />
@@ -116,7 +116,7 @@ export default function Footer() {
         <div className="w-full h-[1px] bg-white/10 mb-8" />
 
         {/* Newsletter Row */}
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-12">
+        {/* <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-12">
           <p className="text-white text-xl font-normal whitespace-nowrap uppercase tracking-tight">Sign up for the newsletter</p>
           <div className="flex flex-row items-center gap-4 w-full lg:flex-1 lg:max-w-lg">
             <div className="flex-1 relative">
@@ -130,7 +130,7 @@ export default function Footer() {
               Submit
             </button>
           </div>
-        </div>
+        </div> */}
 
         {/* Bottom Row: Exact Image Match */}
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">

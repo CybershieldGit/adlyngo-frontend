@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Loader2, CheckCircle2 } from "lucide-react";
+import { submitLead } from "@/lib/submitLead";
 
 const FEATURE_ITEMS = [
   {
@@ -100,6 +101,7 @@ export default function LeadConsultationContent({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -134,13 +136,16 @@ export default function LeadConsultationContent({
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setSubmitError("");
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await submitLead(formData);
       setIsSubmitted(true);
       localStorage.setItem("adlyngo_lead_submitted", "true");
       onSuccess?.();
     } catch (error) {
       console.error("Submission failed:", error);
+      setSubmitError(error.message || "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -154,6 +159,7 @@ export default function LeadConsultationContent({
     setIsSubmitted(false);
     setFormData(INITIAL_FORM_DATA);
     setErrors({});
+    setSubmitError("");
   };
 
   if (isSubmitted) {
@@ -382,6 +388,10 @@ export default function LeadConsultationContent({
                 <span>Get My Free Strategy Call</span>
               )}
             </button>
+
+            {submitError && (
+              <p className="text-red-400 text-[11px] text-center font-albert mt-1">{submitError}</p>
+            )}
 
             <p className="text-[9px] text-white/30 text-center font-albert mt-1">
               No spam. Your information is 100% secure and never shared.
