@@ -48,7 +48,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key_path: ~/.ssh/deploy_key
+          key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           command_timeout: 15m
           envs: VPS_FRONTEND_PATH
