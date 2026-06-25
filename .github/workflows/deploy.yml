@@ -1,15 +1,13 @@
-name: CI/CD
+name: Deploy
 
+# Auto-deploy: runs on every push to main (including when a PR is merged).
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch:
 
 concurrency:
-  group: frontend-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: frontend-deploy
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -32,9 +30,9 @@ jobs:
 
   deploy:
     needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
+    timeout-minutes: 20
     steps:
       - name: Deploy to Hostinger VPS
         env:
