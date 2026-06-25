@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Loader2, CheckCircle2 } from "lucide-react";
 import { submitLead } from "@/lib/submitLead";
+import ContactServiceSelect, { BUDGET_OPTIONS } from "@/components/common/ContactServiceSelect";
 
 const FEATURE_ITEMS = [
   {
@@ -314,46 +315,39 @@ export default function LeadConsultationContent({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex flex-col">
+              <div className="relative z-20 flex flex-col">
                 <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider mb-1 block">
                   Select Service You Need<span className="text-[#FF6A00] ml-0.5">*</span>
                 </label>
-                <select
-                  name="service"
+                <ContactServiceSelect
+                  multiple={false}
+                  variant="boxed"
+                  placeholder="Select service..."
                   value={formData.service}
-                  onChange={handleInputChange}
-                  className={`w-full bg-white/[0.02] border rounded-xl px-3 py-2 sm:px-4 sm:py-2.5 text-white text-xs sm:text-sm outline-none focus:bg-[#161616] transition-all font-albert cursor-pointer appearance-none ${
-                    errors.service ? "border-red-500/50 focus:border-red-500/80" : "border-white/10 focus:border-[#FF6A00]/50"
-                  }`}
-                >
-                  <option value="" className="bg-[#111] text-white/40">Select service...</option>
-                  <option value="Website Development" className="bg-[#111]">Website Development</option>
-                  <option value="UGC Ads" className="bg-[#111]">UGC Ads</option>
-                  <option value="Performance Marketing" className="bg-[#111]">Performance Marketing</option>
-                  <option value="Social Media Management" className="bg-[#111]">Social Media Management</option>
-                  <option value="Video Production" className="bg-[#111]">Video Production</option>
-                  <option value="Brand Strategy" className="bg-[#111]">Brand Strategy</option>
-                </select>
+                  onChange={(service) => {
+                    setFormData((prev) => ({ ...prev, service }));
+                    if (errors.service) {
+                      setErrors((prev) => ({ ...prev, service: "" }));
+                    }
+                    if (submitError) setSubmitError("");
+                  }}
+                  hasError={Boolean(errors.service)}
+                />
                 {errors.service && <span className="text-red-500 text-[10px] mt-1 font-albert">{errors.service}</span>}
               </div>
 
-              <div className="flex flex-col">
+              <div className="relative z-20 flex flex-col">
                 <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider mb-1 block">
                   Monthly Marketing Budget <span className="text-white/30 font-normal lowercase">(Optional)</span>
                 </label>
-                <select
-                  name="budget"
+                <ContactServiceSelect
+                  multiple={false}
+                  options={BUDGET_OPTIONS}
+                  variant="boxed"
+                  placeholder="Select budget range..."
                   value={formData.budget}
-                  onChange={handleInputChange}
-                  className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-3 py-2 sm:px-4 sm:py-2.5 text-white text-xs sm:text-sm outline-none focus:border-[#FF6A00]/50 focus:bg-[#161616] transition-all font-albert cursor-pointer appearance-none"
-                >
-                  <option value="" className="bg-[#111] text-white/40">Select budget range...</option>
-                  <option value="Under ₹1L" className="bg-[#111]">Under ₹1L</option>
-                  <option value="₹1L - ₹3L" className="bg-[#111]">₹1L - ₹3L</option>
-                  <option value="₹3L - ₹5L" className="bg-[#111]">₹3L - ₹5L</option>
-                  <option value="₹5L+" className="bg-[#111]">₹5L+</option>
-                  <option value="Not decided" className="bg-[#111]">Not decided</option>
-                </select>
+                  onChange={(budget) => setFormData((prev) => ({ ...prev, budget }))}
+                />
               </div>
             </div>
 

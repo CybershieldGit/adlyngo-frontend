@@ -1,12 +1,20 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Star } from "lucide-react";
+import { Star, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import Footer from "@/components/common/Footer";
-import { cn } from "@/lib/utils";
+import ContactServiceSelect from "@/components/common/ContactServiceSelect";
+import { submitContactForm } from "@/lib/submitLead";
+
+const INITIAL_CONTACT_FORM = {
+  name: "",
+  email: "",
+  phone: "",
+  service: [],
+  message: "",
+};
 
 const testimonials = [
   {
@@ -34,6 +42,11 @@ const testimonials = [
 
 export default function ContactPage() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [formData, setFormData] = useState(INITIAL_CONTACT_FORM);
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -41,6 +54,56 @@ export default function ContactPage() {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+    if (submitError) setSubmitError("");
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Enter a valid email address";
+    }
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Mobile number is required";
+    } else if (!/^\+?[0-9\s-]{8,15}$/.test(formData.phone.trim())) {
+      newErrors.phone = "Enter a valid phone number";
+    }
+    if (!formData.service?.length) newErrors.service = "Please select at least one service";
+    if (!formData.message.trim()) newErrors.message = "Message is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      await submitContactForm(formData);
+      setIsSubmitted(true);
+      setFormData(INITIAL_CONTACT_FORM);
+      setErrors({});
+    } catch (error) {
+      console.error("Contact submission failed:", error);
+      setSubmitError(error.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -143,42 +206,110 @@ export default function ContactPage() {
 
               {/* Right Column: Form - Minimized Spacing */}
               <div className="lg:col-span-7">
-                <form className="space-y-6">
+                {isSubmitted ? (
+                  <div className="flex min-h-[320px] flex-col items-start justify-center gap-4 py-6">
+                    <h3 className="font-heading text-3xl uppercase text-white">Message sent!</h3>
+                    <p className="max-w-md font-albert text-white/60">
+                      Thanks for reaching out. Our team will get back to you shortly.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setIsSubmitted(false)}
+                      className="px-11 py-3.5 bg-[#FF6A00] text-white font-bold uppercase tracking-widest text-[12px] rounded-lg hover:bg-white hover:text-[#FF6A00] transition-all"
+                    >
+                      Send Another Message
+                    </button>
+                  </div>
+                ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-1.5 border-b border-white/10 pb-2.5 group focus-within:border-[#FF6A00] transition-colors">
                     <p className="text-white/40 text-[12px] uppercase tracking-widest font-bold">I am</p>
-                    <input type="text" placeholder="name" className="w-full bg-transparent text-white text-base outline-none placeholder:text-white/10 font-albert" />
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="name"
+                      className="w-full bg-transparent text-white text-base outline-none placeholder:text-white/10 font-albert"
+                    />
+                    {errors.name && <p className="text-red-400 text-xs font-albert mt-1">{errors.name}</p>}
                   </div>
                   <div className="space-y-1.5 border-b border-white/10 pb-2.5 group focus-within:border-[#FF6A00] transition-colors">
                     <p className="text-white/40 text-[12px] uppercase tracking-widest font-bold">Here is my email</p>
-                    <input type="email" placeholder="abc@abc.com" className="w-full bg-transparent text-white text-base outline-none placeholder:text-white/10 font-albert" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="abc@abc.com"
+                      className="w-full bg-transparent text-white text-base outline-none placeholder:text-white/10 font-albert"
+                    />
+                    {errors.email && <p className="text-red-400 text-xs font-albert mt-1">{errors.email}</p>}
                   </div>
                   <div className="space-y-1.5 border-b border-white/10 pb-2.5 group focus-within:border-[#FF6A00] transition-colors">
                     <p className="text-white/40 text-[12px] uppercase tracking-widest font-bold">My mobile number</p>
-                    <input type="tel" placeholder="+91 00000 00000" className="w-full bg-transparent text-white text-base outline-none placeholder:text-white/10 font-albert" />
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="+91 00000 00000"
+                      className="w-full bg-transparent text-white text-base outline-none placeholder:text-white/10 font-albert"
+                    />
+                    {errors.phone && <p className="text-red-400 text-xs font-albert mt-1">{errors.phone}</p>}
                   </div>
-                  <div className="space-y-1.5 border-b border-white/10 pb-2.5 group focus-within:border-[#FF6A00] transition-colors">
+                  <div className="relative z-20 space-y-1.5 border-b border-white/10 pb-2.5 group focus-within:border-[#FF6A00] transition-colors">
                     <p className="text-white/40 text-[12px] uppercase tracking-widest font-bold">I need</p>
-                    <select className="w-full bg-transparent text-white text-base outline-none appearance-none cursor-pointer uppercase font-bold text-white/20 font-albert">
-                      <option className="bg-black">Select Service</option>
-                      <option className="bg-black">Website Development</option>
-                      <option className="bg-black">UGC Ads</option>
-                      <option className="bg-black">Social Media Management</option>
-                    </select>
+                    <ContactServiceSelect
+                      value={formData.service}
+                      onChange={(service) => {
+                        setFormData((prev) => ({ ...prev, service }));
+                        if (errors.service) {
+                          setErrors((prev) => ({ ...prev, service: "" }));
+                        }
+                        if (submitError) setSubmitError("");
+                      }}
+                      hasError={Boolean(errors.service)}
+                    />
+                    {errors.service && <p className="text-red-400 text-xs font-albert mt-1">{errors.service}</p>}
                   </div>
                   <div className="space-y-1.5 border-b border-white/10 pb-2.5 group focus-within:border-[#FF6A00] transition-colors">
                     <p className="text-white/40 text-[12px] uppercase tracking-widest font-bold">Message</p>
-                    <textarea placeholder="Write your message..." rows={1} className="w-full bg-transparent text-white text-base outline-none placeholder:text-white/10 resize-none font-albert" />
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Write your message..."
+                      rows={1}
+                      className="w-full bg-transparent text-white text-base outline-none placeholder:text-white/10 resize-none font-albert"
+                    />
+                    {errors.message && <p className="text-red-400 text-xs font-albert mt-1">{errors.message}</p>}
                   </div>
 
                   <div className="flex flex-col md:flex-row items-center gap-6 pt-2">
-                    <button className="px-11 py-3.5 bg-[#FF6A00] text-white font-bold uppercase tracking-widest text-[12px] rounded-lg hover:bg-white hover:text-[#FF6A00] transition-all">
-                      Send Message
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="px-11 py-3.5 bg-[#FF6A00] text-white font-bold uppercase tracking-widest text-[12px] rounded-lg hover:bg-white hover:text-[#FF6A00] transition-all disabled:cursor-not-allowed disabled:opacity-60 flex items-center gap-2"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="animate-spin" size={16} />
+                          Sending...
+                        </>
+                      ) : (
+                        "Send Message"
+                      )}
                     </button>
                     <p className="text-white/20 text-[16px] leading-relaxed italic whitespace-nowrap">
                       We are committed to protecting your privacy.
                     </p>
                   </div>
+                  {submitError && (
+                    <p className="text-red-400 text-sm font-albert">{submitError}</p>
+                  )}
                 </form>
+                )}
               </div>
             </div>
           </div>
