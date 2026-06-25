@@ -132,8 +132,6 @@ export default function Footer() {
           </div>
         </div> */}
 
-        
-
         {/* Bottom Row: Exact Image Match */}
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
